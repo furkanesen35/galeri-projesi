@@ -1,0 +1,35 @@
+# Node
+node_modules/
+.env
+.env.*
+dist/
+build/
+.cache/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+*.iml
+
+# Misc
+*.local
+*.sublime-workspace
+*.sublime-project
+
+# Test/coverage
+coverage/
+
+# Optional: lock files
+# package-lock.json
+yarn.lock
+pnpm-lock.yaml

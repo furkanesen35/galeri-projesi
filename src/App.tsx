@@ -1,0 +1,75 @@
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AppShell } from './layouts/AppShell';
+import { Dashboard } from './pages/Dashboard';
+import { Vehicles } from './pages/Vehicles';
+import { Tasks } from './pages/Tasks';
+import { CalendarPage } from './pages/Calendar';
+import { Config } from './pages/Config';
+import { Photos } from './pages/Photos';
+import { Settings } from './pages/Settings';
+import { Auth } from './pages/Auth';
+
+const App = () => (
+  <Routes>
+    <Route path="/login" element={<Auth />} />
+    <Route
+      path="/"
+      element={
+        <AppShell>
+          <Dashboard />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/vehicles"
+      element={
+        <AppShell>
+          <Vehicles />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/tasks"
+      element={
+        <AppShell>
+          <Tasks />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/calendar"
+      element={
+        <AppShell>
+          <CalendarPage />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/config"
+      element={
+        <AppShell>
+          <Config />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/photos"
+      element={
+        <AppShell>
+          <Photos />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/settings"
+      element={
+        <AppShell>
+          <Settings />
+        </AppShell>
+      }
+    />
+    <Route path="*" element={<Navigate to="/" replace />} />
+  </Routes>
+);
+
+export default App;
