@@ -1,15 +1,18 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 
-const items = [
-  { id: 'vehicles', title: 'Vehicles', description: 'Manage fleet inventory' },
-  { id: 'tasks', title: 'Tasks', description: 'Assign and track tasks' },
-  { id: 'calendar', title: 'Calendar', description: 'View workshop schedule' },
-  { id: 'photos', title: 'Photos', description: 'Upload and order media' }
-];
-
 export const QuickGrid = () => {
-  const data = useMemo(() => items, []);
+  const { t } = useTranslation();
+  
+  const items = useMemo(() => [
+    { id: 'vehicles', title: t('nav.vehicles'), description: t('dashboard.manageFleet') },
+    { id: 'tasks', title: t('nav.tasks'), description: t('dashboard.assignTasks') },
+    { id: 'calendar', title: t('nav.calendar'), description: t('dashboard.viewSchedule') },
+    { id: 'photos', title: t('nav.photos'), description: t('dashboard.uploadMedia') }
+  ], [t]);
+  
+  const data = items;
 
   const onDragEnd = (result: DropResult) => {
     // Placeholder: can be extended to persist ordering.
@@ -20,8 +23,8 @@ export const QuickGrid = () => {
     <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 shadow-lg shadow-slate-900/30">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-400">Dynamic grid</p>
-          <h3 className="text-lg font-semibold text-white">Drag & drop cards</h3>
+          <p className="text-sm font-medium text-slate-400">{t('dashboard.dynamicGrid')}</p>
+          <h3 className="text-lg font-semibold text-white">{t('dashboard.dragDropCards')}</h3>
         </div>
       </div>
       <div className="mt-4">

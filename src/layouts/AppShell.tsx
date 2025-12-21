@@ -9,11 +9,13 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
 
   const navigation = [
     { to: '/', label: t('nav.dashboard') },
+    { to: '/damage-assessment', label: t('nav.damageAssessment') },
+    { to: '/photos', label: t('nav.photos') },
+    { to: '/ocr-scanner', label: t('nav.ocrScanner') },
     { to: '/vehicles', label: t('nav.vehicles') },
     { to: '/tasks', label: t('nav.tasks') },
     { to: '/calendar', label: t('nav.calendar') },
     { to: '/config', label: t('nav.config') },
-    { to: '/photos', label: t('nav.photos') },
     { to: '/settings', label: t('nav.settings') }
   ];
 
@@ -33,19 +35,17 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
               </NavLinkItem>
             ))}
           </nav>
-          <div className="mt-auto flex flex-col gap-3">
+          <div className="mt-auto space-y-4">
+            <div className="pt-4 border-t border-border">
+              <NavLinkItem to="/marketing">
+                🎯 {t('nav.marketing')}
+              </NavLinkItem>
+            </div>
             <LanguageSelector />
             <ThemeToggle />
           </div>
         </aside>
         <main className="flex flex-col bg-background">
-          <header className="flex items-center justify-between border-b border-border bg-bg-secondary px-8 py-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-text-muted">Overview</p>
-              <h2 className="text-lg font-semibold text-foreground">{t('dashboard.title')}</h2>
-              <p className="text-sm text-text-secondary">{t('dashboard.subtitle')}</p>
-            </div>
-          </header>
           <section className="flex-1 px-8 py-6">
             <div className="mx-auto max-w-6xl space-y-6">{children}</div>
           </section>

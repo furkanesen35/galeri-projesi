@@ -8,15 +8,35 @@ import { Config } from './pages/Config';
 import { Photos } from './pages/Photos';
 import { Settings } from './pages/Settings';
 import { Auth } from './pages/Auth';
+import { Marketing } from './pages/Marketing';
+import { DamageAssessment } from './pages/DamageAssessment';
+import { OCRScanner } from './pages/OCRScanner';
 
 const App = () => (
   <Routes>
     <Route path="/login" element={<Auth />} />
+    <Route path="/marketing" element={<Marketing />} />
     <Route
       path="/"
       element={
         <AppShell>
           <Dashboard />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/damage-assessment"
+      element={
+        <AppShell>
+          <DamageAssessment />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/ocr-scanner"
+      element={
+        <AppShell>
+          <OCRScanner />
         </AppShell>
       }
     />
