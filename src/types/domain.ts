@@ -1,10 +1,102 @@
+export type VehicleStatus = 'available' | 'reserved' | 'sold' | 'service' | 'archived';
+export type FuelType = 'benzin' | 'diesel' | 'elektro' | 'hybrid' | 'plug-in-hybrid';
+export type Transmission = 'automatik' | 'manuell';
+export type Condition = 'neufahrzeug' | 'tageszulassung' | 'jahreswagen' | 'gebraucht' | 'vorführwagen';
+export type VehicleCategory = 'limousine' | 'kombi' | 'suv' | 'cabrio' | 'coupe' | 'kleinwagen' | 'van' | 'sportwagen';
+
+// Feature icons mapping
+export type VehicleFeature = 
+  | 'automatik' 
+  | 'klimaanlage' 
+  | 'klimaautomatik'
+  | '2-zonen-klimaautomatik'
+  | 'sitzheizung'
+  | 'lenkradheizung'
+  | 'navigationssystem'
+  | 'led-scheinwerfer'
+  | 'xenon-scheinwerfer'
+  | 'leichtmetallfelgen'
+  | 'einparkhilfe'
+  | 'rückfahrkamera'
+  | '360-grad-kamera'
+  | 'anhängerkupplung'
+  | 'anhängerkupplung-abnehmbar'
+  | 'panoramadach'
+  | 'schiebedach'
+  | 'tempomat'
+  | 'adaptiver-tempomat'
+  | 'spurhalteassistent'
+  | 'totwinkel-assistent'
+  | 'fernlichtassistent'
+  | 'müdigkeitswarner'
+  | 'notbremsassistent'
+  | 'verkehrszeichenerkennung'
+  | 'einparkhilfe-selbsttätig'
+  | 'head-up-display'
+  | 'digitales-kombiinstrument'
+  | 'ledersitze'
+  | 'teilleder'
+  | 'sportpaket'
+  | 'soundsystem'
+  | 'freisprecheinrichtung'
+  | 'apple-carplay'
+  | 'android-auto'
+  | 'bluetooth'
+  | 'usb'
+  | 'isofix'
+  | 'beheizbare-frontscheibe'
+  | 'regensensor'
+  | 'lichtsensor'
+  | 'keyless-entry'
+  | 'keyless-go'
+  | 'start-stop-automatik'
+  | 'allradantrieb'
+  | 'luftfederung'
+  | 'sportfahrwerk';
+
 export type Vehicle = {
   id: string;
+  internalId: string; // e.g., CAR3028260
   plate: string;
+  vin: string;
   brand: string;
   model: string;
-  status: 'active' | 'maintenance' | 'inactive';
+  variant?: string;
+  category: VehicleCategory;
+  year: number;
+  firstRegistration: string;
   mileageKm: number;
+  fuelType: FuelType;
+  transmission: Transmission;
+  transmissionDetail?: string; // e.g., "7-Gang-Doppelkupplungsgetriebe (eDCT)"
+  engine?: string; // e.g., "1.6 Direct Injection Turbo"
+  power: {
+    kw: number;
+    ps: number;
+  };
+  color: string;
+  colorHex?: string;
+  seats: number;
+  doors: number;
+  condition: Condition;
+  price: number;
+  priceNet?: number;
+  purchasePrice?: number;
+  status: VehicleStatus;
+  availability?: string; // e.g., "Verfügbar in ca. 8 Wochen", "Sofort verfügbar"
+  images: string[];
+  features: VehicleFeature[];
+  description?: string;
+  location?: string;
+  customerId?: string;
+  co2Emission?: number; // g/km
+  consumption?: {
+    city?: number;
+    highway?: number;
+    combined?: number;
+  };
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type TaskStatus = 'pending' | 'in_progress' | 'done' | 'cancelled';
