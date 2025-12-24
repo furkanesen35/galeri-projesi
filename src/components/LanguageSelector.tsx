@@ -35,7 +35,8 @@ export const LanguageSelector = () => {
       
       {isOpen && (
         <div 
-          className="absolute left-full ml-0 bottom-0 bg-surface border border-border rounded-lg shadow-lg overflow-hidden z-50 min-w-[160px]"
+          className="absolute left-full ml-0 bottom-0 bg-surface border border-border rounded-lg shadow-lg overflow-hidden min-w-[160px]"
+          style={{ zIndex: 9999 }}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >

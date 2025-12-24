@@ -34,20 +34,20 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
       <div className="flex min-h-screen">
-        <aside className="fixed left-0 top-0 h-screen w-[80px] flex flex-col gap-4 border-r border-border bg-bg-secondary px-3 py-6 overflow-hidden">
+        <aside className="fixed left-0 top-0 h-screen w-[80px] flex flex-col gap-4 border-r border-border bg-bg-secondary px-3 py-6 z-50">
           <div className="space-y-1 mb-4">
             <div className="w-12 h-12 mx-auto bg-primary rounded-lg flex items-center justify-center">
               <span className="text-2xl font-bold text-primary-text">G</span>
             </div>
           </div>
-          <nav className="flex-1 flex flex-col gap-1 overflow-y-auto overflow-x-hidden">
+          <nav className="flex-1 flex flex-col gap-1 overflow-y-auto overflow-x-visible">
             {navigation.map((item) => (
               <NavLinkItem key={item.to} to={item.to} icon={item.icon}>
                 {item.label}
               </NavLinkItem>
             ))}
           </nav>
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-visible">
             <div className="pt-4 border-t border-border">
               <NavLinkItem to="/marketing" icon={Target}>
                 {t('nav.marketing')}
@@ -57,7 +57,7 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
             <ThemeToggle />
           </div>
         </aside>
-        <main className="flex-1 ml-[80px] flex flex-col bg-background">
+        <main className="flex-1 ml-[80px] flex flex-col bg-background relative z-10">
           <section className="flex-1 px-8 py-6">
             <div className="mx-auto max-w-6xl space-y-6">{children}</div>
           </section>
