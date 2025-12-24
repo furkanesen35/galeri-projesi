@@ -1,35 +1,61 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Languages } from 'lucide-react';
 import { useAppConfig, SupportedLanguage } from '../store/useAppConfig';
 
-const languages: { value: SupportedLanguage; label: string }[] = [
-  { value: 'de', label: 'Deutsch' },
-  { value: 'en', label: 'English' },
-  { value: 'tr', label: 'Türkçe' }
+const languages: { value: SupportedLanguage; label: string; flag: string }[] = [
+  { value: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { value: 'en', label: 'English', flag: '🇬🇧' },
+  { value: 'tr', label: 'Türkçe', flag: '🇹🇷' }
 ];
 
 export const LanguageSelector = () => {
   const { i18n } = useTranslation();
   const { language, setLanguage } = useAppConfig();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (value: SupportedLanguage) => {
     setLanguage(value);
     i18n.changeLanguage(value);
+    setIsOpen(false);
   };
 
+  const currentLang = languages.find(l => l.value === language);
+
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm shadow">
-      <span className="text-text-secondary">Lang</span>
-      <select
-        value={language}
-        onChange={(e) => handleChange(e.target.value as SupportedLanguage)}
-        className="rounded-md bg-bg-secondary px-2 py-1 text-foreground outline-none"
+    <div className="relative group">
+      <button
+        type="button"
+        className="flex items-center justify-center w-full rounded-lg px-3 py-2.5 text-text-secondary hover:bg-surface-hover hover:text-foreground transition-all"
+        title="Change Language"
+        onMouseEnter={() => setIsOpen(true)}
       >
-        {languages.map((lang) => (
-          <option key={lang.value} value={lang.value}>
-            {lang.label}
-          </option>
-        ))}
-      </select>
+        <Languages className="h-5 w-5" strokeWidth={2} />
+      </button>
+      
+      {isOpen && (
+        <div 
+          className="absolute left-full ml-0 bottom-0 bg-surface border border-border rounded-lg shadow-lg overflow-hidden z-50 min-w-[160px]"
+          onMouseEnter={() => setIsOpen(true)}
+          onMouseLeave={() => setIsOpen(false)}
+        >
+          {languages.map((lang) => (
+            <button
+              key={lang.value}
+              type="button"
+              onClick={() => handleChange(lang.value)}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${
+                language === lang.value
+                  ? 'bg-primary text-primary-text'
+                  : 'text-foreground hover:bg-surface-hover'
+              }`}
+            >
+              <span className="text-lg">{lang.flag}</span>
+              <span>{lang.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
