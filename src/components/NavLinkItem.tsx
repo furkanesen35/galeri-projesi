@@ -1,11 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { ReactNode, ElementType } from 'react';
 import clsx from 'clsx';
-import { LucideIcon } from 'lucide-react';
 
 export type NavLinkItemProps = {
   to: string;
-  icon?: LucideIcon;
+  icon?: ElementType;
   children: ReactNode;
 };
 

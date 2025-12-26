@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppShell } from './layouts/AppShell';
 import { Dashboard } from './pages/Dashboard';
 import { Vehicles } from './pages/Vehicles';
+import { VehicleDetail } from './pages/Vehicles/VehicleDetail';
 import { Tasks } from './pages/Tasks';
 import { CalendarPage } from './pages/Calendar';
 import { Config } from './pages/Config';
@@ -45,6 +46,14 @@ const App = () => (
       element={
         <AppShell>
           <Vehicles />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/vehicles/:id"
+      element={
+        <AppShell>
+          <VehicleDetail />
         </AppShell>
       }
     />

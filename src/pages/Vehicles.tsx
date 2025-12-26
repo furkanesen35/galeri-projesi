@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Search, LayoutGrid, List, Filter } from 'lucide-react';
 import { Vehicle } from '../types/domain';
 import { vehicleFixtures, getAvailableVehicles, getReservedVehicles, getSoldVehicles } from '../services/vehicleFixtures';
@@ -8,6 +9,7 @@ type ViewMode = 'grid' | 'list';
 type FilterTab = 'all' | 'available' | 'reserved' | 'sold' | 'service' | 'archived';
 
 export const Vehicles = () => {
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -164,7 +166,7 @@ export const Vehicles = () => {
             <VehicleCard 
               key={vehicle.id} 
               vehicle={vehicle}
-              onClick={() => console.log('Navigate to vehicle:', vehicle.id)}
+              onClick={() => navigate(`/vehicles/${vehicle.id}`)}
             />
           ))}
         </div>
