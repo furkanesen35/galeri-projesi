@@ -7,7 +7,7 @@ const resources = {
       nav: {
         dashboard: 'Dashboard',
         damageAssessment: 'Damage Assessment',
-        vehicles: 'Vehicles',
+        vehicles: 'Vehicle Search',
         tasks: 'Tasks',
         calendar: 'Calendar',
         config: 'Config',
@@ -134,7 +134,7 @@ const resources = {
       nav: {
         dashboard: 'Übersicht',
         damageAssessment: 'Schadenbewertung',
-        vehicles: 'Fahrzeuge',
+        vehicles: 'Fahrzeugsuche',
         tasks: 'Aufgaben',
         calendar: 'Kalender',
         config: 'Konfiguration',
@@ -261,7 +261,7 @@ const resources = {
       nav: {
         dashboard: 'Panel',
         damageAssessment: 'Hasar Değerlendirme',
-        vehicles: 'Araçlar',
+        vehicles: 'Araç Arama',
         tasks: 'Görevler',
         calendar: 'Takvim',
         config: 'Konfig',

@@ -20,14 +20,10 @@ export const NavLinkItem = ({ to, icon: Icon, children }: NavLinkItemProps) => (
           : 'text-text-secondary hover:bg-surface-hover hover:text-foreground'
       )
     }
+    title={typeof children === 'string' ? children : undefined}
   >
     {Icon && (
       <Icon className="h-5 w-5 shrink-0" strokeWidth={2} />
     )}
-    <div className="absolute left-full ml-2 hidden group-hover:block pointer-events-none z-50">
-      <div className="bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap shadow-lg">
-        {children}
-      </div>
-    </div>
   </NavLink>
 );

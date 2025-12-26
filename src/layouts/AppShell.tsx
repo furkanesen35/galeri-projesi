@@ -5,13 +5,13 @@ import {
   FileText, 
   Camera, 
   ScanLine, 
-  Car, 
   ListTodo, 
   Calendar as CalendarIcon, 
   Settings as SettingsIcon, 
   Wrench,
   Target
 } from 'lucide-react';
+import { CarSearchIcon } from '../components/icons/CarSearchIcon';
 import { LanguageSelector } from '../components/LanguageSelector';
 import { NavLinkItem } from '../components/NavLinkItem';
 import { ThemeToggle } from '../components/ThemeToggle';
@@ -24,7 +24,7 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
     { to: '/damage-assessment', label: t('nav.damageAssessment'), icon: FileText },
     { to: '/photos', label: t('nav.photos'), icon: Camera },
     { to: '/ocr-scanner', label: t('nav.ocrScanner'), icon: ScanLine },
-    { to: '/vehicles', label: t('nav.vehicles'), icon: Car },
+    { to: '/vehicles', label: t('nav.vehicles'), icon: CarSearchIcon },
     { to: '/tasks', label: t('nav.tasks'), icon: ListTodo },
     { to: '/calendar', label: t('nav.calendar'), icon: CalendarIcon },
     { to: '/config', label: t('nav.config'), icon: Wrench },
@@ -40,14 +40,14 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
               <span className="text-2xl font-bold text-primary-text">G</span>
             </div>
           </div>
-          <nav className="flex-1 flex flex-col gap-1 overflow-y-auto overflow-x-visible">
+          <nav className="flex-1 flex flex-col gap-1 overflow-y-auto overflow-x-hidden scrollbar-none">
             {navigation.map((item) => (
               <NavLinkItem key={item.to} to={item.to} icon={item.icon}>
                 {item.label}
               </NavLinkItem>
             ))}
           </nav>
-          <div className="space-y-4 overflow-visible">
+          <div className="space-y-4">
             <div className="pt-4 border-t border-border">
               <NavLinkItem to="/marketing" icon={Target}>
                 {t('nav.marketing')}
