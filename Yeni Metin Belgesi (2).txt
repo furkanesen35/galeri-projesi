@@ -5,20 +5,20 @@ renklendirme
 +ilk sayfa bilale anlatir gibi basit suchbar basit araba
 +Fahrzeugverwaltung yukarida tablar olacak
 +hersey ikonlarla readable
-Fahrzeugverwaltung kaker 4 köse sergilenecek
-kakel lar ausblenden einblenden kostumizieren
++Fahrzeugverwaltung kaker 4 köse sergilenecek
++kakel lar ausblenden einblenden kostumizieren
 +fiyatla alakali bir bölüm 
 üc sekmeden sonra user friendly olmaktan cikar
 +araba parcalari ikon olarak gözükebilecek
-arka plan resmi degisebilir
++arka plan resmi degisebilir
 her panel customize olabilir renk boyut Widget
 üc tip kullanici sales client admin
 dokument 
 plaka ui i muhakkak olmali
 ayrica bazi bilgiler yukarida gözüksün
-inverstitonen in preise debouncer saving with notification
-dms.audesk very user friendly but old fashioned
-aufgaben Management ta ikonla tamir görme mesela motor tamiriyse motor ikonu
++inverstitonen in preise debouncer saving with notification
++dms.audesk very user friendly but old fashioned
++aufgaben Management ta ikonla tamir görme mesela motor tamiriyse motor ikonu
 ikon secme yeri
 takvimde aufgabenler ikonla olacak
 dokument te son 5 dokument ankaufvertrag template olacak secerek vertrag olusacak sonra bitmis hali sagda gözükecek sonra gönderilecek

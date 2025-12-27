@@ -101,12 +101,41 @@ export type Vehicle = {
 
 export type TaskStatus = 'pending' | 'in_progress' | 'done' | 'cancelled';
 
+export type TaskType = 
+  | 'oil_change'
+  | 'tire_rotation'
+  | 'tire_change'
+  | 'brake_repair'
+  | 'engine_repair'
+  | 'transmission'
+  | 'battery'
+  | 'ac_repair'
+  | 'bodywork'
+  | 'paint'
+  | 'electrical'
+  | 'inspection'
+  | 'cleaning'
+  | 'glass_repair'
+  | 'exhaust'
+  | 'suspension'
+  | 'steering'
+  | 'lights'
+  | 'interior'
+  | 'general';
+
+export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
+
 export type TaskItem = {
   id: string;
   title: string;
+  description?: string;
+  taskType: TaskType;
+  priority?: TaskPriority;
   assignee?: string;
   status: TaskStatus;
   dueDate?: string;
+  vehicleId?: string;
+  vehicleName?: string;
 };
 
 export type CalendarEvent = {
@@ -114,4 +143,10 @@ export type CalendarEvent = {
   title: string;
   start: Date;
   end: Date;
+  taskType?: TaskType;
+  priority?: TaskPriority;
+  vehicleName?: string;
+  assignee?: string;
+  description?: string;
+  status?: TaskStatus;
 };

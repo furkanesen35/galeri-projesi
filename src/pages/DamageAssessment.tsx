@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Table, GitBranch } from 'lucide-react';
 import { mockApi } from '../services/mockApi';
 import { CaseWizard } from './DamageAssessment/components/CaseWizard';
 import { CasesTable } from './DamageAssessment/components/CasesTable';
 import { StatusTimeline } from './DamageAssessment/components/StatusTimeline';
+import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../components/DraggablePanel';
+import { PanelCustomizer } from '../components/PanelCustomizer';
+import { usePanelLayout } from '../hooks/usePanelLayout';
 
 interface Case {
   id: string;
@@ -19,6 +23,8 @@ interface Case {
   estimatedValue: number;
 }
 
+const VIEW_ID = 'damage-assessment' as const;
+
 export const DamageAssessment = () => {
   const { t } = useTranslation();
   const [cases, setCases] = useState<Case[]>([]);
@@ -26,6 +32,8 @@ export const DamageAssessment = () => {
   const [showWizard, setShowWizard] = useState(false);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const navigate = useNavigate();
+  
+  const { panels, checkVisibility } = usePanelLayout(VIEW_ID);
 
   useEffect(() => {
     loadCases();
@@ -69,7 +77,11 @@ export const DamageAssessment = () => {
         >
           + {t('damageAssessment.newCase')}
         </button>
+        <PanelCustomizer viewId={VIEW_ID} />
       </div>
+
+      {/* Hidden Panels Bar */}
+      <HiddenPanelsBar viewId={VIEW_ID} />
 
       {/* Quick filters */}
       <div className="flex gap-2">
@@ -87,21 +99,42 @@ export const DamageAssessment = () => {
         </button>
       </div>
 
-      {/* Selected case timeline */}
-      {selectedCase && (
-        <StatusTimeline
-          caseItem={selectedCase}
-          onStatusChange={handleStatusChange}
-        />
-      )}
+      {/* Draggable Panels */}
+      <DraggablePanelContainer viewId={VIEW_ID}>
+        {/* Selected case timeline */}
+        <DraggablePanel
+          id="status-timeline"
+          viewId={VIEW_ID}
+          title="Status-Timeline"
+          icon={<GitBranch className="h-5 w-5 text-primary" />}
+        >
+          {selectedCase ? (
+            <StatusTimeline
+              caseItem={selectedCase}
+              onStatusChange={handleStatusChange}
+            />
+          ) : (
+            <div className="text-center py-8 text-text-secondary">
+              Wählen Sie einen Fall aus, um die Timeline anzuzeigen
+            </div>
+          )}
+        </DraggablePanel>
 
-      {/* Cases table */}
-      <CasesTable
-        cases={cases}
-        loading={loading}
-        onViewCase={handleViewCase}
-        selectedCaseId={selectedCase?.id}
-      />
+        {/* Cases table */}
+        <DraggablePanel
+          id="cases-table"
+          viewId={VIEW_ID}
+          title="Schadensfälle"
+          icon={<Table className="h-5 w-5 text-primary" />}
+        >
+          <CasesTable
+            cases={cases}
+            loading={loading}
+            onViewCase={handleViewCase}
+            selectedCaseId={selectedCase?.id}
+          />
+        </DraggablePanel>
+      </DraggablePanelContainer>
 
       {/* Wizard modal */}
       {showWizard && (

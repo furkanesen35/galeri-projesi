@@ -4,10 +4,15 @@ import {
   Car, Fuel, Gauge, Calendar, Settings2, Hash, Palette, DoorOpen, Users, 
   Zap, Leaf, Info
 } from 'lucide-react';
+import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../../../../components/DraggablePanel';
+import { PanelCustomizer } from '../../../../components/PanelCustomizer';
+import { usePanelLayout } from '../../../../hooks/usePanelLayout';
 
 interface Props {
   vehicle: Vehicle;
 }
+
+const VIEW_ID = 'vehicle-detail-overview' as const;
 
 const conditionConfig = {
   neufahrzeug: { label: 'Neufahrzeug' },
@@ -31,17 +36,26 @@ const categoryConfig = {
 export const VehicleOverviewTab = ({ vehicle }: Props) => {
   const condition = conditionConfig[vehicle.condition] || { label: 'Gebrauchtwagen' };
   const category = categoryConfig[vehicle.category] || 'Sonstiges';
+  const { panels, checkVisibility } = usePanelLayout(VIEW_ID);
 
   return (
-    <div className="grid grid-cols-3 gap-6">
-      {/* Left Column - Basic Info */}
-      <div className="col-span-2 space-y-6">
-        {/* Vehicle Details Card */}
-        <div className="rounded-xl border border-border bg-surface p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Car className="h-5 w-5 text-primary" />
-            Fahrzeugdaten
-          </h3>
+    <div className="space-y-4">
+      {/* Panel Customizer */}
+      <div className="flex justify-end">
+        <PanelCustomizer viewId={VIEW_ID} />
+      </div>
+
+      {/* Hidden Panels Bar */}
+      <HiddenPanelsBar viewId={VIEW_ID} />
+
+      <DraggablePanelContainer viewId={VIEW_ID}>
+        {/* Vehicle Details Panel */}
+        <DraggablePanel
+          id="vehicle-data"
+          viewId={VIEW_ID}
+          title="Fahrzeugdaten"
+          icon={<Car className="h-5 w-5 text-primary" />}
+        >
           <div className="grid grid-cols-2 gap-4">
             <InfoRow label="Marke" value={vehicle.brand} />
             <InfoRow label="Modell" value={`${vehicle.model} ${vehicle.variant || ''}`} />
@@ -54,14 +68,15 @@ export const VehicleOverviewTab = ({ vehicle }: Props) => {
             <InfoRow label="Türen" value={vehicle.doors.toString()} />
             <InfoRow label="Sitze" value={vehicle.seats.toString()} />
           </div>
-        </div>
+        </DraggablePanel>
 
-        {/* Technical Details Card */}
-        <div className="rounded-xl border border-border bg-surface p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Settings2 className="h-5 w-5 text-primary" />
-            Technische Daten
-          </h3>
+        {/* Technical Details Panel */}
+        <DraggablePanel
+          id="technical-data"
+          viewId={VIEW_ID}
+          title="Technische Daten"
+          icon={<Settings2 className="h-5 w-5 text-primary" />}
+        >
           <div className="grid grid-cols-2 gap-4">
             <InfoRow label="Motor" value={vehicle.engine || 'N/A'} />
             <InfoRow label="Leistung" value={`${vehicle.power.kw} kW (${vehicle.power.ps} PS)`} />
@@ -70,14 +85,15 @@ export const VehicleOverviewTab = ({ vehicle }: Props) => {
             {vehicle.co2Emission && <InfoRow label="CO₂-Emission" value={`${vehicle.co2Emission} g/km`} />}
             {vehicle.consumption?.combined && <InfoRow label="Verbrauch (komb.)" value={`${vehicle.consumption.combined} l/100km`} />}
           </div>
-        </div>
+        </DraggablePanel>
 
-        {/* Features Card */}
-        <div className="rounded-xl border border-border bg-surface p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-primary" />
-            Ausstattung
-          </h3>
+        {/* Features Panel */}
+        <DraggablePanel
+          id="equipment-highlights"
+          viewId={VIEW_ID}
+          title="Ausstattung"
+          icon={<Zap className="h-5 w-5 text-primary" />}
+        >
           <div className="flex flex-wrap gap-2">
             {vehicle.features?.map((featureKey) => {
               const featureData = featureIconMap[featureKey];
@@ -94,29 +110,16 @@ export const VehicleOverviewTab = ({ vehicle }: Props) => {
               );
             })}
           </div>
-        </div>
+        </DraggablePanel>
 
-        {/* Description */}
-        {vehicle.description && (
-          <div className="rounded-xl border border-border bg-surface p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Info className="h-5 w-5 text-primary" />
-              Beschreibung
-            </h3>
-            <p className="text-text-secondary leading-relaxed">{vehicle.description}</p>
-          </div>
-        )}
-      </div>
-
-      {/* Right Column - IDs & Quick Actions */}
-      <div className="space-y-6">
-        {/* Identification Card */}
-        <div className="rounded-xl border border-border bg-surface p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Hash className="h-5 w-5 text-primary" />
-            Identifikation
-          </h3>
-          <div className="space-y-3">
+        {/* Identification Panel */}
+        <DraggablePanel
+          id="identification"
+          viewId={VIEW_ID}
+          title="Identifikation"
+          icon={<Hash className="h-5 w-5 text-primary" />}
+        >
+          <div className="grid grid-cols-3 gap-6">
             <div>
               <p className="text-xs text-text-secondary">Interne ID</p>
               <p className="text-sm font-mono text-foreground">{vehicle.internalId}</p>
@@ -130,16 +133,17 @@ export const VehicleOverviewTab = ({ vehicle }: Props) => {
               <p className="text-sm font-mono text-foreground break-all">{vehicle.vin}</p>
             </div>
           </div>
-        </div>
+        </DraggablePanel>
 
-        {/* Consumption & Emissions */}
+        {/* Consumption & Emissions Panel */}
         {(vehicle.consumption || vehicle.co2Emission) && (
-          <div className="rounded-xl border border-border bg-surface p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Leaf className="h-5 w-5 text-green-500" />
-              Verbrauch & Emissionen
-            </h3>
-            <div className="space-y-3">
+          <DraggablePanel
+            id="consumption-environment"
+            viewId={VIEW_ID}
+            title="Verbrauch & Emissionen"
+            icon={<Leaf className="h-5 w-5 text-green-500" />}
+          >
+            <div className="grid grid-cols-4 gap-6">
               {vehicle.consumption?.city && (
                 <div className="flex justify-between">
                   <span className="text-sm text-text-secondary">Innerorts</span>
@@ -159,22 +163,35 @@ export const VehicleOverviewTab = ({ vehicle }: Props) => {
                 </div>
               )}
               {vehicle.co2Emission && (
-                <div className="flex justify-between border-t border-border pt-3 mt-3">
+                <div className="flex justify-between">
                   <span className="text-sm text-text-secondary">CO₂-Emission</span>
                   <span className="text-sm font-medium text-foreground">{vehicle.co2Emission} g/km</span>
                 </div>
               )}
             </div>
-          </div>
+          </DraggablePanel>
         )}
 
-        {/* Timestamps */}
-        <div className="rounded-xl border border-border bg-surface p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-primary" />
-            Zeitstempel
-          </h3>
-          <div className="space-y-3">
+        {/* Description Panel */}
+        {vehicle.description && (
+          <DraggablePanel
+            id="description"
+            viewId={VIEW_ID}
+            title="Beschreibung"
+            icon={<Info className="h-5 w-5 text-primary" />}
+          >
+            <p className="text-text-secondary leading-relaxed">{vehicle.description}</p>
+          </DraggablePanel>
+        )}
+
+        {/* Timestamps Panel */}
+        <DraggablePanel
+          id="timestamps"
+          viewId={VIEW_ID}
+          title="Zeitstempel"
+          icon={<Calendar className="h-5 w-5 text-primary" />}
+        >
+          <div className="grid grid-cols-2 gap-6">
             <div className="flex justify-between">
               <span className="text-sm text-text-secondary">Erstellt am</span>
               <span className="text-sm text-foreground">{new Date(vehicle.createdAt).toLocaleDateString('de-DE')}</span>
@@ -184,8 +201,8 @@ export const VehicleOverviewTab = ({ vehicle }: Props) => {
               <span className="text-sm text-foreground">{new Date(vehicle.updatedAt).toLocaleDateString('de-DE')}</span>
             </div>
           </div>
-        </div>
-      </div>
+        </DraggablePanel>
+      </DraggablePanelContainer>
     </div>
   );
 };
