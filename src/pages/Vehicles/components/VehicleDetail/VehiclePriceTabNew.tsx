@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Vehicle } from '../../../../types/domain';
 import { 
   Calculator, Euro, TrendingUp, TrendingDown, Percent, 
@@ -14,6 +14,79 @@ interface Props {
 
 const VIEW_ID = 'vehicle-detail-price' as const;
 
+// Debounced input component to prevent re-render issues
+interface DebouncedInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  type?: 'text' | 'number';
+  className?: string;
+  placeholder?: string;
+  min?: number;
+  debounceMs?: number;
+}
+
+const DebouncedInput = memo(({ 
+  value: externalValue, 
+  onChange, 
+  type = 'text', 
+  className, 
+  placeholder,
+  min,
+  debounceMs = 300
+}: DebouncedInputProps) => {
+  const [localValue, setLocalValue] = useState(externalValue);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isTypingRef = useRef(false);
+
+  // Sync external value to local only when not typing
+  useEffect(() => {
+    if (!isTypingRef.current) {
+      setLocalValue(externalValue);
+    }
+  }, [externalValue]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setLocalValue(newValue);
+    isTypingRef.current = true;
+
+    // Clear previous timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Debounce the onChange callback
+    timeoutRef.current = setTimeout(() => {
+      isTypingRef.current = false;
+      if (type === 'number') {
+        onChange(newValue === '' ? '0' : newValue);
+      } else {
+        onChange(newValue);
+      }
+    }, debounceMs);
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <input
+      type={type}
+      value={localValue}
+      onChange={handleChange}
+      className={className}
+      placeholder={placeholder}
+      min={min}
+    />
+  );
+});
+
 export const VehiclePriceTabNew = ({ vehicle }: Props) => {
   const [sellingPrice, setSellingPrice] = useState(vehicle.price);
   const [discount, setDiscount] = useState(0);
@@ -25,17 +98,23 @@ export const VehiclePriceTabNew = ({ vehicle }: Props) => {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFirstRender = useRef(true);
+  const damagesRef = useRef(damages);
   
   const { getPanels, isPanelVisible } = usePanelLayoutStore();
+
+  // Keep ref in sync with latest damages
+  useEffect(() => {
+    damagesRef.current = damages;
+  }, [damages]);
 
   // Debounced auto-save for damages only
   const saveData = useCallback(async () => {
     setSaveStatus('saving');
     await new Promise(resolve => setTimeout(resolve, 500));
-    console.log('Saved damage data:', { damages });
+    console.log('Saved damage data:', { damages: damagesRef.current });
     setSaveStatus('saved');
     setTimeout(() => setSaveStatus('idle'), 2000);
-  }, [damages]);
+  }, []);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -273,23 +352,25 @@ export const VehiclePriceTabNew = ({ vehicle }: Props) => {
             {/* Damage Cost Input */}
             <div className="relative w-28 flex-shrink-0">
               <Euro className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-text-secondary" />
-              <input
+              <DebouncedInput
                 type="number"
-                min="0"
-                value={damage.cost || ''}
-                onChange={(e) => updateDamage(damage.id, 'cost', Number(e.target.value))}
+                min={0}
+                value={String(damage.cost || '')}
+                onChange={(val) => updateDamage(damage.id, 'cost', Number(val))}
                 className="w-full rounded-lg border border-border bg-bg-secondary pl-8 pr-2 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 placeholder="0"
+                debounceMs={500}
               />
             </div>
 
             {/* Damage Description */}
-            <input
+            <DebouncedInput
               type="text"
               value={damage.description}
-              onChange={(e) => updateDamage(damage.id, 'description', e.target.value)}
+              onChange={(val) => updateDamage(damage.id, 'description', val)}
               className="flex-1 rounded-lg border border-border bg-bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="Beschreibung..."
+              debounceMs={500}
             />
 
             {/* Remove button */}
