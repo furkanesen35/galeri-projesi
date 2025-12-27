@@ -20,8 +20,8 @@ ayrica bazi bilgiler yukarida gözüksün
 +dms.audesk very user friendly but old fashioned
 +aufgaben Management ta ikonla tamir görme mesela motor tamiriyse motor ikonu
 ikon secme yeri
-takvimde aufgabenler ikonla olacak
++takvimde aufgabenler ikonla olacak
 dokument te son 5 dokument ankaufvertrag template olacak secerek vertrag olusacak sonra bitmis hali sagda gözükecek sonra gönderilecek
 lead Management aufgabe tracking müsteri bilgileri
-aufgabenmanagement araba merkezli hangi araba ne yapilacak ve ne zamana kadar Kommentar olsun
++aufgabenmanagement araba merkezli hangi araba ne yapilacak ve ne zamana kadar Kommentar olsun
 summary Fahrzeug Details kommentar
