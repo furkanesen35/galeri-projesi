@@ -1,6 +1,22 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+// Custom styling for individual panels
+export interface PanelStyle {
+  bgColor?: string;         // Background color (e.g., '#ff0000', 'rgb(255,0,0)', 'red')
+  textColor?: string;       // Text color
+  headerBgColor?: string;   // Header background color
+  headerTextColor?: string; // Header text color
+  iconColor?: string;       // Icon color (separate from text)
+  borderColor?: string;     // Border color
+  borderWidth?: number;     // Border width in pixels
+  borderRadius?: number;    // Border radius in pixels
+  shadowColor?: string;     // Box shadow color
+  shadowSize?: 'none' | 'sm' | 'md' | 'lg' | 'xl';  // Shadow size preset
+  opacity?: number;         // Panel opacity (0-100)
+  inheritColors?: boolean;  // Whether child components should inherit the panel's colors
+}
+
 // Panel configuration for each view/page
 export interface PanelConfig {
   id: string;
@@ -9,6 +25,7 @@ export interface PanelConfig {
   visible: boolean;
   order: number;
   collapsed?: boolean;
+  style?: PanelStyle;       // Custom panel styling
 }
 
 // Layout configuration for a specific view
@@ -126,6 +143,21 @@ interface PanelLayoutState {
   
   // Get panel order
   getPanelOrder: (viewId: ViewId, panelId: string) => number;
+  
+  // Update panel style
+  updatePanelStyle: (viewId: ViewId, panelId: string, style: Partial<PanelStyle>) => void;
+  
+  // Reset panel style to default
+  resetPanelStyle: (viewId: ViewId, panelId: string) => void;
+  
+  // Get panel style
+  getPanelStyle: (viewId: ViewId, panelId: string) => PanelStyle | undefined;
+  
+  // Copy style from one panel to another
+  copyPanelStyle: (fromViewId: ViewId, fromPanelId: string, toViewId: ViewId, toPanelId: string) => void;
+  
+  // Apply style to all panels in a view
+  applyStyleToAllPanels: (viewId: ViewId, style: Partial<PanelStyle>) => void;
 }
 
 export const usePanelLayoutStore = create<PanelLayoutState>()(
@@ -318,6 +350,99 @@ export const usePanelLayoutStore = create<PanelLayoutState>()(
         if (!layout) return 0;
         const panel = layout.panels.find((p) => p.id === panelId);
         return panel?.order ?? 0;
+      },
+      
+      updatePanelStyle: (viewId, panelId, style) => {
+        set((state) => {
+          const layout = state.layouts[viewId];
+          if (!layout) return state;
+          
+          return {
+            layouts: {
+              ...state.layouts,
+              [viewId]: {
+                ...layout,
+                panels: layout.panels.map((panel) =>
+                  panel.id === panelId
+                    ? { ...panel, style: { ...panel.style, ...style } }
+                    : panel
+                ),
+              },
+            },
+          };
+        });
+      },
+      
+      resetPanelStyle: (viewId, panelId) => {
+        set((state) => {
+          const layout = state.layouts[viewId];
+          if (!layout) return state;
+          
+          return {
+            layouts: {
+              ...state.layouts,
+              [viewId]: {
+                ...layout,
+                panels: layout.panels.map((panel) =>
+                  panel.id === panelId
+                    ? { ...panel, style: undefined }
+                    : panel
+                ),
+              },
+            },
+          };
+        });
+      },
+      
+      getPanelStyle: (viewId, panelId) => {
+        const layout = get().layouts[viewId];
+        if (!layout) return undefined;
+        const panel = layout.panels.find((p) => p.id === panelId);
+        return panel?.style;
+      },
+      
+      copyPanelStyle: (fromViewId, fromPanelId, toViewId, toPanelId) => {
+        const fromStyle = get().getPanelStyle(fromViewId, fromPanelId);
+        if (!fromStyle) return;
+        
+        set((state) => {
+          const layout = state.layouts[toViewId];
+          if (!layout) return state;
+          
+          return {
+            layouts: {
+              ...state.layouts,
+              [toViewId]: {
+                ...layout,
+                panels: layout.panels.map((panel) =>
+                  panel.id === toPanelId
+                    ? { ...panel, style: { ...fromStyle } }
+                    : panel
+                ),
+              },
+            },
+          };
+        });
+      },
+      
+      applyStyleToAllPanels: (viewId, style) => {
+        set((state) => {
+          const layout = state.layouts[viewId];
+          if (!layout) return state;
+          
+          return {
+            layouts: {
+              ...state.layouts,
+              [viewId]: {
+                ...layout,
+                panels: layout.panels.map((panel) => ({
+                  ...panel,
+                  style: { ...panel.style, ...style },
+                })),
+              },
+            },
+          };
+        });
       },
     }),
     {

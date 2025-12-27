@@ -1,4 +1,4 @@
-import React, { useState, useRef, createContext, useContext, useEffect, useCallback } from 'react';
+import React, { useState, useRef, createContext, useContext, useEffect, useCallback, useMemo } from 'react';
 import { 
   GripVertical, 
   Eye, 
@@ -7,7 +7,9 @@ import {
   Maximize2,
   RotateCcw
 } from 'lucide-react';
-import { usePanelLayoutStore, ViewId } from '../store/usePanelLayoutStore';
+import { usePanelLayoutStore, ViewId, PanelStyle } from '../store/usePanelLayoutStore';
+import { getShadowStyle } from './PanelStyleEditor';
+import { InlinePanelStyler, StyleTriggerButton } from './InlinePanelStyler';
 
 // ============================================
 // Drag Context for sharing state
@@ -21,6 +23,41 @@ const DragContext = createContext<DragContextType>({
   draggedPanelId: null,
   setDraggedPanelId: () => {},
 });
+
+// Helper to build inline styles from PanelStyle
+function buildContainerStyles(style?: PanelStyle): React.CSSProperties {
+  if (!style) return {};
+  
+  return {
+    backgroundColor: style.bgColor || undefined,
+    color: style.textColor || undefined,
+    borderColor: style.borderColor || undefined,
+    borderWidth: style.borderWidth !== undefined ? `${style.borderWidth}px` : undefined,
+    borderRadius: style.borderRadius !== undefined ? `${style.borderRadius}px` : undefined,
+    opacity: style.opacity !== undefined ? style.opacity / 100 : undefined,
+    boxShadow: getShadowStyle(style.shadowSize, style.shadowColor),
+  };
+}
+
+function buildHeaderStyles(style?: PanelStyle): React.CSSProperties {
+  if (!style) return {};
+  
+  return {
+    backgroundColor: style.headerBgColor || undefined,
+    color: style.headerTextColor || undefined,
+    borderRadius: style.borderRadius !== undefined 
+      ? `${Math.max(0, style.borderRadius - 1)}px ${Math.max(0, style.borderRadius - 1)}px 0 0` 
+      : undefined,
+  };
+}
+
+function buildContentStyles(style?: PanelStyle): React.CSSProperties {
+  if (!style) return {};
+  
+  return {
+    color: style.textColor || undefined,
+  };
+}
 
 interface DraggablePanelProps {
   id: string;
@@ -72,16 +109,24 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
   showDragHandle = true,
   variant = 'default',
 }) => {
-  const { isPanelVisible, togglePanelCollapsed, togglePanelVisibility, layouts } = usePanelLayoutStore();
+  const { isPanelVisible, togglePanelCollapsed, togglePanelVisibility, layouts, updatePanelStyle, resetPanelStyle } = usePanelLayoutStore();
   const panelRef = useRef<HTMLDivElement>(null);
+  const [showStyler, setShowStyler] = useState(false);
 
   // Get panel state from store
   const layout = layouts[viewId];
   const panelConfig = layout?.panels.find(p => p.id === id);
   const isCollapsed = panelConfig?.collapsed ?? false;
   const isVisible = isPanelVisible(viewId, id);
+  const customStyle = panelConfig?.style;
+  const hasCustomStyle = customStyle && Object.keys(customStyle).some(k => customStyle[k as keyof PanelStyle]);
 
-  const styles = variantStyles[variant];
+  const variantClasses = variantStyles[variant];
+  
+  // Build inline styles for custom styling
+  const containerInlineStyles = useMemo(() => buildContainerStyles(customStyle), [customStyle]);
+  const headerInlineStyles = useMemo(() => buildHeaderStyles(customStyle), [customStyle]);
+  const contentInlineStyles = useMemo(() => buildContentStyles(customStyle), [customStyle]);
 
   const handleToggleCollapse = () => {
     if (collapsible) {
@@ -93,6 +138,14 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
     togglePanelVisibility(viewId, id);
   };
 
+  const handleStyleChange = useCallback((style: Partial<PanelStyle>) => {
+    updatePanelStyle(viewId, id, style);
+  }, [viewId, id, updatePanelStyle]);
+
+  const handleResetStyle = useCallback(() => {
+    resetPanelStyle(viewId, id);
+  }, [viewId, id, resetPanelStyle]);
+
   // If panel is hidden, return null (HiddenPanelsBar will show the restore button)
   if (!isVisible) {
     return null;
@@ -103,47 +156,69 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
       ref={panelRef}
       data-panel-id={id}
       className={`
-        rounded-xl border transition-all duration-200
-        ${styles.container}
+        rounded-xl border transition-all duration-200 relative
+        ${!hasCustomStyle ? variantClasses.container : 'border-solid'}
         ${className}
       `}
+      style={containerInlineStyles}
     >
       {/* Panel Header */}
       <div
         className={`
-          flex items-center justify-between p-4 rounded-t-xl
-          ${styles.header}
+          flex items-center justify-between p-4 rounded-t-xl relative
+          ${!hasCustomStyle ? variantClasses.header : ''}
           ${!isCollapsed ? 'border-b border-border' : 'rounded-b-xl'}
           ${headerClassName}
         `}
+        style={headerInlineStyles}
       >
         <div className="flex items-center gap-3">
           {/* Drag Handle */}
           {showDragHandle && (
             <div 
-              className="drag-handle cursor-grab active:cursor-grabbing p-1 -ml-1 rounded hover:bg-bg-secondary transition-colors"
+              className="drag-handle cursor-grab active:cursor-grabbing p-1 -ml-1 rounded hover:bg-black/10 transition-colors"
               title="Ziehen zum Neuanordnen"
             >
-              <GripVertical className="h-4 w-4 text-text-secondary" />
+              <GripVertical className="h-4 w-4" style={{ color: customStyle?.iconColor || customStyle?.headerTextColor || 'inherit', opacity: 0.6 }} />
             </div>
           )}
           
           {/* Icon */}
           {icon && (
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0" style={{ color: customStyle?.iconColor || customStyle?.headerTextColor || 'inherit' }}>
               {icon}
             </div>
           )}
           
           {/* Title */}
-          <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+          <h3 className="text-lg font-semibold" style={{ color: customStyle?.headerTextColor || 'inherit' }}>{title}</h3>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 relative">
+          {/* Style Button */}
+          <StyleTriggerButton
+            onClick={() => setShowStyler(!showStyler)}
+            hasCustomStyle={!!hasCustomStyle}
+            headerTextColor={customStyle?.headerTextColor}
+          />
+
+          {/* Inline Style Editor Popup */}
+          {showStyler && (
+            <InlinePanelStyler
+              panelId={id}
+              panelTitle={title}
+              style={customStyle}
+              onStyleChange={handleStyleChange}
+              onReset={handleResetStyle}
+              onClose={() => setShowStyler(false)}
+            />
+          )}
+
           {/* Hide Button */}
           <button
             onClick={handleHide}
-            className="p-1.5 rounded-lg hover:bg-bg-secondary transition-colors text-text-secondary hover:text-foreground"
+            className="p-1.5 rounded-lg hover:bg-black/10 transition-colors"
+            style={{ color: customStyle?.headerTextColor || 'inherit', opacity: 0.7 }}
             title="Panel ausblenden"
           >
             <Eye className="h-4 w-4" />
@@ -153,7 +228,8 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
           {collapsible && (
             <button
               onClick={handleToggleCollapse}
-              className="p-1.5 rounded-lg hover:bg-bg-secondary transition-colors text-text-secondary hover:text-foreground"
+              className="p-1.5 rounded-lg hover:bg-black/10 transition-colors"
+              style={{ color: customStyle?.headerTextColor || 'inherit', opacity: 0.7 }}
               title={isCollapsed ? 'Panel erweitern' : 'Panel minimieren'}
             >
               {isCollapsed ? (
@@ -172,7 +248,9 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
           transition-all duration-200 overflow-hidden
           ${isCollapsed ? 'max-h-0' : 'max-h-[5000px]'}
           ${contentClassName}
+          ${customStyle?.inheritColors && customStyle?.textColor ? 'panel-content-inherit' : ''}
         `}
+        style={contentInlineStyles}
       >
         <div className="p-6">
           {children}

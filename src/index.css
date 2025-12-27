@@ -177,3 +177,77 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ===== PANEL CUSTOM STYLING ===== */
+/* Custom panel content wrapper - ensures all text inherits the panel color */
+.panel-content-inherit {
+  color: inherit;
+}
+
+/* Force text elements to inherit color in custom styled panels */
+.panel-content-inherit p,
+.panel-content-inherit span,
+.panel-content-inherit h1,
+.panel-content-inherit h2,
+.panel-content-inherit h3,
+.panel-content-inherit h4,
+.panel-content-inherit h5,
+.panel-content-inherit h6,
+.panel-content-inherit label,
+.panel-content-inherit .text-foreground,
+.panel-content-inherit .text-text-secondary,
+.panel-content-inherit .text-text-muted {
+  color: inherit !important;
+}
+
+/* SVG icons should inherit color */
+.panel-content-inherit svg {
+  color: inherit !important;
+}
+
+/* Keep nested cards visible - use rgba for softer border */
+.panel-content-inherit .border-border {
+  border-color: currentColor !important;
+}
+
+/* Make icon backgrounds blend nicely using pseudo-element */
+.panel-content-inherit .bg-primary\/10 {
+  position: relative;
+}
+
+.panel-content-inherit .bg-primary\/10::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;
+  opacity: 0.15;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.panel-content-inherit .text-primary {
+  color: inherit !important;
+}
+
+/* Preserve specific semantic colors */
+.panel-content-inherit .text-success {
+  color: #22c55e !important;
+}
+
+.panel-content-inherit .text-error {
+  color: #ef4444 !important;
+}
+
+.panel-content-inherit .text-warning {
+  color: #f59e0b !important;
+}
+
+/* Preserve card backgrounds - don't make them transparent */
+.panel-content-inherit .bg-surface {
+  background-color: inherit !important;
+}
+
+/* Nested cards within styled panels should keep their background but use inherited text color */
+.panel-content-inherit [class*="rounded"] {
+  background-color: inherit;
+}
