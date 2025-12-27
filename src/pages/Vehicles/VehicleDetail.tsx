@@ -28,10 +28,19 @@ import {
   ChevronRight,
   Check,
   Info,
+  Calculator,
+  Camera,
+  History,
+  LayoutDashboard,
 } from "lucide-react";
 import { vehicleFixtures } from "../../services/vehicleFixtures";
 import { featureIconMap } from "../../config/featureIcons";
 import { VehicleFeature } from "../../types/domain";
+import { VehiclePriceTab } from "./components/VehicleDetail/VehiclePriceTab";
+import { VehicleDocumentsTab } from "./components/VehicleDetail/VehicleDocumentsTab";
+import { VehicleHistoryTab } from "./components/VehicleDetail/VehicleHistoryTab";
+import { VehiclePhotosTab } from "./components/VehicleDetail/VehiclePhotosTab";
+import { VehicleSettingsTab } from "./components/VehicleDetail/VehicleSettingsTab";
 
 const statusConfig = {
   available: { label: "Verfügbar", color: "text-green-600" },
@@ -72,6 +81,16 @@ export const VehicleDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState<'overview' | 'price' | 'documents' | 'history' | 'photos' | 'settings'>('overview');
+
+  const tabs = [
+    { id: 'overview' as const, label: 'Übersicht', icon: LayoutDashboard },
+    { id: 'price' as const, label: 'Preiskalkulation', icon: Calculator },
+    { id: 'documents' as const, label: 'Dokumente', icon: FileText },
+    { id: 'history' as const, label: 'Historie', icon: History },
+    { id: 'photos' as const, label: 'Fotos', icon: Camera },
+    { id: 'settings' as const, label: 'Einstellungen', icon: Settings },
+  ];
 
   const vehicle = vehicleFixtures.find((v) => v.id === id);
 
@@ -114,13 +133,11 @@ export const VehicleDetail = () => {
   const availableFeatures = vehicle.features || [];
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* ============================================= */}
+    <div className="pb-12">
       {/* HEADER - Back Link */}
-      {/* ============================================= */}
       <button
         onClick={() => navigate("/vehicles")}
-        className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors group"
+        className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors group mb-4"
       >
         <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
         <span className="text-sm font-medium uppercase tracking-wide">
@@ -128,55 +145,78 @@ export const VehicleDetail = () => {
         </span>
       </button>
 
-      {/* ============================================= */}
-      {/* TITLE SECTION */}
-      {/* ============================================= */}
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          {/* Main Title */}
-          <h1 className="text-2xl font-bold text-foreground">
-            {vehicle.brand} {vehicle.model} {vehicle.variant && `| ${categoryLabels[vehicle.category] || vehicle.category}`}
-          </h1>
-          {/* Engine Specs */}
-          <p className="text-sm text-text-secondary">
-            {vehicle.engine && `${vehicle.engine}, `}
-            {vehicle.transmissionDetail || (vehicle.transmission === "automatik" ? "Automatik" : "Schaltgetriebe")}
-            {`, ${vehicle.power.kw} kW, (${vehicle.power.ps} PS)`}
-          </p>
-          {/* ID and Condition */}
-          <p className="text-sm text-text-secondary">
-            {vehicle.internalId}, {conditionLabels[vehicle.condition] || vehicle.condition}
-          </p>
-        </div>
-
-        {/* Price Section */}
-        <div className="text-right">
-          <p className="text-3xl font-bold text-foreground">
-            {vehicle.price.toLocaleString("de-DE")} €
-          </p>
-          {vehicle.priceNet && (
-            <p className="text-sm text-text-secondary">
-              {vehicle.priceNet.toLocaleString("de-DE")} € netto
-            </p>
-          )}
-          <p className={`text-sm font-medium mt-1 ${status.color}`}>
-            {vehicle.availability || status.label}
-          </p>
-        </div>
+      {/* TAB NAVIGATION */}
+      <div className="flex items-center gap-1 border-b border-border mb-6">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                isActive
+                  ? "border-primary text-primary"
+                  : "border-transparent text-text-secondary hover:text-foreground hover:border-border"
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
+      {/* TAB CONTENT */}
+      {activeTab === 'overview' && (
+        <>
       {/* ============================================= */}
-      {/* MAIN HERO - Unified Panel */}
+      {/* HERO VIEWPORT - Takes full screen height */}
       {/* ============================================= */}
-      <div className="rounded-xl border border-border bg-surface p-4">
-        <div className="grid grid-cols-12 gap-4">
-          {/* LEFT: Photo Gallery - Larger */}
-          <div className="col-span-5 relative group">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-bg-secondary">
-              {/* "Abb. ähnlich" badge */}
-              <div className="absolute top-3 left-3 z-10 bg-gray-800/80 text-white text-xs px-2 py-1 rounded">
-                Abb. ähnlich
-              </div>
+      <div className="min-h-[calc(100vh-220px)] flex flex-col">
+
+        {/* TITLE SECTION */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold text-foreground">
+              {vehicle.brand} {vehicle.model} {vehicle.variant && `| ${categoryLabels[vehicle.category] || vehicle.category}`}
+            </h1>
+            <p className="text-sm text-text-secondary">
+              {vehicle.engine && `${vehicle.engine}, `}
+              {vehicle.transmissionDetail || (vehicle.transmission === "automatik" ? "Automatik" : "Schaltgetriebe")}
+              {`, ${vehicle.power.kw} kW, (${vehicle.power.ps} PS)`}
+            </p>
+            <p className="text-sm text-text-secondary">
+              {vehicle.internalId}, {conditionLabels[vehicle.condition] || vehicle.condition}
+            </p>
+          </div>
+
+          <div className="text-right">
+            <p className="text-3xl font-bold text-foreground">
+              {vehicle.price.toLocaleString("de-DE")} €
+            </p>
+            {vehicle.priceNet && (
+              <p className="text-sm text-text-secondary">
+                {vehicle.priceNet.toLocaleString("de-DE")} € netto
+              </p>
+            )}
+            <p className={`text-sm font-medium mt-1 ${status.color}`}>
+              {vehicle.availability || status.label}
+            </p>
+          </div>
+        </div>
+
+        {/* MAIN HERO - Unified Panel - Fills remaining space */}
+        <div className="rounded-xl border border-border bg-surface p-4 flex-1 flex flex-col">
+          <div className="grid grid-cols-12 gap-4 flex-1">
+            {/* LEFT: Photo Gallery - Larger */}
+            <div className="col-span-8 relative group">
+              <div className="relative h-full overflow-hidden rounded-lg bg-bg-secondary">
+                {/* "Abb. ähnlich" badge */}
+                <div className="absolute top-3 left-3 z-10 bg-gray-800/80 text-white text-xs px-2 py-1 rounded">
+                  Abb. ähnlich
+                </div>
+              
               
               <img
                 src={vehicle.images[currentImageIndex]}
@@ -218,19 +258,29 @@ export const VehicleDetail = () => {
                   ))}
                 </div>
               )}
-            </div>
-          </div>
-
-          {/* MIDDLE: Fahrzeugdaten */}
-          <div className="col-span-5">
-            {/* Section Header */}
-            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border">
-              <div className="p-2 rounded-lg bg-bg-secondary">
-                <Car className="h-5 w-5 text-foreground" />
               </div>
-              <h2 className="text-base font-bold text-foreground uppercase tracking-wide">
-                Fahrzeugdaten
-              </h2>
+            </div>
+
+            {/* MIDDLE: Fahrzeugdaten */}
+            <div className="col-span-4 overflow-y-auto">
+            {/* Section Header */}
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-bg-secondary">
+                  <Car className="h-5 w-5 text-foreground" />
+                </div>
+                <h2 className="text-base font-bold text-foreground uppercase tracking-wide">
+                  Fahrzeugdaten
+                </h2>
+              </div>
+              {vehicle.plate && (
+                <div className="bg-white border-2 border-gray-800 rounded px-3 py-1 flex items-center gap-2">
+                  <div className="bg-blue-700 text-white text-xs font-bold px-1 py-0.5 rounded-sm">D</div>
+                  <span className="font-mono font-bold text-gray-900 text-sm tracking-wider">
+                    {vehicle.plate}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Data Grid */}
@@ -297,10 +347,11 @@ export const VehicleDetail = () => {
                 value="--/----" 
               />
             </div>
+            </div>
           </div>
 
-          {/* RIGHT: Action Buttons */}
-          <div className="col-span-2 flex flex-col gap-1.5">
+          {/* BOTTOM: Action Buttons */}
+          <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-border">
             <ActionButton icon={ShoppingCart} label="Kaufen" variant="outline" size="sm" />
             <ActionButton icon={Tag} label="Preisvorschlag" variant="primary" size="sm" />
             <ActionButton icon={Bookmark} label="Reservieren" variant="outline" size="sm" />
@@ -313,6 +364,11 @@ export const VehicleDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* ============================================= */}
+      {/* SCROLLABLE CONTENT - Below the fold */}
+      {/* ============================================= */}
+      <div className="space-y-8 mt-8">
 
       {/* ============================================= */}
       {/* AUSSTATTUNGSHIGHLIGHTS */}
@@ -540,6 +596,24 @@ export const VehicleDetail = () => {
         sondern ein vergleichbares Modell. Angebot freibleibend unter Vorbehalt der Eigenbelieferung. 
         Keine Haftung für Irrtümer und Druckfehler.
       </p>
+      </div>
+        </>
+      )}
+
+      {/* PRICE CALCULATION TAB */}
+      {activeTab === 'price' && <VehiclePriceTab vehicle={vehicle} />}
+
+      {/* DOCUMENTS TAB */}
+      {activeTab === 'documents' && <VehicleDocumentsTab vehicle={vehicle} />}
+
+      {/* HISTORY TAB */}
+      {activeTab === 'history' && <VehicleHistoryTab vehicle={vehicle} />}
+
+      {/* PHOTOS TAB */}
+      {activeTab === 'photos' && <VehiclePhotosTab vehicle={vehicle} />}
+
+      {/* SETTINGS TAB */}
+      {activeTab === 'settings' && <VehicleSettingsTab vehicle={vehicle} />}
     </div>
   );
 };
@@ -590,8 +664,8 @@ const ActionButton = ({
   size?: "sm" | "md";
 }) => (
   <button
-    className={`w-full flex items-center justify-center gap-1.5 rounded-lg font-medium transition-colors ${
-      size === "sm" ? "px-2 py-1.5 text-xs" : "px-4 py-2.5 text-sm"
+    className={`flex items-center gap-1.5 rounded-lg font-medium transition-colors whitespace-nowrap ${
+      size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2.5 text-sm"
     } ${
       variant === "primary"
         ? "bg-primary text-primary-text hover:bg-primary-hover"

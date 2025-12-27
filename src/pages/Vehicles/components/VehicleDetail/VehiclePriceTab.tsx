@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Vehicle } from '../../../../types/domain';
 import { 
   Calculator, Euro, TrendingUp, TrendingDown, Percent, 
-  PiggyBank, Receipt, ArrowRight, Info, RefreshCw
+  PiggyBank, Receipt, ArrowRight, Info, RefreshCw, Wrench, AlertTriangle, ChevronDown, Plus, Trash2, Check, Loader2
 } from 'lucide-react';
 
 interface Props {
@@ -14,13 +14,88 @@ export const VehiclePriceTab = ({ vehicle }: Props) => {
   const [discount, setDiscount] = useState(0);
   const [tradeInValue, setTradeInValue] = useState(0);
   const [extras, setExtras] = useState(0);
+  const [damages, setDamages] = useState<Array<{ id: number; type: string; cost: number; description: string }>>([
+    { id: 1, type: '', cost: 0, description: '' }
+  ]);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isFirstRender = useRef(true);
+
+  // Debounced auto-save for damages only
+  const saveData = useCallback(async () => {
+    setSaveStatus('saving');
+    // Simulate API call - replace with actual save logic
+    await new Promise(resolve => setTimeout(resolve, 500));
+    console.log('Saved damage data:', { damages });
+    setSaveStatus('saved');
+    // Reset to idle after showing "saved" for 2 seconds
+    setTimeout(() => setSaveStatus('idle'), 2000);
+  }, [damages]);
+
+  useEffect(() => {
+    // Skip first render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Set new timeout for 1 second debounce
+    saveTimeoutRef.current = setTimeout(() => {
+      saveData();
+    }, 1000);
+
+    // Cleanup on unmount
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [damages, saveData]);
+
+  const damageTypes = [
+    { value: '', label: 'Auswählen...' },
+    { value: 'lack', label: 'Lackschaden' },
+    { value: 'delle', label: 'Delle / Beule' },
+    { value: 'kratzer', label: 'Kratzer' },
+    { value: 'glas', label: 'Glasschaden' },
+    { value: 'motor', label: 'Motorschaden' },
+    { value: 'getriebe', label: 'Getriebeschaden' },
+    { value: 'bremsen', label: 'Bremsen' },
+    { value: 'reifen', label: 'Reifen / Felgen' },
+    { value: 'elektronik', label: 'Elektronik' },
+    { value: 'innenraum', label: 'Innenraum' },
+    { value: 'unfall', label: 'Unfallschaden' },
+    { value: 'sonstiges', label: 'Sonstiges' },
+  ];
+
+  const addDamage = () => {
+    const newId = Math.max(...damages.map(d => d.id), 0) + 1;
+    setDamages([...damages, { id: newId, type: '', cost: 0, description: '' }]);
+  };
+
+  const removeDamage = (id: number) => {
+    if (damages.length > 1) {
+      setDamages(damages.filter(d => d.id !== id));
+    }
+  };
+
+  const updateDamage = (id: number, field: 'type' | 'cost' | 'description', value: string | number) => {
+    setDamages(damages.map(d => d.id === id ? { ...d, [field]: value } : d));
+  };
+
+  const totalDamageCost = damages.reduce((sum, d) => sum + d.cost, 0);
 
   const purchasePrice = vehicle.purchasePrice || 0;
   const netPrice = vehicle.priceNet || Math.round(sellingPrice / 1.19);
   const vat = sellingPrice - netPrice;
   
   const discountAmount = (sellingPrice * discount) / 100;
-  const finalPrice = sellingPrice - discountAmount + extras - tradeInValue;
+  const finalPrice = sellingPrice - discountAmount + extras - tradeInValue - totalDamageCost;
   const margin = finalPrice - purchasePrice;
   const marginPercent = purchasePrice > 0 ? ((margin / purchasePrice) * 100).toFixed(1) : '0';
 
@@ -147,6 +222,113 @@ export const VehiclePriceTab = ({ vehicle }: Props) => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Damage / Schaden Card - Multiple entries */}
+        <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-red-500" />
+                Schaden / Mängel
+              </h3>
+              {/* Save Status Indicator */}
+              <div className={`flex items-center gap-1.5 px-2 py-1 rounded text-xs transition-all ${
+                saveStatus === 'saving' 
+                  ? 'bg-blue-500/10 text-blue-500' 
+                  : saveStatus === 'saved' 
+                    ? 'bg-green-500/10 text-green-500' 
+                    : 'opacity-0'
+              }`}>
+                {saveStatus === 'saving' && (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <span>Speichern...</span>
+                  </>
+                )}
+                {saveStatus === 'saved' && (
+                  <>
+                    <Check className="h-3 w-3" />
+                    <span>Gespeichert</span>
+                  </>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={addDamage}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              Schaden hinzufügen
+            </button>
+          </div>
+          
+          {/* Damage entries */}
+          <div className="space-y-3">
+            {damages.map((damage, index) => (
+              <div key={damage.id} className="flex items-center gap-3">
+                {/* Damage Type Dropdown */}
+                <div className="relative w-40 flex-shrink-0">
+                  <select
+                    value={damage.type}
+                    onChange={(e) => updateDamage(damage.id, 'type', e.target.value)}
+                    className="w-full appearance-none rounded-lg border border-border bg-bg-secondary pl-3 pr-8 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+                  >
+                    {damageTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-text-secondary pointer-events-none" />
+                </div>
+
+                {/* Damage Cost Input */}
+                <div className="relative w-28 flex-shrink-0">
+                  <Euro className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-text-secondary" />
+                  <input
+                    type="number"
+                    min="0"
+                    value={damage.cost || ''}
+                    onChange={(e) => updateDamage(damage.id, 'cost', Number(e.target.value))}
+                    className="w-full rounded-lg border border-border bg-bg-secondary pl-8 pr-2 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                    placeholder="0"
+                  />
+                </div>
+
+                {/* Damage Description */}
+                <input
+                  type="text"
+                  value={damage.description}
+                  onChange={(e) => updateDamage(damage.id, 'description', e.target.value)}
+                  className="flex-1 rounded-lg border border-border bg-bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="Beschreibung..."
+                />
+
+                {/* Remove button */}
+                <button
+                  onClick={() => removeDamage(damage.id)}
+                  disabled={damages.length === 1}
+                  className="p-2 text-text-secondary hover:text-red-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Total Damage Summary */}
+          {totalDamageCost > 0 && (
+            <div className="flex items-center justify-between rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 mt-4">
+              <div className="flex items-center gap-2">
+                <Wrench className="h-4 w-4 text-red-500" />
+                <span className="text-sm text-foreground">
+                  Gesamt Schadenabzug ({damages.filter(d => d.cost > 0).length} Posten)
+                </span>
+              </div>
+              <span className="text-lg font-bold text-red-500">- € {totalDamageCost.toLocaleString('de-DE')}</span>
+            </div>
+          )}
         </div>
 
         {/* Final Price Summary */}
