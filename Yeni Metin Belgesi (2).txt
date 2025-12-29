@@ -11,10 +11,10 @@ renklendirme
 üc sekmeden sonra user friendly olmaktan cikar
 +araba parcalari ikon olarak gözükebilecek
 +arka plan resmi degisebilir
-her panel customize olabilir renk boyut Widget
++her panel customize olabilir renk boyut Widget
 üc tip kullanici sales client admin
 dokument 
-plaka ui i muhakkak olmali
++plaka ui i muhakkak olmali
 ayrica bazi bilgiler yukarida gözüksün
 +inverstitonen in preise debouncer saving with notification
 +dms.audesk very user friendly but old fashioned
@@ -25,3 +25,29 @@ ikon secme yeri
 lead Management aufgabe tracking müsteri bilgileri
 +aufgabenmanagement araba merkezli hangi araba ne yapilacak ve ne zamana kadar Kommentar olsun
 summary Fahrzeug Details kommentar
+inner component dragging
+Fahrzeugverwaltung depopulation in the info
+suche ki
+fahrzeugverwaltung checklist ne yapilmasi gerekiyor
+satin almada ne yapilacak tek tek olacak
+tasklist in verwaltung ayrica aufgabe olusturma
+satis öncesi sonrasi fotolar biz arabaya bunlari yaptik
+document ler categorize edilecek vertrag tüv etc.
+document müsteri ekleme in ankaufvertrag profile ile otomatik
+documentlerde hersey otomatik cekilecek
+belgenin kendisi gösterilecek
+left navibar template documents bütün template ler ayri bir tab olacak
+imza eklenebilecek
+3 click document ready
+Dokument hochladen daha kücük yukarida
+document categorizing
+arabanin status görünmeli
+foto sekmesi 2 sekme öncesi ve sonrasi
+status ve price hep görünmeli belki übersicht
+calender neue termin popup window
+calender woche monat quartal täglich can stay
+personal verfügbarkeit in calender belki outlook integration belki takvim ortaklasmasi
+calender interactive 
+aufgabe tab detailed tab and calender
+document with placeholder task management another tab with detailed view and calender row editing
+document pdf export
