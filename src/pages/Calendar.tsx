@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react';
 import { Calendar, dayjsLocalizer, Views, EventProps } from 'react-big-calendar';
 import dayjs from 'dayjs';
+import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Plus, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Car, User, Clock, X } from 'lucide-react';
 import { CalendarEvent } from '../types/domain';
 import { taskTypeConfig, TaskTypeIcon, PriorityBadge } from '../config/taskIcons';
 
+dayjs.extend(quarterOfYear);
 const localizer = dayjsLocalizer(dayjs);
 
 // Sample calendar events with task types
@@ -277,7 +279,7 @@ const calendarStyles = `
   }
 `;
 
-type ViewType = 'day' | 'week' | 'month';
+type ViewType = 'week' | 'month' | 'quarter';
 
 export const CalendarPage = () => {
   const [events, setEvents] = useState<CalendarEvent[]>(initialEvents);
@@ -305,23 +307,28 @@ export const CalendarPage = () => {
       setCurrentDate(new Date());
     } else {
       const amount = direction === 'prev' ? -1 : 1;
-      const unit = view === 'day' ? 'day' : view === 'week' ? 'week' : 'month';
+      const unit = view === 'week' ? 'week' : view === 'month' ? 'month' : 'quarter';
       setCurrentDate(dayjs(currentDate).add(amount, unit).toDate());
     }
   }, [currentDate, view]);
 
   const getDateRangeLabel = () => {
-    if (view === 'day') {
-      return dayjs(currentDate).format('dddd, D. MMMM YYYY');
-    } else if (view === 'week') {
+    if (view === 'week') {
       const start = dayjs(currentDate).startOf('week');
       const end = dayjs(currentDate).endOf('week');
       if (start.month() === end.month()) {
         return `${start.format('D.')} - ${end.format('D. MMMM YYYY')}`;
       }
       return `${start.format('D. MMM')} - ${end.format('D. MMM YYYY')}`;
+    } else if (view === 'month') {
+      return dayjs(currentDate).format('MMMM YYYY');
+    } else {
+      // Quarter view
+      const quarter = dayjs(currentDate).quarter();
+      const start = dayjs(currentDate).startOf('quarter');
+      const end = dayjs(currentDate).endOf('quarter');
+      return `Q${quarter} ${dayjs(currentDate).year()} (${start.format('MMM')} - ${end.format('MMM')})`;
     }
-    return dayjs(currentDate).format('MMMM YYYY');
   };
 
   // Event styling based on priority
@@ -374,68 +381,111 @@ export const CalendarPage = () => {
       </div>
 
       {/* Calendar - Full Width */}
-      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-lg">
-        {/* Custom Toolbar */}
-        <div className="flex items-center justify-between p-4 border-b border-border bg-bg-secondary">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => navigateCalendar('prev')}
-              className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors"
-            >
-              <ChevronLeft className="h-5 w-5 text-foreground" />
-            </button>
-            <button
-              onClick={() => navigateCalendar('today')}
-              className="px-3 py-1.5 text-sm font-medium rounded-lg border border-border hover:bg-bg-tertiary transition-colors"
-            >
-              Heute
-            </button>
-            <button
-              onClick={() => navigateCalendar('next')}
-              className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors"
-            >
-              <ChevronRight className="h-5 w-5 text-foreground" />
-            </button>
-            <span className="ml-4 text-lg font-semibold text-foreground">
-              {getDateRangeLabel()}
-            </span>
-          </div>
-          <div className="flex items-center gap-1 bg-bg-tertiary rounded-lg p-1">
-            {(['day', 'week', 'month'] as ViewType[]).map((v) => (
+      <div className="fixed left-[80px] right-0 top-[200px] bottom-0 overflow-auto z-40">
+        <div className="h-full overflow-hidden rounded-2xl border border-border bg-surface shadow-lg m-4">
+          {/* Custom Toolbar */}
+          <div className="flex items-center justify-between p-4 border-b border-border bg-bg-secondary">
+            <div className="flex items-center gap-2">
               <button
-                key={v}
-                onClick={() => setView(v)}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                  view === v
-                    ? 'bg-primary text-primary-text'
-                    : 'text-text-secondary hover:text-foreground'
-                }`}
+                onClick={() => navigateCalendar('prev')}
+                className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors"
               >
-                {v === 'day' ? 'Tag' : v === 'week' ? 'Woche' : 'Monat'}
+                <ChevronLeft className="h-5 w-5 text-foreground" />
               </button>
-            ))}
+              <button
+                onClick={() => navigateCalendar('today')}
+                className="px-3 py-1.5 text-sm font-medium rounded-lg border border-border hover:bg-bg-tertiary transition-colors"
+              >
+                Heute
+              </button>
+              <button
+                onClick={() => navigateCalendar('next')}
+                className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors"
+              >
+                <ChevronRight className="h-5 w-5 text-foreground" />
+              </button>
+              <span className="ml-4 text-lg font-semibold text-foreground">
+                {getDateRangeLabel()}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 bg-bg-tertiary rounded-lg p-1">
+              {(['week', 'month', 'quarter'] as ViewType[]).map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                    view === v
+                      ? 'bg-primary text-primary-text'
+                      : 'text-text-secondary hover:text-foreground'
+                  }`}
+                >
+                  {v === 'week' ? 'Woche' : v === 'month' ? 'Monat' : 'Quartal'}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Calendar Component */}
-        <div className="p-4">
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            date={currentDate}
-            view={view === 'day' ? Views.DAY : view === 'week' ? Views.WEEK : Views.MONTH}
-            onNavigate={setCurrentDate}
-            onView={(v) => setView(v.toLowerCase() as ViewType)}
-            views={[Views.DAY, Views.WEEK, Views.MONTH]}
-            style={{ height: 600 }}
-            onSelectEvent={handleSelectEvent}
-            components={{
-              event: CustomEvent,
-            }}
-            eventPropGetter={eventStyleGetter}
-          />
+          {/* Calendar Component */}
+          <div className="p-4 h-[calc(100%-80px)] overflow-auto">
+          {view === 'quarter' ? (
+            // Quarter View - 3 Months Side by Side
+            <div className="grid grid-cols-3 gap-4">
+              {[0, 1, 2].map((monthOffset) => {
+                const monthDate = dayjs(currentDate).startOf('quarter').add(monthOffset, 'month').toDate();
+                const monthEvents = events.filter(event => {
+                  const eventDate = dayjs(event.start);
+                  const targetMonth = dayjs(monthDate);
+                  return eventDate.month() === targetMonth.month() && eventDate.year() === targetMonth.year();
+                });
+                
+                return (
+                  <div key={monthOffset} className="border border-border rounded-lg overflow-hidden">
+                    <div className="bg-bg-secondary px-3 py-2 border-b border-border">
+                      <h4 className="text-sm font-semibold text-foreground text-center">
+                        {dayjs(monthDate).format('MMMM YYYY')}
+                      </h4>
+                    </div>
+                    <Calendar
+                      localizer={localizer}
+                      events={monthEvents}
+                      startAccessor="start"
+                      endAccessor="end"
+                      date={monthDate}
+                      view={Views.MONTH}
+                      onNavigate={() => {}}
+                      toolbar={false}
+                      style={{ height: 500 }}
+                      onSelectEvent={handleSelectEvent}
+                      components={{
+                        event: CustomEvent,
+                      }}
+                      eventPropGetter={eventStyleGetter}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            // Week and Month Views
+            <Calendar
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              date={currentDate}
+              view={view === 'week' ? Views.WEEK : Views.MONTH}
+              onNavigate={setCurrentDate}
+              onView={(v) => setView(v.toLowerCase() as ViewType)}
+              views={[Views.WEEK, Views.MONTH]}
+              style={{ height: 600 }}
+              onSelectEvent={handleSelectEvent}
+              components={{
+                event: CustomEvent,
+              }}
+              eventPropGetter={eventStyleGetter}
+            />
+          )}
+          </div>
         </div>
       </div>
 

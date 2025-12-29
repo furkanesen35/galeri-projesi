@@ -42,6 +42,7 @@ import { VehicleHistoryTab } from "./components/VehicleDetail/VehicleHistoryTab"
 import { VehiclePhotosTab } from "./components/VehicleDetail/VehiclePhotosTab";
 import { VehicleSettingsTab } from "./components/VehicleDetail/VehicleSettingsTab";
 import { VehicleOverviewTab } from "./components/VehicleDetail/VehicleOverviewTab";
+import { SalesWizard } from "./components/VehicleDetail/SalesWizard";
 
 const statusConfig = {
   available: { label: "Verfügbar", color: "text-green-600" },
@@ -83,6 +84,7 @@ export const VehicleDetail = () => {
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'price' | 'documents' | 'history' | 'photos' | 'settings'>('overview');
+  const [showSalesWizard, setShowSalesWizard] = useState(false);
 
   const tabs = [
     { id: 'overview' as const, label: 'Übersicht', icon: LayoutDashboard },
@@ -146,32 +148,60 @@ export const VehicleDetail = () => {
         </span>
       </button>
 
-      {/* TAB NAVIGATION */}
-      <div className="flex items-center gap-1 border-b border-border mb-6">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                isActive
-                  ? "border-primary text-primary"
-                  : "border-transparent text-text-secondary hover:text-foreground hover:border-border"
-              }`}
-            >
-              <Icon className="h-4 w-4" />
-              {tab.label}
-            </button>
-          );
-        })}
+      {/* TAB NAVIGATION with Actions */}
+      <div className="flex items-center justify-between border-b border-border mb-6">
+        <div className="flex items-center gap-1">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                  isActive
+                    ? "border-primary text-primary"
+                    : "border-transparent text-text-secondary hover:text-foreground hover:border-border"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Verkaufen Button - Only show for available vehicles */}
+        {vehicle.status === 'available' && (
+          <button
+            onClick={() => setShowSalesWizard(true)}
+            className="flex items-center gap-2 rounded-lg bg-green-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-green-600 transition-all hover:scale-105 mb-[-2px]"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            Fahrzeug verkaufen
+          </button>
+        )}
       </div>
 
       {/* TAB CONTENT */}
       {activeTab === 'overview' && <VehicleOverviewTab vehicle={vehicle} />}
 
       {/* PRICE CALCULATION TAB */}
+
+      {/* SALES WIZARD MODAL */}
+      {showSalesWizard && (
+        <SalesWizard
+          vehicle={vehicle}
+          onClose={() => setShowSalesWizard(false)}
+          onComplete={() => {
+            setShowSalesWizard(false);
+            // Show success message and potentially update vehicle status
+            alert('Fahrzeug erfolgreich verkauft! Der Kaufvertrag wurde erstellt.');
+            // In a real app, you would update the vehicle status here
+            navigate('/vehicles');
+          }}
+        />
+      )}
       {activeTab === 'price' && <VehiclePriceTabNew vehicle={vehicle} />}
 
       {/* DOCUMENTS TAB */}

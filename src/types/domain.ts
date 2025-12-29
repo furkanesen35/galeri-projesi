@@ -138,6 +138,30 @@ export type TaskItem = {
   vehicleName?: string;
 };
 
+export type TaskDetailRow = {
+  id: string;
+  title: string;
+  description: string;
+  taskType: TaskType;
+  priority: TaskPriority;
+  assignee?: string;
+  status: TaskStatus;
+  dueDate: string;
+  createdAt: string;
+  vehicleId: string;
+  vehicleName: string;
+  brand: string;
+  model: string;
+  licensePlate: string;
+  vin: string;
+  mileage: number;
+  firstRegistration: string;
+  fuelType: string;
+  price: number;
+  estimatedCost: number;
+  notes?: string;
+};
+
 export type CalendarEvent = {
   id: string;
   title: string;

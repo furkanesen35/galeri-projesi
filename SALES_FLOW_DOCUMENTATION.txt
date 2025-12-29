@@ -1,0 +1,177 @@
+=== FAHRZEUG VERKAUFEN - SALES FLOW DOKUMENTATION ===
+
+📋 ÜBERSICHT
+Das neue Verkaufs-System ermöglicht einen schnellen und effizienten Verkaufsprozess mit vorausgefüllten Daten aus Platzhalter-Profilen.
+
+🎯 WIE ES FUNKTIONIERT:
+
+1. NAVIGATION
+   - Gehen Sie zu "Fahrzeugverwaltung" (Vehicles)
+   - Wählen Sie ein verfügbares Fahrzeug aus (Status: "Verfügbar")
+   - Klicken Sie auf das Fahrzeug, um die Detailansicht zu öffnen
+
+2. VERKAUF STARTEN
+   - In der Fahrzeugdetailansicht sehen Sie rechts oben den grünen Button "Fahrzeug verkaufen"
+   - Dieser Button erscheint NUR bei Fahrzeugen mit Status "Verfügbar"
+   - Klicken Sie auf "Fahrzeug verkaufen" um den Verkaufs-Wizard zu öffnen
+
+3. VERKAUFS-WIZARD (5 Schritte)
+
+   📝 SCHRITT 1: KÄUFER-INFORMATIONEN
+   - Alle Käuferdaten sind bereits vorausgefüllt mit Platzhalter-Daten
+   - Anzeige von:
+     * Persönliche Daten (Name, Geburtsdatum)
+     * Kontaktdaten (Telefon, E-Mail)
+     * Adresse
+     * Ausweisdaten (Personalausweis, Führerschein)
+     * Bankverbindung
+   - Klick auf "Weiter" →
+
+   🚗 SCHRITT 2: FAHRZEUGDATEN BESTÄTIGEN
+   - Alle Fahrzeugdaten automatisch geladen
+   - Anzeige von:
+     * Grunddaten (Marke, Modell, VIN, Kennzeichen)
+     * Technische Daten (Motor, Getriebe, Kraftstoff)
+     * Zustand und TÜV
+   - Klick auf "Weiter" →
+
+   💰 SCHRITT 3: PREIS & ZAHLUNG
+   - Preisübersicht mit Nettopreis, MwSt. und Gesamtpreis
+   - Zahlungsmodalitäten:
+     * Anzahlung: 5.000 €
+     * Restbetrag: (Automatisch berechnet)
+     * Zahlungsziel: 7 Tage
+   - Zahlungsplan wird grafisch angezeigt
+   - Klick auf "Weiter" →
+
+   📄 SCHRITT 4: VERTRAGSBEDINGUNGEN
+   - Gewährleistung (12 Monate Gebrauchtwagen-Garantie)
+   - Übergabetermin (10 Tage in der Zukunft)
+   - Mitgelieferte Dokumente (Fahrzeugbrief, etc.)
+   - Zusätzliche Konditionen (Probefahrt, Unfallfrei, etc.)
+   - Klick auf "Weiter" →
+
+   ✅ SCHRITT 5: ÜBERPRÜFUNG
+   - Zusammenfassung aller Daten in übersichtlicher Form
+   - Anzeige von:
+     * Käufer-Zusammenfassung
+     * Fahrzeug-Zusammenfassung
+     * Preis-Zusammenfassung
+     * Verkäufer (Autohaus)
+     * Vollständige Vertragsdaten
+   - Klick auf "Verkauf abschließen" →
+
+4. ABSCHLUSS
+   - Verkauf wird verarbeitet (2 Sekunden Simulation)
+   - Erfolgsbestätigung: "Fahrzeug erfolgreich verkauft!"
+   - Automatische Weiterleitung zur Fahrzeugübersicht
+
+📊 VERWENDETE PLATZHALTER-DATEN:
+
+AUTOHAUS (Verkäufer):
+  - Name: Premium Autohaus München GmbH
+  - Adresse: Leopoldstraße 245, 80807 München
+  - Vertreter: Thomas Müller (Geschäftsführer)
+  - Verkaufsberater: Sarah Schmidt
+
+KÄUFER:
+  - Name: Michael Wagner
+  - Adresse: Sonnenstraße 12, 80331 München
+  - Telefon: +49 176 12345678
+  - E-Mail: michael.wagner@email.de
+  - Ausweis: Personalausweis L01X234567
+  - Führerschein: B1234567890
+
+FAHRZEUG (Beispiel):
+  - BMW 320d Touring M Sport
+  - FIN: WBA12345678901234
+  - Kennzeichen: M-AB 1234
+  - Erstzulassung: 15.03.2021
+  - Kilometerstand: 45.000 km
+  - Verkaufspreis: 39.900 €
+
+VERTRAG:
+  - Anzahlung: 5.000 €
+  - Restbetrag: 34.900 €
+  - Zahlungsziel: 7 Tage
+  - Übergabe: 10 Tage
+  - Garantie: 12 Monate
+
+📂 TECHNISCHE DETAILS:
+
+Neue Dateien:
+  1. src/services/placeholderData.ts
+     - Enthält alle Platzhalter-Profile
+     - dealerProfile (Autohaus)
+     - buyerProfile (Käufer)
+     - carForSale (Fahrzeug)
+     - salesContractData (Vertragsdaten)
+
+  2. src/pages/Vehicles/components/VehicleDetail/SalesWizard.tsx
+     - Haupt-Wizard-Komponente
+     - 5 Schritte mit vorausgefüllten Daten
+     - Responsive Design
+     - Fortschrittsanzeige
+
+Geänderte Dateien:
+  - src/pages/Vehicles/VehicleDetail.tsx
+    * "Fahrzeug verkaufen" Button hinzugefügt
+    * SalesWizard Integration
+    * Status-basierte Anzeige (nur bei "Verfügbar")
+
+🎨 UI-FEATURES:
+
+- Moderner Multi-Step Wizard
+- Fortschrittsanzeige mit Icons
+- Farbcodierte Sektionen
+- Automatische Datenvalidierung
+- Responsive Layout
+- Smooth Transitions
+- Loading States
+- Success Feedback
+
+🔄 WORKFLOW:
+
+1. Button klicken → Wizard öffnet sich
+2. Alle Daten sind vorausgefüllt
+3. Durch die Schritte navigieren (Weiter/Zurück)
+4. Daten überprüfen
+5. "Verkauf abschließen"
+6. Erfolgsbestätigung
+7. Zurück zur Übersicht
+
+⚡ PROOF OF CONCEPT:
+
+Das System arbeitet aktuell mit statischen Platzhalter-Daten.
+Für die Produktion müssten folgende Erweiterungen erfolgen:
+
+- Integration mit echter Kundendatenbank
+- API-Anbindung für Vertragserstellung
+- PDF-Generierung des Kaufvertrags
+- E-Mail-Versand an Käufer
+- Automatische Statusänderung des Fahrzeugs
+- Rechnungserstellung
+- Dokumenten-Upload in Fahrzeugakte
+
+🎯 VORTEILE:
+
+✓ Schneller Verkaufsprozess
+✓ Keine manuellen Eingaben nötig
+✓ Fehlerreduzierung durch Vorausfüllen
+✓ Übersichtliche Darstellung aller Daten
+✓ Professionelles Erscheinungsbild
+✓ Einfache Navigation (Weiter/Zurück)
+✓ Visuelle Bestätigung jedes Schritts
+
+🚀 NÄCHSTE SCHRITTE (für Vollversion):
+
+1. Kundendatenbank-Anbindung
+2. PDF-Vertragsgenerierung
+3. E-Signatur Integration
+4. Automatische Dokumentenverwaltung
+5. Status-Updates in Echtzeit
+6. Benachrichtigungssystem
+7. Export-Funktionen
+8. Reporting & Analytics
+
+=== ENDE DER DOKUMENTATION ===
