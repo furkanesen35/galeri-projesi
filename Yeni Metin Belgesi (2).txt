@@ -26,6 +26,9 @@
 +aufgabe tab detailed tab and calender
 +calender woche monat quartal täglich can stay
 +calender neue termin popup window
++arabanin status görünmeli
++status ve price hep görünmeli belki übersicht
++calender interactive 
 
 dokument
 ayrica bazi bilgiler yukarida gözüksün
@@ -43,9 +46,6 @@ belgenin kendisi gösterilecek
 left navibar template documents bütün template ler ayri bir tab olacak
 Dokument hochladen daha kücük yukarida
 document categorizing
-arabanin status görünmeli
 foto sekmesi 2 sekme öncesi ve sonrasi
-status ve price hep görünmeli belki übersicht
 personal verfügbarkeit in calender belki outlook integration belki takvim ortaklasmasi
-calender interactive 
 document with placeholder task management another tab with detailed view and calender row editing

@@ -3,9 +3,12 @@ import { Calendar, dayjsLocalizer, Views, EventProps } from 'react-big-calendar'
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Plus, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Car, User, Clock, X } from 'lucide-react';
-import { CalendarEvent } from '../types/domain';
+import { Plus, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Car, User, Clock, X, CheckCircle2, AlertCircle, Coffee, Wrench, AlertTriangle } from 'lucide-react';
+import { CalendarEvent, Vehicle, Personnel } from '../types/domain';
 import { taskTypeConfig, TaskTypeIcon, PriorityBadge } from '../config/taskIcons';
+import { vehicleFixtures } from '../services/vehicleFixtures';
+import { personnelFixtures } from '../services/personnelFixtures';
+import { getPrimaryServiceIssue, getAllServiceIssues } from '../services/vehicleServiceHistory';
 
 dayjs.extend(quarterOfYear);
 const localizer = dayjsLocalizer(dayjs);
@@ -289,40 +292,61 @@ export const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<ViewType>('week');
   const [isCreating, setIsCreating] = useState(false);
-  const [isLoadingData, setIsLoadingData] = useState(false);
-  const [autoFilledData, setAutoFilledData] = useState<any>(null);
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
+  const [selectedPersonnel, setSelectedPersonnel] = useState<Personnel | null>(null);
+  const [formData, setFormData] = useState<any>({
+    title: '',
+    taskType: '',
+    priority: 'medium',
+    description: ''
+  });
+  const [manualDateTime, setManualDateTime] = useState({
+    date: dayjs().format('YYYY-MM-DD'),
+    startTime: '09:00',
+    endTime: '11:00'
+  });
 
   const handleSelectEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
   };
 
-  const handleSelectSlot = async (slotInfo: { start: Date; end: Date }) => {
-    console.log('🎯 handleSelectSlot called:', slotInfo);
+  const handleSelectSlot = (slotInfo: { start: Date; end: Date }) => {
     setNewTaskSlot(slotInfo);
     setShowNewTaskModal(true);
-    setAutoFilledData(null);
-    console.log('✅ Modal should now be visible');
-    
-    // Simulate fetching data from backend
-    console.log('🔄 Simulating backend fetch...');
-    setIsLoadingData(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Mock data from "backend"
-    const mockData = {
-      title: 'Ölwechsel',
-      taskType: 'oil_change',
+    setSelectedVehicle(null);
+    setSelectedPersonnel(null);
+    setFormData({
+      title: '',
+      taskType: '',
       priority: 'medium',
-      vehicleName: 'BMW 320i',
-      assignee: 'Anna Schmidt',
-      description: 'Motoröl und Filter wechseln'
-    };
-    
-    console.log('📦 Backend data received:', mockData);
-    setAutoFilledData(mockData);
-    setIsLoadingData(false);
-    console.log('✅ Form fields should now be auto-filled');
+      description: ''
+    });
+    // Reset manual date/time when selecting from calendar
+    setManualDateTime({
+      date: dayjs(slotInfo.start).format('YYYY-MM-DD'),
+      startTime: dayjs(slotInfo.start).format('HH:mm'),
+      endTime: dayjs(slotInfo.end).format('HH:mm')
+    });
+  };
+
+  const handleOpenNewTaskModal = () => {
+    // Open modal without pre-selected time slot (manual input)
+    setNewTaskSlot(null);
+    setShowNewTaskModal(true);
+    setSelectedVehicle(null);
+    setSelectedPersonnel(null);
+    setFormData({
+      title: '',
+      taskType: '',
+      priority: 'medium',
+      description: ''
+    });
+    // Set default manual date/time
+    setManualDateTime({
+      date: dayjs().format('YYYY-MM-DD'),
+      startTime: '09:00',
+      endTime: '11:00'
+    });
   };
 
   const handleCloseModal = () => {
@@ -332,36 +356,57 @@ export const CalendarPage = () => {
   const handleCloseNewTaskModal = () => {
     setShowNewTaskModal(false);
     setNewTaskSlot(null);
-    setAutoFilledData(null);
-    setIsLoadingData(false);
+    setSelectedVehicle(null);
+    setSelectedPersonnel(null);
+    setFormData({
+      title: '',
+      taskType: '',
+      priority: 'medium',
+      description: ''
+    });
+    setManualDateTime({
+      date: dayjs().format('YYYY-MM-DD'),
+      startTime: '09:00',
+      endTime: '11:00'
+    });
   };
 
-  const handleCreateTask = async (taskData: any) => {
-    console.log('🚀 handleCreateTask called with data:', taskData);
-    console.log('📝 Setting isCreating to TRUE');
+  const handleCreateTask = async () => {
     setIsCreating(true);
-    console.log('⏳ Starting 1.5 second delay...');
     
-    // Simulate backend API call with 1.5 second delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Simulate backend API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    console.log('✅ Delay completed, creating event...');
+    // Determine start and end times
+    let startDate: Date;
+    let endDate: Date;
+    
+    if (newTaskSlot) {
+      // Time slot was selected from calendar
+      startDate = newTaskSlot.start;
+      endDate = newTaskSlot.end;
+    } else {
+      // Manual date/time input
+      startDate = dayjs(`${manualDateTime.date} ${manualDateTime.startTime}`).toDate();
+      endDate = dayjs(`${manualDateTime.date} ${manualDateTime.endTime}`).toDate();
+    }
+    
     const newEvent: CalendarEvent = {
       id: `ev${Date.now()}`,
-      title: taskData.title,
-      start: newTaskSlot!.start,
-      end: newTaskSlot!.end,
-      taskType: taskData.taskType,
-      priority: taskData.priority,
-      vehicleName: taskData.vehicleName,
-      assignee: taskData.assignee,
-      description: taskData.description,
+      title: formData.title,
+      start: startDate,
+      end: endDate,
+      taskType: formData.taskType,
+      priority: formData.priority,
+      vehicleId: selectedVehicle?.id,
+      vehicleName: selectedVehicle ? `${selectedVehicle.brand} ${selectedVehicle.model}` : undefined,
+      assignee: selectedPersonnel?.fullName,
+      assigneeId: selectedPersonnel?.id,
+      description: formData.description,
     };
-    console.log('📦 New event created:', newEvent);
+    
     setEvents([...events, newEvent]);
-    console.log('📝 Setting isCreating to FALSE');
     setIsCreating(false);
-    console.log('🔒 Closing modal...');
     handleCloseNewTaskModal();
   };
 
@@ -426,7 +471,10 @@ export const CalendarPage = () => {
           <h3 className="text-xl font-semibold text-foreground">Werkstatt Kalender</h3>
           <p className="text-sm text-text-secondary">Alle Termine und Reparaturen im Überblick</p>
         </div>
-        <button className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-text shadow hover:bg-primary-hover transition-colors">
+        <button 
+          onClick={handleOpenNewTaskModal}
+          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-text shadow hover:bg-primary-hover transition-colors"
+        >
           <Plus className="h-4 w-4" />
           Neuer Termin
         </button>
@@ -669,13 +717,16 @@ export const CalendarPage = () => {
       )}
 
       {/* New Task Creation Modal */}
-      {showNewTaskModal && newTaskSlot && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-surface border border-border rounded-xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden animate-fade-in">
+      {showNewTaskModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-surface border border-border rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden animate-fade-in flex flex-col">
             {/* Modal Header */}
-            <div className="bg-primary/10 border-b border-border px-6 py-4">
+            <div className="bg-primary/10 border-b border-border px-6 py-4 flex-shrink-0">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-foreground">Neue Aufgabe erstellen</h3>
+                <div className="flex items-center gap-3">
+                  <CalendarIcon className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-semibold text-foreground">Neue Aufgabe erstellen</h3>
+                </div>
                 <button
                   onClick={handleCloseNewTaskModal}
                   className="p-1.5 rounded-lg text-text-secondary hover:text-foreground hover:bg-bg-secondary transition-colors"
@@ -683,150 +734,377 @@ export const CalendarPage = () => {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-            </div>
-
-            {/* Modal Form */}
-            <form onSubmit={async (e) => {
-              console.log('📋 Form submitted!');
-              e.preventDefault();
-              console.log('📊 Form data from state:', autoFilledData);
-              await handleCreateTask(autoFilledData);
-              console.log('🏁 Form submission complete');
-            }} className="px-6 py-5 space-y-4 relative">
-              
-              {/* Loading Overlay */}
-              {isLoadingData && (
-                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-xl">
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-                    <p className="text-sm font-medium text-foreground">Daten werden geladen...</p>
-                  </div>
-                </div>
-              )}
               
               {/* Time Info */}
-              <div className="p-3 rounded-lg bg-bg-secondary text-sm text-foreground">
-                <div className="flex items-center gap-2">
+              {newTaskSlot ? (
+                <div className="mt-3 flex items-center gap-2 text-sm text-foreground">
                   <Clock className="h-4 w-4 text-primary" />
                   <span>
                     <strong>{dayjs(newTaskSlot.start).format('DD.MM.YYYY HH:mm')}</strong> bis{' '}
                     <strong>{dayjs(newTaskSlot.end).format('HH:mm')}</strong>
+                    <span className="text-text-secondary ml-2">
+                      ({dayjs(newTaskSlot.end).diff(dayjs(newTaskSlot.start), 'hour')}h)
+                    </span>
                   </span>
                 </div>
-              </div>
+              ) : (
+                <div className="mt-3 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                  <div className="flex items-center gap-2 text-sm text-foreground mb-2">
+                    <Clock className="h-4 w-4 text-blue-500" />
+                    <span className="font-medium">Datum und Uhrzeit manuell eingeben</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-text-secondary mb-1">Datum</label>
+                      <input
+                        type="date"
+                        value={manualDateTime.date}
+                        onChange={(e) => setManualDateTime({...manualDateTime, date: e.target.value})}
+                        className="w-full px-2 py-1.5 text-sm bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-text-secondary mb-1">Von</label>
+                      <input
+                        type="time"
+                        value={manualDateTime.startTime}
+                        onChange={(e) => setManualDateTime({...manualDateTime, startTime: e.target.value})}
+                        className="w-full px-2 py-1.5 text-sm bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-text-secondary mb-1">Bis</label>
+                      <input
+                        type="time"
+                        value={manualDateTime.endTime}
+                        onChange={(e) => setManualDateTime({...manualDateTime, endTime: e.target.value})}
+                        className="w-full px-2 py-1.5 text-sm bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
-              {/* Title */}
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Titel *</label>
-                <input
-                  type="text"
-                  name="title"
-                  required
-                  value={autoFilledData?.title || ''}
-                  onChange={(e) => setAutoFilledData({...autoFilledData, title: e.target.value})}
-                  disabled={isLoadingData}
-                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
-                  placeholder="z.B. Ölwechsel"
-                />
-              </div>
+            {/* Modal Content - Two Column Layout */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="grid grid-cols-2 gap-6 p-6">
+                
+                {/* LEFT COLUMN - Vehicle & Personnel Selection */}
+                <div className="space-y-5">
+                  <div className="flex items-center gap-2 pb-2 border-b border-border">
+                    <Car className="h-4 w-4 text-primary" />
+                    <h4 className="text-sm font-semibold text-foreground">Fahrzeug & Mitarbeiter</h4>
+                  </div>
 
-              {/* Task Type */}
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Aufgabentyp *</label>
-                <select
-                  name="taskType"
-                  required
-                  value={autoFilledData?.taskType || ''}
-                  onChange={(e) => setAutoFilledData({...autoFilledData, taskType: e.target.value})}
-                  disabled={isLoadingData}
-                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
-                >
-                  <option value="">Bitte wählen...</option>
-                  {Object.entries(taskTypeConfig).map(([key, config]) => (
-                    <option key={key} value={key}>{config.label}</option>
-                  ))}
-                </select>
-              </div>
+                  {/* Vehicle Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Fahrzeug auswählen *
+                    </label>
+                    <select
+                      required
+                      value={selectedVehicle?.id || ''}
+                      onChange={(e) => {
+                        const vehicle = vehicleFixtures.find(v => v.id === e.target.value);
+                        setSelectedVehicle(vehicle || null);
+                        
+                        // Auto-fill task details from vehicle service history
+                        if (vehicle) {
+                          const primaryIssue = getPrimaryServiceIssue(vehicle.id);
+                          if (primaryIssue) {
+                            setFormData({
+                              title: primaryIssue.title,
+                              taskType: primaryIssue.taskType,
+                              priority: primaryIssue.priority,
+                              description: primaryIssue.description
+                            });
+                          }
+                        }
+                      }}
+                      className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="">Fahrzeug wählen...</option>
+                      {vehicleFixtures.map((vehicle) => {
+                        const issues = getAllServiceIssues(vehicle.id);
+                        const hasUrgent = issues.some(i => i.priority === 'urgent');
+                        return (
+                          <option key={vehicle.id} value={vehicle.id}>
+                            {hasUrgent ? '⚠️ ' : ''}{vehicle.brand} {vehicle.model} - {vehicle.plate}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    
+                    {/* Vehicle Info Card */}
+                    {selectedVehicle && (
+                      <div className="mt-3 p-4 rounded-lg bg-primary/5 border border-primary/20">
+                        <div className="flex items-start gap-3">
+                          <Car className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                          <div className="flex-1 text-sm space-y-2">
+                            <p className="font-semibold text-foreground">
+                              {selectedVehicle.brand} {selectedVehicle.model} {selectedVehicle.variant}
+                            </p>
+                            <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-text-secondary">
+                              <p><span className="font-medium">Kennzeichen:</span> {selectedVehicle.plate}</p>
+                              <p><span className="font-medium">FIN:</span> {selectedVehicle.vin.slice(-8)}</p>
+                              <p><span className="font-medium">Laufleistung:</span> {selectedVehicle.mileageKm.toLocaleString()} km</p>
+                              <p><span className="font-medium">Erstzulassung:</span> {dayjs(selectedVehicle.firstRegistration).format('MM/YYYY')}</p>
+                            </div>
+                            
+                            {/* Known Issues */}
+                            {(() => {
+                              const issues = getAllServiceIssues(selectedVehicle.id);
+                              if (issues.length > 0) {
+                                return (
+                                  <div className="mt-3 pt-3 border-t border-primary/20">
+                                    <div className="flex items-center gap-1.5 mb-2">
+                                      <Wrench className="h-3.5 w-3.5 text-orange-500" />
+                                      <span className="text-xs font-semibold text-foreground">
+                                        Bekannte Probleme ({issues.length})
+                                      </span>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                      {issues.slice(0, 3).map((issue, idx) => (
+                                        <div key={idx} className="flex items-start gap-2 text-xs">
+                                          <PriorityBadge priority={issue.priority} />
+                                          <span className="text-text-secondary flex-1">{issue.title}</span>
+                                        </div>
+                                      ))}
+                                      {issues.length > 3 && (
+                                        <p className="text-xs text-text-secondary italic">
+                                          +{issues.length - 3} weitere...
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                );
+                              }
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-              {/* Priority */}
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Priorität *</label>
-                <select
-                  name="priority"
-                  required
-                  value={autoFilledData?.priority || 'medium'}
-                  onChange={(e) => setAutoFilledData({...autoFilledData, priority: e.target.value})}
-                  disabled={isLoadingData}
-                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
-                >
-                  <option value="low">Niedrig</option>
-                  <option value="medium">Mittel</option>
-                  <option value="high">Hoch</option>
-                  <option value="urgent">Dringend</option>
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {/* Vehicle */}
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Fahrzeug</label>
-                  <input
-                    type="text"
-                    name="vehicleName"
-                    value={autoFilledData?.vehicleName || ''}
-                    onChange={(e) => setAutoFilledData({...autoFilledData, vehicleName: e.target.value})}
-                    disabled={isLoadingData}
-                    className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
-                    placeholder="z.B. BMW 320i"
-                  />
+                  {/* Personnel Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Mitarbeiter zuweisen *
+                    </label>
+                    <select
+                      required
+                      value={selectedPersonnel?.id || ''}
+                      onChange={(e) => {
+                        const personnel = personnelFixtures.find(p => p.id === e.target.value);
+                        setSelectedPersonnel(personnel || null);
+                      }}
+                      className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="">Mitarbeiter wählen...</option>
+                      {personnelFixtures.map((person) => (
+                        <option key={person.id} value={person.id}>
+                          {person.fullName} - {person.role} 
+                          {person.status === 'available' ? ' ✓ Verfügbar' : person.status === 'busy' ? ' ⚠ Beschäftigt' : ' ✗ Abwesend'}
+                        </option>
+                      ))}
+                    </select>
+                    
+                    {/* Personnel Info Card */}
+                    {selectedPersonnel && (
+                      <div className={`mt-3 p-4 rounded-lg border ${
+                        selectedPersonnel.status === 'available' 
+                          ? 'bg-green-500/5 border-green-500/20' 
+                          : selectedPersonnel.status === 'busy'
+                          ? 'bg-orange-500/5 border-orange-500/20'
+                          : 'bg-red-500/5 border-red-500/20'
+                      }`}>
+                        <div className="flex items-start gap-3">
+                          {selectedPersonnel.image && (
+                            <img 
+                              src={selectedPersonnel.image} 
+                              alt={selectedPersonnel.fullName}
+                              className="h-12 w-12 rounded-full object-cover flex-shrink-0"
+                            />
+                          )}
+                          <div className="flex-1 text-sm space-y-1.5">
+                            <div className="flex items-center gap-2">
+                              <p className="font-semibold text-foreground">
+                                {selectedPersonnel.fullName}
+                              </p>
+                              {selectedPersonnel.status === 'available' && (
+                                <span className="flex items-center gap-1 text-xs bg-green-500/20 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full">
+                                  <CheckCircle2 className="h-3 w-3" />
+                                  Verfügbar
+                                </span>
+                              )}
+                              {selectedPersonnel.status === 'busy' && (
+                                <span className="flex items-center gap-1 text-xs bg-orange-500/20 text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded-full">
+                                  <AlertCircle className="h-3 w-3" />
+                                  Beschäftigt
+                                </span>
+                              )}
+                              {selectedPersonnel.status === 'on_leave' && (
+                                <span className="flex items-center gap-1 text-xs bg-red-500/20 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full">
+                                  <Coffee className="h-3 w-3" />
+                                  Abwesend
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-text-secondary">{selectedPersonnel.role}</p>
+                            {selectedPersonnel.availability.currentTask && (
+                              <p className="text-xs text-text-secondary">
+                                <span className="font-medium">Aktuelle Aufgabe:</span> {selectedPersonnel.availability.currentTask}
+                              </p>
+                            )}
+                            {!selectedPersonnel.availability.isAvailable && (
+                              <p className="text-xs text-text-secondary">
+                                <span className="font-medium">Verfügbar ab:</span> {dayjs(selectedPersonnel.availability.nextAvailableSlot).format('DD.MM.YYYY HH:mm')}
+                              </p>
+                            )}
+                            {selectedPersonnel.specializations.length > 0 && (
+                              <div className="pt-2">
+                                <p className="text-xs font-medium text-foreground mb-1">Spezialisierungen:</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {selectedPersonnel.specializations.slice(0, 4).map((spec, idx) => (
+                                    <span key={idx} className="text-xs bg-bg-tertiary px-2 py-0.5 rounded text-text-secondary">
+                                      {taskTypeConfig[spec]?.label || spec}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* Assignee */}
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Mitarbeiter</label>
-                  <input
-                    type="text"
-                    name="assignee"
-                    value={autoFilledData?.assignee || ''}
-                    onChange={(e) => setAutoFilledData({...autoFilledData, assignee: e.target.value})}
-                    disabled={isLoadingData}
-                    className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
-                    placeholder="z.B. Anna"
-                  />
+                {/* RIGHT COLUMN - Task Details */}
+                <div className="space-y-5">
+                  <div className="flex items-center gap-2 pb-2 border-b border-border">
+                    <Wrench className="h-4 w-4 text-primary" />
+                    <h4 className="text-sm font-semibold text-foreground">Aufgaben-Details</h4>
+                  </div>
+
+                  {/* Auto-fill notification */}
+                  {selectedVehicle && formData.title && (
+                    <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                      <AlertTriangle className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-foreground">Automatisch ausgefüllt</p>
+                        <p className="text-xs text-text-secondary mt-0.5">
+                          Aufgabendaten wurden basierend auf dem Fahrzeugverlauf geladen. Sie können diese manuell anpassen.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Title */}
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">Aufgabentitel *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.title}
+                      onChange={(e) => setFormData({...formData, title: e.target.value})}
+                      className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="z.B. Ölwechsel durchführen"
+                    />
+                  </div>
+
+                  {/* Task Type & Priority */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">Aufgabentyp *</label>
+                      <select
+                        required
+                        value={formData.taskType}
+                        onChange={(e) => setFormData({...formData, taskType: e.target.value})}
+                        className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="">Bitte wählen...</option>
+                        {Object.entries(taskTypeConfig).map(([key, config]) => (
+                          <option key={key} value={key}>{config.label}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">Priorität *</label>
+                      <select
+                        required
+                        value={formData.priority}
+                        onChange={(e) => setFormData({...formData, priority: e.target.value})}
+                        className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="low">Niedrig</option>
+                        <option value="medium">Mittel</option>
+                        <option value="high">Hoch</option>
+                        <option value="urgent">Dringend</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">Beschreibung</label>
+                    <textarea
+                      rows={6}
+                      value={formData.description}
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                      placeholder="Detaillierte Beschreibung der Aufgabe, Schritte, benötigte Teile..."
+                    />
+                  </div>
+
+                  {/* Estimated Duration (if available) */}
+                  {selectedVehicle && (() => {
+                    const primaryIssue = getPrimaryServiceIssue(selectedVehicle.id);
+                    if (primaryIssue && formData.taskType === primaryIssue.taskType) {
+                      return (
+                        <div className="p-3 rounded-lg bg-bg-secondary">
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-text-secondary" />
+                            <span className="text-sm text-foreground">
+                              <span className="font-medium">Geschätzte Dauer:</span> {primaryIssue.estimatedDuration}h
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })()}
                 </div>
               </div>
+            </div>
 
-              {/* Description */}
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Beschreibung</label>
-                <textarea
-                  name="description"
-                  rows={3}
-                  value={autoFilledData?.description || ''}
-                  onChange={(e) => setAutoFilledData({...autoFilledData, description: e.target.value})}
-                  disabled={isLoadingData}
-                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none disabled:opacity-50"
-                  placeholder="Zusätzliche Details..."
-                />
+            {/* Modal Footer */}
+            <div className="bg-bg-secondary border-t border-border px-6 py-4 flex items-center justify-between flex-shrink-0">
+              <div className="text-sm text-text-secondary">
+                {selectedVehicle && selectedPersonnel && formData.title && formData.taskType ? (
+                  <span className="text-green-600 dark:text-green-400 flex items-center gap-1.5">
+                    <CheckCircle2 className="h-4 w-4" />
+                    Alle erforderlichen Felder ausgefüllt
+                  </span>
+                ) : (
+                  <span>Bitte alle Pflichtfelder (*) ausfüllen</span>
+                )}
               </div>
-
-              {/* Modal Actions */}
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={() => {
-                    console.log('❌ Cancel button clicked');
-                    handleCloseNewTaskModal();
-                  }}
+                  onClick={handleCloseNewTaskModal}
                   disabled={isCreating}
-                  className="flex-1 px-4 py-2 bg-surface border border-border text-foreground rounded-lg font-medium hover:bg-bg-tertiary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-5 py-2 bg-surface border border-border text-foreground rounded-lg font-medium hover:bg-bg-tertiary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Abbrechen
                 </button>
                 <button
-                  type="submit"
-                  disabled={isCreating}
-                  className="flex-1 px-4 py-2 bg-primary text-primary-text rounded-lg font-medium hover:bg-primary-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  type="button"
+                  onClick={handleCreateTask}
+                  disabled={isCreating || !selectedVehicle || !selectedPersonnel || !formData.title || !formData.taskType}
+                  className="px-5 py-2 bg-primary text-primary-text rounded-lg font-medium hover:bg-primary-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[140px]"
                 >
                   {isCreating ? (
                     <>
@@ -836,10 +1114,9 @@ export const CalendarPage = () => {
                   ) : (
                     'Aufgabe erstellen'
                   )}
-                  {console.log('🔄 Button render - isCreating:', isCreating)}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}

@@ -132,6 +132,7 @@ export type TaskItem = {
   taskType: TaskType;
   priority?: TaskPriority;
   assignee?: string;
+  assigneeId?: string; // ID reference to Personnel
   status: TaskStatus;
   dueDate?: string;
   vehicleId?: string;
@@ -145,6 +146,7 @@ export type TaskDetailRow = {
   taskType: TaskType;
   priority: TaskPriority;
   assignee?: string;
+  assigneeId?: string; // ID reference to Personnel
   status: TaskStatus;
   dueDate: string;
   createdAt: string;
@@ -169,8 +171,42 @@ export type CalendarEvent = {
   end: Date;
   taskType?: TaskType;
   priority?: TaskPriority;
+  vehicleId?: string; // ID reference to Vehicle
   vehicleName?: string;
   assignee?: string;
+  assigneeId?: string; // ID reference to Personnel
   description?: string;
   status?: TaskStatus;
+};
+
+export type PersonnelStatus = 'available' | 'busy' | 'on_leave' | 'off_duty';
+
+export type Personnel = {
+  id: string;
+  employeeId: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  role: string;
+  specializations: TaskType[];
+  email: string;
+  phone: string;
+  status: PersonnelStatus;
+  availability: {
+    isAvailable: boolean;
+    currentTask: string | null;
+    nextAvailableSlot: string;
+    schedule: {
+      monday?: { start: string; end: string };
+      tuesday?: { start: string; end: string };
+      wednesday?: { start: string; end: string };
+      thursday?: { start: string; end: string };
+      friday?: { start: string; end: string };
+      saturday?: { start: string; end: string };
+      sunday?: { start: string; end: string };
+    };
+  };
+  image?: string;
+  hireDate: string;
+  certifications?: string[];
 };
