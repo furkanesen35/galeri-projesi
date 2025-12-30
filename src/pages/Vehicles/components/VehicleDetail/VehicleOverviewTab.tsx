@@ -2,14 +2,16 @@ import { Vehicle, VehicleFeature } from '../../../../types/domain';
 import { featureIconMap } from '../../../../config/featureIcons';
 import { 
   Car, Fuel, Gauge, Calendar, Settings2, Hash, Palette, DoorOpen, Users, 
-  Zap, Leaf, Info
+  Zap, Leaf, Info, Eye, Tag, ShoppingCart, Wrench, FileCheck, Edit, Share2, Archive, RotateCcw
 } from 'lucide-react';
 import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../../../../components/DraggablePanel';
 import { PanelCustomizer } from '../../../../components/PanelCustomizer';
 import { usePanelLayout } from '../../../../hooks/usePanelLayout';
+import { usePanelLayoutStore } from '../../../../store/usePanelLayoutStore';
 
 interface Props {
   vehicle: Vehicle;
+  onActionClick?: (action: string) => void;
 }
 
 const VIEW_ID = 'vehicle-detail-overview' as const;
@@ -33,22 +35,33 @@ const categoryConfig = {
   sportwagen: 'Sportwagen'
 };
 
-export const VehicleOverviewTab = ({ vehicle }: Props) => {
+export const VehicleOverviewTab = ({ vehicle, onActionClick }: Props) => {
   const condition = conditionConfig[vehicle.condition] || { label: 'Gebrauchtwagen' };
   const category = categoryConfig[vehicle.category] || 'Sonstiges';
   const { panels, checkVisibility } = usePanelLayout(VIEW_ID);
+  const { resetLayout } = usePanelLayoutStore();
 
   return (
-    <div className="space-y-4">
-      {/* Panel Customizer */}
-      <div className="flex justify-end">
-        <PanelCustomizer viewId={VIEW_ID} />
-      </div>
+    <div className="flex gap-4">
+      {/* Main Content */}
+      <div className="flex-1 space-y-4">
+        {/* Panel Customizer and Reset */}
+        <div className="flex items-center gap-2 justify-end">
+          <button
+            onClick={() => resetLayout(VIEW_ID)}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-surface text-foreground hover:border-primary hover:bg-bg-secondary transition-all"
+            title="Layout zurücksetzen"
+          >
+            <RotateCcw className="h-4 w-4" />
+            <span className="text-sm font-medium">Zurücksetzen</span>
+          </button>
+          <PanelCustomizer viewId={VIEW_ID} />
+        </div>
 
-      {/* Hidden Panels Bar */}
-      <HiddenPanelsBar viewId={VIEW_ID} />
+        {/* Hidden Panels Bar */}
+        <HiddenPanelsBar viewId={VIEW_ID} />
 
-      <DraggablePanelContainer viewId={VIEW_ID}>
+        <DraggablePanelContainer viewId={VIEW_ID}>
         {/* Vehicle Details Panel */}
         <DraggablePanel
           id="vehicle-data"
@@ -203,6 +216,82 @@ export const VehicleOverviewTab = ({ vehicle }: Props) => {
           </div>
         </DraggablePanel>
       </DraggablePanelContainer>
+      </div>
+
+      {/* Action Buttons - Right Side */}
+      <div className="flex flex-col gap-2 flex-shrink-0 w-36">
+        <button
+          onClick={() => onActionClick?.('view')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug ansehen"
+        >
+          <Eye className="h-4 w-4" />
+          Ansehen
+        </button>
+        
+        <button
+          onClick={() => onActionClick?.('sell')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 hover:bg-green-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug verkaufen"
+        >
+          <Tag className="h-4 w-4" />
+          Verkaufen
+        </button>
+        
+        <button
+          onClick={() => onActionClick?.('buy')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug kaufen"
+        >
+          <ShoppingCart className="h-4 w-4" />
+          Kaufen
+        </button>
+        
+        <button
+          onClick={() => onActionClick?.('service')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-600 dark:text-orange-400 hover:bg-orange-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Service einplanen"
+        >
+          <Wrench className="h-4 w-4" />
+          Service
+        </button>
+        
+        <button
+          onClick={() => onActionClick?.('contract')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Vertrag erstellen"
+        >
+          <FileCheck className="h-4 w-4" />
+          Vertrag
+        </button>
+        
+        <button
+          onClick={() => onActionClick?.('edit')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug bearbeiten"
+        >
+          <Edit className="h-4 w-4" />
+          Bearbeiten
+        </button>
+        
+        <button
+          onClick={() => onActionClick?.('share')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug teilen"
+        >
+          <Share2 className="h-4 w-4" />
+          Teilen
+        </button>
+        
+        <button
+          onClick={() => onActionClick?.('archive')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-500/10 border border-gray-500/30 text-gray-600 dark:text-gray-400 hover:bg-gray-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug archivieren"
+        >
+          <Archive className="h-4 w-4" />
+          Archivieren
+        </button>
+      </div>
     </div>
   );
 };

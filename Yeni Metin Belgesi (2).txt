@@ -23,7 +23,9 @@
 +documentlerde hersey otomatik cekilecek
 +document pdf export
 +3 click document ready
-aufgabe tab detailed tab and calender
++aufgabe tab detailed tab and calender
++calender woche monat quartal täglich can stay
++calender neue termin popup window
 
 dokument
 ayrica bazi bilgiler yukarida gözüksün
@@ -44,8 +46,6 @@ document categorizing
 arabanin status görünmeli
 foto sekmesi 2 sekme öncesi ve sonrasi
 status ve price hep görünmeli belki übersicht
-calender neue termin popup window
-calender woche monat quartal täglich can stay
 personal verfügbarkeit in calender belki outlook integration belki takvim ortaklasmasi
 calender interactive 
 document with placeholder task management another tab with detailed view and calender row editing

@@ -140,7 +140,7 @@ const calendarStyles = `
   .rbc-header {
     color: var(--text-primary);
     background: var(--bg-secondary);
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
     padding: 10px 4px;
     font-weight: 600;
   }
@@ -148,7 +148,7 @@ const calendarStyles = `
   /* Weekend highlighting in month view */
   .rbc-month-view .rbc-day-bg:nth-child(7n),
   .rbc-month-view .rbc-day-bg:nth-child(7n-1) {
-    background: rgba(100, 100, 120, 0.05) !important;
+    background: rgba(100, 100, 120, 0.03) !important;
   }
   
   /* Alternating time slot colors for better readability */
@@ -156,7 +156,7 @@ const calendarStyles = `
     background: var(--bg-primary);
   }
   .rbc-time-slot:nth-child(even) {
-    background: rgba(100, 100, 120, 0.03);
+    background: rgba(100, 100, 120, 0.01);
   }
   
   .rbc-off-range {
@@ -166,7 +166,7 @@ const calendarStyles = `
     background: var(--bg-tertiary);
   }
   .rbc-today {
-    background-color: rgba(59, 130, 246, 0.1) !important;
+    background-color: rgba(59, 130, 246, 0.08) !important;
   }
   .rbc-event {
     background-color: var(--primary-color);
@@ -186,21 +186,21 @@ const calendarStyles = `
   }
   .rbc-day-bg {
     background: var(--bg-primary);
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12) !important;
   }
   .rbc-month-view, .rbc-time-view {
     background: var(--bg-primary);
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
   }
   .rbc-time-slot {
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
     color: var(--text-secondary);
   }
   .rbc-time-content {
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
   }
   .rbc-time-header-content {
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
   }
   .rbc-current-time-indicator {
     background-color: var(--primary-color);
@@ -242,19 +242,19 @@ const calendarStyles = `
     font-weight: 700;
   }
   .rbc-timeslot-group {
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
   }
   .rbc-time-header.rbc-overflowing {
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
   }
   .rbc-label {
     color: var(--text-secondary);
   }
   .rbc-month-row {
-    border-color: var(--border-color);
+    border-color: rgba(128, 128, 128, 0.12);
   }
   .rbc-day-slot .rbc-time-slot {
-    border-top-color: var(--border-color);
+    border-top-color: rgba(128, 128, 128, 0.12);
   }
   .rbc-toolbar {
     display: none;
@@ -284,15 +284,85 @@ type ViewType = 'week' | 'month' | 'quarter';
 export const CalendarPage = () => {
   const [events, setEvents] = useState<CalendarEvent[]>(initialEvents);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [showNewTaskModal, setShowNewTaskModal] = useState(false);
+  const [newTaskSlot, setNewTaskSlot] = useState<{ start: Date; end: Date } | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<ViewType>('week');
+  const [isCreating, setIsCreating] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [autoFilledData, setAutoFilledData] = useState<any>(null);
 
   const handleSelectEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
   };
 
+  const handleSelectSlot = async (slotInfo: { start: Date; end: Date }) => {
+    console.log('🎯 handleSelectSlot called:', slotInfo);
+    setNewTaskSlot(slotInfo);
+    setShowNewTaskModal(true);
+    setAutoFilledData(null);
+    console.log('✅ Modal should now be visible');
+    
+    // Simulate fetching data from backend
+    console.log('🔄 Simulating backend fetch...');
+    setIsLoadingData(true);
+    
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Mock data from "backend"
+    const mockData = {
+      title: 'Ölwechsel',
+      taskType: 'oil_change',
+      priority: 'medium',
+      vehicleName: 'BMW 320i',
+      assignee: 'Anna Schmidt',
+      description: 'Motoröl und Filter wechseln'
+    };
+    
+    console.log('📦 Backend data received:', mockData);
+    setAutoFilledData(mockData);
+    setIsLoadingData(false);
+    console.log('✅ Form fields should now be auto-filled');
+  };
+
   const handleCloseModal = () => {
     setSelectedEvent(null);
+  };
+
+  const handleCloseNewTaskModal = () => {
+    setShowNewTaskModal(false);
+    setNewTaskSlot(null);
+    setAutoFilledData(null);
+    setIsLoadingData(false);
+  };
+
+  const handleCreateTask = async (taskData: any) => {
+    console.log('🚀 handleCreateTask called with data:', taskData);
+    console.log('📝 Setting isCreating to TRUE');
+    setIsCreating(true);
+    console.log('⏳ Starting 1.5 second delay...');
+    
+    // Simulate backend API call with 1.5 second delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    console.log('✅ Delay completed, creating event...');
+    const newEvent: CalendarEvent = {
+      id: `ev${Date.now()}`,
+      title: taskData.title,
+      start: newTaskSlot!.start,
+      end: newTaskSlot!.end,
+      taskType: taskData.taskType,
+      priority: taskData.priority,
+      vehicleName: taskData.vehicleName,
+      assignee: taskData.assignee,
+      description: taskData.description,
+    };
+    console.log('📦 New event created:', newEvent);
+    setEvents([...events, newEvent]);
+    console.log('📝 Setting isCreating to FALSE');
+    setIsCreating(false);
+    console.log('🔒 Closing modal...');
+    handleCloseNewTaskModal();
   };
 
   const handleDeleteEvent = () => {
@@ -381,10 +451,10 @@ export const CalendarPage = () => {
       </div>
 
       {/* Calendar - Full Width */}
-      <div className="fixed left-[80px] right-0 top-[200px] bottom-0 overflow-auto z-40">
-        <div className="h-full overflow-hidden rounded-2xl border border-border bg-surface shadow-lg m-4">
+      <div className="fixed left-[80px] right-0 top-[200px] bottom-0 z-40 p-4">
+        <div className="h-full overflow-hidden rounded-2xl border border-border bg-surface shadow-lg flex flex-col">
           {/* Custom Toolbar */}
-          <div className="flex items-center justify-between p-4 border-b border-border bg-bg-secondary">
+          <div className="flex items-center justify-between p-4 border-b border-border bg-bg-secondary flex-shrink-0">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => navigateCalendar('prev')}
@@ -426,7 +496,7 @@ export const CalendarPage = () => {
           </div>
 
           {/* Calendar Component */}
-          <div className="p-4 h-[calc(100%-80px)] overflow-auto">
+          <div className="flex-1 p-4 overflow-auto">
           {view === 'quarter' ? (
             // Quarter View - 3 Months Side by Side
             <div className="grid grid-cols-3 gap-4">
@@ -456,6 +526,8 @@ export const CalendarPage = () => {
                       toolbar={false}
                       style={{ height: 500 }}
                       onSelectEvent={handleSelectEvent}
+                      onSelectSlot={handleSelectSlot}
+                      selectable
                       components={{
                         event: CustomEvent,
                       }}
@@ -479,6 +551,8 @@ export const CalendarPage = () => {
               views={[Views.WEEK, Views.MONTH]}
               style={{ height: 600 }}
               onSelectEvent={handleSelectEvent}
+              onSelectSlot={handleSelectSlot}
+              selectable
               components={{
                 event: CustomEvent,
               }}
@@ -590,6 +664,182 @@ export const CalendarPage = () => {
                 Schließen
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* New Task Creation Modal */}
+      {showNewTaskModal && newTaskSlot && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-surface border border-border rounded-xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden animate-fade-in">
+            {/* Modal Header */}
+            <div className="bg-primary/10 border-b border-border px-6 py-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-foreground">Neue Aufgabe erstellen</h3>
+                <button
+                  onClick={handleCloseNewTaskModal}
+                  className="p-1.5 rounded-lg text-text-secondary hover:text-foreground hover:bg-bg-secondary transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={async (e) => {
+              console.log('📋 Form submitted!');
+              e.preventDefault();
+              console.log('📊 Form data from state:', autoFilledData);
+              await handleCreateTask(autoFilledData);
+              console.log('🏁 Form submission complete');
+            }} className="px-6 py-5 space-y-4 relative">
+              
+              {/* Loading Overlay */}
+              {isLoadingData && (
+                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-xl">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-sm font-medium text-foreground">Daten werden geladen...</p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Time Info */}
+              <div className="p-3 rounded-lg bg-bg-secondary text-sm text-foreground">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-primary" />
+                  <span>
+                    <strong>{dayjs(newTaskSlot.start).format('DD.MM.YYYY HH:mm')}</strong> bis{' '}
+                    <strong>{dayjs(newTaskSlot.end).format('HH:mm')}</strong>
+                  </span>
+                </div>
+              </div>
+
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Titel *</label>
+                <input
+                  type="text"
+                  name="title"
+                  required
+                  value={autoFilledData?.title || ''}
+                  onChange={(e) => setAutoFilledData({...autoFilledData, title: e.target.value})}
+                  disabled={isLoadingData}
+                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+                  placeholder="z.B. Ölwechsel"
+                />
+              </div>
+
+              {/* Task Type */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Aufgabentyp *</label>
+                <select
+                  name="taskType"
+                  required
+                  value={autoFilledData?.taskType || ''}
+                  onChange={(e) => setAutoFilledData({...autoFilledData, taskType: e.target.value})}
+                  disabled={isLoadingData}
+                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+                >
+                  <option value="">Bitte wählen...</option>
+                  {Object.entries(taskTypeConfig).map(([key, config]) => (
+                    <option key={key} value={key}>{config.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Priority */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Priorität *</label>
+                <select
+                  name="priority"
+                  required
+                  value={autoFilledData?.priority || 'medium'}
+                  onChange={(e) => setAutoFilledData({...autoFilledData, priority: e.target.value})}
+                  disabled={isLoadingData}
+                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+                >
+                  <option value="low">Niedrig</option>
+                  <option value="medium">Mittel</option>
+                  <option value="high">Hoch</option>
+                  <option value="urgent">Dringend</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {/* Vehicle */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">Fahrzeug</label>
+                  <input
+                    type="text"
+                    name="vehicleName"
+                    value={autoFilledData?.vehicleName || ''}
+                    onChange={(e) => setAutoFilledData({...autoFilledData, vehicleName: e.target.value})}
+                    disabled={isLoadingData}
+                    className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+                    placeholder="z.B. BMW 320i"
+                  />
+                </div>
+
+                {/* Assignee */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">Mitarbeiter</label>
+                  <input
+                    type="text"
+                    name="assignee"
+                    value={autoFilledData?.assignee || ''}
+                    onChange={(e) => setAutoFilledData({...autoFilledData, assignee: e.target.value})}
+                    disabled={isLoadingData}
+                    className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+                    placeholder="z.B. Anna"
+                  />
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Beschreibung</label>
+                <textarea
+                  name="description"
+                  rows={3}
+                  value={autoFilledData?.description || ''}
+                  onChange={(e) => setAutoFilledData({...autoFilledData, description: e.target.value})}
+                  disabled={isLoadingData}
+                  className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none disabled:opacity-50"
+                  placeholder="Zusätzliche Details..."
+                />
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    console.log('❌ Cancel button clicked');
+                    handleCloseNewTaskModal();
+                  }}
+                  disabled={isCreating}
+                  className="flex-1 px-4 py-2 bg-surface border border-border text-foreground rounded-lg font-medium hover:bg-bg-tertiary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Abbrechen
+                </button>
+                <button
+                  type="submit"
+                  disabled={isCreating}
+                  className="flex-1 px-4 py-2 bg-primary text-primary-text rounded-lg font-medium hover:bg-primary-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isCreating ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Wird erstellt...
+                    </>
+                  ) : (
+                    'Aufgabe erstellen'
+                  )}
+                  {console.log('🔄 Button render - isCreating:', isCreating)}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

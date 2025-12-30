@@ -32,6 +32,12 @@ import {
   Camera,
   History,
   LayoutDashboard,
+  Eye,
+  Edit,
+  Share2,
+  Wrench,
+  FileCheck,
+  Archive,
 } from "lucide-react";
 import { vehicleFixtures } from "../../services/vehicleFixtures";
 import { featureIconMap } from "../../config/featureIcons";
@@ -85,6 +91,14 @@ export const VehicleDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'price' | 'documents' | 'history' | 'photos' | 'settings'>('overview');
   const [showSalesWizard, setShowSalesWizard] = useState(false);
+
+  const handleActionClick = (action: string) => {
+    console.log(`${action} clicked for vehicle:`, vehicle?.id);
+    if (action === 'sell') {
+      setShowSalesWizard(true);
+    }
+    // Other actions will be implemented later
+  };
 
   const tabs = [
     { id: 'overview' as const, label: 'Übersicht', icon: LayoutDashboard },
@@ -148,8 +162,8 @@ export const VehicleDetail = () => {
         </span>
       </button>
 
-      {/* TAB NAVIGATION with Actions */}
-      <div className="flex items-center justify-between border-b border-border mb-6">
+      {/* TAB NAVIGATION */}
+      <div className="border-b border-border mb-6">
         <div className="flex items-center gap-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -170,21 +184,10 @@ export const VehicleDetail = () => {
             );
           })}
         </div>
-
-        {/* Verkaufen Button - Only show for available vehicles */}
-        {vehicle.status === 'available' && (
-          <button
-            onClick={() => setShowSalesWizard(true)}
-            className="flex items-center gap-2 rounded-lg bg-green-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-green-600 transition-all hover:scale-105 mb-[-2px]"
-          >
-            <ShoppingCart className="h-4 w-4" />
-            Fahrzeug verkaufen
-          </button>
-        )}
       </div>
 
       {/* TAB CONTENT */}
-      {activeTab === 'overview' && <VehicleOverviewTab vehicle={vehicle} />}
+      {activeTab === 'overview' && <VehicleOverviewTab vehicle={vehicle} onActionClick={handleActionClick} />}
 
       {/* PRICE CALCULATION TAB */}
 

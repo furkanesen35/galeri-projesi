@@ -15,7 +15,15 @@ import {
   FileText,
   TrendingUp,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ShoppingCart,
+  Tag,
+  FileCheck,
+  Wrench,
+  Archive,
+  Eye,
+  Edit,
+  Share2
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -78,6 +86,12 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
     setCurrentImageIndex((prev) => 
       prev === vehicle.images.length - 1 ? 0 : prev + 1
     );
+  };
+
+  const handleActionClick = (e: React.MouseEvent, action: string) => {
+    e.stopPropagation();
+    console.log(`${action} clicked for vehicle:`, vehicle.id);
+    // Actions will be implemented later
   };
 
   return (
@@ -295,6 +309,81 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
             })}
           </div>
         </div>
+      </div>
+
+      {/* Action Buttons - Right Side */}
+      <div className="flex flex-col gap-2 flex-shrink-0 border-l border-border pl-4 ml-4">
+        <button
+          onClick={(e) => handleActionClick(e, 'view')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug ansehen"
+        >
+          <Eye className="h-4 w-4" />
+          Ansehen
+        </button>
+        
+        <button
+          onClick={(e) => handleActionClick(e, 'sell')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 hover:bg-green-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug verkaufen"
+        >
+          <Tag className="h-4 w-4" />
+          Verkaufen
+        </button>
+        
+        <button
+          onClick={(e) => handleActionClick(e, 'buy')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug kaufen"
+        >
+          <ShoppingCart className="h-4 w-4" />
+          Kaufen
+        </button>
+        
+        <button
+          onClick={(e) => handleActionClick(e, 'service')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-600 dark:text-orange-400 hover:bg-orange-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Service einplanen"
+        >
+          <Wrench className="h-4 w-4" />
+          Service
+        </button>
+        
+        <button
+          onClick={(e) => handleActionClick(e, 'contract')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Vertrag erstellen"
+        >
+          <FileCheck className="h-4 w-4" />
+          Vertrag
+        </button>
+        
+        <button
+          onClick={(e) => handleActionClick(e, 'edit')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug bearbeiten"
+        >
+          <Edit className="h-4 w-4" />
+          Bearbeiten
+        </button>
+        
+        <button
+          onClick={(e) => handleActionClick(e, 'share')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug teilen"
+        >
+          <Share2 className="h-4 w-4" />
+          Teilen
+        </button>
+        
+        <button
+          onClick={(e) => handleActionClick(e, 'archive')}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-500/10 border border-gray-500/30 text-gray-600 dark:text-gray-400 hover:bg-gray-500/20 transition-all text-xs font-medium whitespace-nowrap"
+          title="Fahrzeug archivieren"
+        >
+          <Archive className="h-4 w-4" />
+          Archivieren
+        </button>
       </div>
     </div>
   );
