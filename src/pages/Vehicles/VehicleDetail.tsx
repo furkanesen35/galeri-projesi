@@ -164,6 +164,40 @@ export const VehicleDetail = () => {
 
       {/* TAB NAVIGATION */}
       <div className="border-b border-border mb-6">
+        {/* Vehicle Info Bar - Always Visible */}
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-border/50">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <Car className="h-5 w-5 text-primary" />
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">
+                  {vehicle.brand} {vehicle.model}
+                </h2>
+                <div className="flex items-center gap-3 mt-0.5">
+                  <span className="px-2 py-0.5 text-sm font-mono font-bold bg-white text-black border-2 border-black rounded shadow-sm">
+                    {vehicle.plate}
+                  </span>
+                  <span className="text-sm text-text-secondary">•</span>
+                  <span className="text-sm text-text-secondary">
+                    {vehicle.year} · {vehicle.mileageKm.toLocaleString('de-DE')} km
+                  </span>
+                  <span className="text-sm text-text-secondary">•</span>
+                  <span className={`text-sm font-medium ${status.color}`}>
+                    {status.label}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-text-secondary">Preis</p>
+            <p className="text-xl font-bold text-primary">
+              {vehicle.price.toLocaleString('de-DE')} €
+            </p>
+          </div>
+        </div>
+        
+        {/* Tabs */}
         <div className="flex items-center gap-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;

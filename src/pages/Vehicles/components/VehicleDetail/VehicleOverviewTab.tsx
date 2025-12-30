@@ -59,7 +59,7 @@ export const VehicleOverviewTab = ({ vehicle, onActionClick }: Props) => {
         </div>
 
         {/* Hidden Panels Bar */}
-        <HiddenPanelsBar viewId={VIEW_ID} />
+        <HiddenPanelsBar viewId={VIEW_ID} showResetButton={false} />
 
         <DraggablePanelContainer viewId={VIEW_ID}>
         {/* Vehicle Details Panel */}

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Vehicle } from '../../../../types/domain';
 import { 
   Calculator, Euro, TrendingUp, TrendingDown, Percent, 
-  PiggyBank, Receipt, ArrowRight, Info, RefreshCw, Wrench, AlertTriangle, ChevronDown, Plus, Trash2, Check, Loader2, Zap
+  PiggyBank, Receipt, ArrowRight, Info, RefreshCw, Wrench, AlertTriangle, ChevronDown, Plus, Trash2, Check, Loader2, Zap, RotateCcw
 } from 'lucide-react';
 import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../../../../components/DraggablePanel';
 import { PanelCustomizer } from '../../../../components/PanelCustomizer';
@@ -100,7 +100,7 @@ export const VehiclePriceTabNew = ({ vehicle }: Props) => {
   const isFirstRender = useRef(true);
   const damagesRef = useRef(damages);
   
-  const { getPanels, isPanelVisible } = usePanelLayoutStore();
+  const { getPanels, isPanelVisible, resetLayout } = usePanelLayoutStore();
 
   // Keep ref in sync with latest damages
   useEffect(() => {
@@ -517,13 +517,21 @@ export const VehiclePriceTabNew = ({ vehicle }: Props) => {
 
   return (
     <div className="space-y-4">
-      {/* Panel Customizer */}
-      <div className="flex justify-end">
+      {/* Panel Customizer and Reset */}
+      <div className="flex items-center gap-2 justify-end">
+        <button
+          onClick={() => resetLayout(VIEW_ID)}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-surface text-foreground hover:border-primary hover:bg-bg-secondary transition-all"
+          title="Layout zurücksetzen"
+        >
+          <RotateCcw className="h-4 w-4" />
+          <span className="text-sm font-medium">Zurücksetzen</span>
+        </button>
         <PanelCustomizer viewId={VIEW_ID} />
       </div>
 
       {/* Hidden Panels Bar */}
-      <HiddenPanelsBar viewId={VIEW_ID} />
+      <HiddenPanelsBar viewId={VIEW_ID} showResetButton={false} />
 
       {/* Content Grid */}
       <div className="grid grid-cols-3 gap-6">

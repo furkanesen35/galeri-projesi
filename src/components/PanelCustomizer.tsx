@@ -253,17 +253,6 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
                 </div>
               )}
             </div>
-
-            {/* Footer */}
-            <div className="p-3 border-t border-border bg-bg-secondary flex-shrink-0">
-              <button
-                onClick={handleReset}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary hover:text-foreground hover:bg-surface rounded-lg transition-colors"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Auf Standard zurücksetzen
-              </button>
-            </div>
           </div>
         </>
       )}
