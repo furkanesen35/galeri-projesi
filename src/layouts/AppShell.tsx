@@ -10,6 +10,7 @@ import {
   Settings as SettingsIcon,
   Wrench,
   Target,
+  FolderOpen,
 } from "lucide-react";
 import { CarSearchIcon } from "../components/icons/CarSearchIcon";
 import { LanguageSelector } from "../components/LanguageSelector";
@@ -32,6 +33,7 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
     { to: "/photos", label: t("nav.photos"), icon: Camera },
     { to: "/ocr-scanner", label: t("nav.ocrScanner"), icon: ScanLine },
     { to: "/vehicles", label: t("nav.vehicles"), icon: CarSearchIcon },
+    { to: "/document-pool", label: t("nav.documentPool"), icon: FolderOpen },
     { to: "/tasks", label: t("nav.tasks"), icon: ListTodo },
     { to: "/calendar", label: t("nav.calendar"), icon: CalendarIcon },
     { to: "/config", label: t("nav.config"), icon: Wrench },

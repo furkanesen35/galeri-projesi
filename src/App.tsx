@@ -12,6 +12,7 @@ import { Auth } from './pages/Auth';
 import { Marketing } from './pages/Marketing';
 import { DamageAssessment } from './pages/DamageAssessment';
 import { OCRScanner } from './pages/OCRScanner';
+import { DocumentPool } from './pages/DocumentPool';
 
 const App = () => (
   <Routes>
@@ -54,6 +55,14 @@ const App = () => (
       element={
         <AppShell>
           <VehicleDetail />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/document-pool"
+      element={
+        <AppShell>
+          <DocumentPool />
         </AppShell>
       }
     />

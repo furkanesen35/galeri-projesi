@@ -14,7 +14,8 @@ const resources = {
         photos: 'Photos',
         ocrScanner: 'OCR Scanner',
         settings: 'Settings',
-        marketing: 'Marketing'
+        marketing: 'Marketing',
+        documentPool: 'Document Pool'
       },
       actions: {
         add: 'Add',
@@ -141,7 +142,8 @@ const resources = {
         photos: 'Fotos',
         ocrScanner: 'OCR Scanner',
         settings: 'Einstellungen',
-        marketing: 'Marketing'
+        marketing: 'Marketing',
+        documentPool: 'Dokumentenpool'
       },
       actions: {
         add: 'Hinzufügen',
@@ -268,7 +270,8 @@ const resources = {
         photos: 'Fotoğraflar',
         ocrScanner: 'OCR Tarayıcı',
         settings: 'Ayarlar',
-        marketing: 'Pazarlama'
+        marketing: 'Pazarlama',
+        documentPool: 'Belge Havuzu'
       },
       actions: {
         add: 'Ekle',

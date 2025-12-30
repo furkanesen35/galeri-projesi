@@ -38,6 +38,7 @@ import {
   Wrench,
   FileCheck,
   Archive,
+  ClipboardCheck,
 } from "lucide-react";
 import { vehicleFixtures } from "../../services/vehicleFixtures";
 import { featureIconMap } from "../../config/featureIcons";
@@ -49,6 +50,7 @@ import { VehiclePhotosTab } from "./components/VehicleDetail/VehiclePhotosTab";
 import { VehicleSettingsTab } from "./components/VehicleDetail/VehicleSettingsTab";
 import { VehicleOverviewTab } from "./components/VehicleDetail/VehicleOverviewTab";
 import { SalesWizard } from "./components/VehicleDetail/SalesWizard";
+import { PurchaseChecklist } from "./components/VehicleDetail/PurchaseChecklist";
 
 const statusConfig = {
   available: { label: "Verfügbar", color: "text-green-600" },
@@ -89,7 +91,7 @@ export const VehicleDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<'overview' | 'price' | 'documents' | 'history' | 'photos' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'checklist' | 'price' | 'documents' | 'history' | 'photos' | 'settings'>('overview');
   const [showSalesWizard, setShowSalesWizard] = useState(false);
 
   const handleActionClick = (action: string) => {
@@ -102,6 +104,7 @@ export const VehicleDetail = () => {
 
   const tabs = [
     { id: 'overview' as const, label: 'Übersicht', icon: LayoutDashboard },
+    { id: 'checklist' as const, label: 'Checkliste', icon: ClipboardCheck },
     { id: 'price' as const, label: 'Preiskalkulation', icon: Calculator },
     { id: 'documents' as const, label: 'Dokumente', icon: FileText },
     { id: 'history' as const, label: 'Historie', icon: History },
@@ -222,6 +225,13 @@ export const VehicleDetail = () => {
 
       {/* TAB CONTENT */}
       {activeTab === 'overview' && <VehicleOverviewTab vehicle={vehicle} onActionClick={handleActionClick} />}
+
+      {/* CHECKLIST TAB */}
+      {activeTab === 'checklist' && (
+        <div className="mt-6">
+          <PurchaseChecklist vehicle={vehicle} />
+        </div>
+      )}
 
       {/* PRICE CALCULATION TAB */}
 

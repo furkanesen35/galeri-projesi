@@ -2,12 +2,13 @@ import { Vehicle, VehicleFeature } from '../../../../types/domain';
 import { featureIconMap } from '../../../../config/featureIcons';
 import { 
   Car, Fuel, Gauge, Calendar, Settings2, Hash, Palette, DoorOpen, Users, 
-  Zap, Leaf, Info, Eye, Tag, ShoppingCart, Wrench, FileCheck, Edit, Share2, Archive, RotateCcw
+  Zap, Leaf, Info, Eye, Tag, ShoppingCart, Wrench, FileCheck, Edit, Share2, Archive, RotateCcw, MessageSquare
 } from 'lucide-react';
 import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../../../../components/DraggablePanel';
 import { PanelCustomizer } from '../../../../components/PanelCustomizer';
 import { usePanelLayout } from '../../../../hooks/usePanelLayout';
 import { usePanelLayoutStore } from '../../../../store/usePanelLayoutStore';
+import { VehicleComments } from './VehicleComments';
 
 interface Props {
   vehicle: Vehicle;
@@ -42,40 +43,42 @@ export const VehicleOverviewTab = ({ vehicle, onActionClick }: Props) => {
   const { resetLayout } = usePanelLayoutStore();
 
   return (
-    <div className="flex gap-4">
-      {/* Main Content */}
-      <div className="flex-1 space-y-4">
-        {/* Panel Customizer and Reset */}
-        <div className="flex items-center gap-2 justify-end">
-          <button
-            onClick={() => resetLayout(VIEW_ID)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-surface text-foreground hover:border-primary hover:bg-bg-secondary transition-all"
-            title="Layout zurücksetzen"
+    <div className="space-y-6">
+
+      <div className="flex gap-4">
+        {/* Main Content */}
+        <div className="flex-1 space-y-4">
+          {/* Panel Customizer and Reset */}
+          <div className="flex items-center gap-2 justify-end">
+            <button
+              onClick={() => resetLayout(VIEW_ID)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-surface text-foreground hover:border-primary hover:bg-bg-secondary transition-all"
+              title="Layout zurücksetzen"
+            >
+              <RotateCcw className="h-4 w-4" />
+              <span className="text-sm font-medium">Zurücksetzen</span>
+            </button>
+            <PanelCustomizer viewId={VIEW_ID} />
+          </div>
+
+          {/* Hidden Panels Bar */}
+          <HiddenPanelsBar viewId={VIEW_ID} showResetButton={false} />
+
+          <DraggablePanelContainer viewId={VIEW_ID}>
+          {/* Vehicle Details Panel */}
+          <DraggablePanel
+            id="vehicle-data"
+            viewId={VIEW_ID}
+            title="Fahrzeugdaten"
+            icon={<Car className="h-5 w-5 text-primary" />}
           >
-            <RotateCcw className="h-4 w-4" />
-            <span className="text-sm font-medium">Zurücksetzen</span>
-          </button>
-          <PanelCustomizer viewId={VIEW_ID} />
-        </div>
-
-        {/* Hidden Panels Bar */}
-        <HiddenPanelsBar viewId={VIEW_ID} showResetButton={false} />
-
-        <DraggablePanelContainer viewId={VIEW_ID}>
-        {/* Vehicle Details Panel */}
-        <DraggablePanel
-          id="vehicle-data"
-          viewId={VIEW_ID}
-          title="Fahrzeugdaten"
-          icon={<Car className="h-5 w-5 text-primary" />}
-        >
-          <div className="grid grid-cols-2 gap-4">
-            <InfoRow label="Marke" value={vehicle.brand} />
-            <InfoRow label="Modell" value={`${vehicle.model} ${vehicle.variant || ''}`} />
-            <InfoRow label="Kategorie" value={category} />
-            <InfoRow label="Zustand" value={condition.label} />
-            <InfoRow label="Baujahr" value={vehicle.year.toString()} />
-            <InfoRow label="Erstzulassung" value={new Date(vehicle.firstRegistration).toLocaleDateString('de-DE')} />
+            <div className="grid grid-cols-2 gap-4">
+              <InfoRow label="Marke" value={vehicle.brand} />
+              <InfoRow label="Modell" value={`${vehicle.model} ${vehicle.variant || ''}`} />
+              <InfoRow label="Kategorie" value={category} />
+              <InfoRow label="Zustand" value={condition.label} />
+              <InfoRow label="Baujahr" value={vehicle.year.toString()} />
+              <InfoRow label="Erstzulassung" value={new Date(vehicle.firstRegistration).toLocaleDateString('de-DE')} />
             <InfoRow label="Kilometerstand" value={`${vehicle.mileageKm.toLocaleString('de-DE')} km`} />
             <InfoRow label="Farbe" value={vehicle.color} colorHex={vehicle.colorHex} />
             <InfoRow label="Türen" value={vehicle.doors.toString()} />
@@ -218,79 +221,92 @@ export const VehicleOverviewTab = ({ vehicle, onActionClick }: Props) => {
       </DraggablePanelContainer>
       </div>
 
-      {/* Action Buttons - Right Side */}
-      <div className="flex flex-col gap-2 flex-shrink-0 w-36">
-        <button
-          onClick={() => onActionClick?.('view')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Fahrzeug ansehen"
-        >
-          <Eye className="h-4 w-4" />
-          Ansehen
-        </button>
-        
-        <button
-          onClick={() => onActionClick?.('sell')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 hover:bg-green-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Fahrzeug verkaufen"
-        >
-          <Tag className="h-4 w-4" />
-          Verkaufen
-        </button>
-        
-        <button
-          onClick={() => onActionClick?.('buy')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Fahrzeug kaufen"
-        >
-          <ShoppingCart className="h-4 w-4" />
-          Kaufen
-        </button>
-        
-        <button
-          onClick={() => onActionClick?.('service')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-600 dark:text-orange-400 hover:bg-orange-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Service einplanen"
-        >
-          <Wrench className="h-4 w-4" />
-          Service
-        </button>
-        
-        <button
-          onClick={() => onActionClick?.('contract')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Vertrag erstellen"
-        >
-          <FileCheck className="h-4 w-4" />
-          Vertrag
-        </button>
-        
-        <button
-          onClick={() => onActionClick?.('edit')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Fahrzeug bearbeiten"
-        >
-          <Edit className="h-4 w-4" />
-          Bearbeiten
-        </button>
-        
-        <button
-          onClick={() => onActionClick?.('share')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Fahrzeug teilen"
-        >
-          <Share2 className="h-4 w-4" />
-          Teilen
-        </button>
-        
-        <button
-          onClick={() => onActionClick?.('archive')}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-500/10 border border-gray-500/30 text-gray-600 dark:text-gray-400 hover:bg-gray-500/20 transition-all text-xs font-medium whitespace-nowrap"
-          title="Fahrzeug archivieren"
-        >
-          <Archive className="h-4 w-4" />
-          Archivieren
-        </button>
+      {/* Right Sidebar - Action Buttons & Comments */}
+      <div className="flex flex-col gap-4 flex-shrink-0 w-80">
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={() => onActionClick?.('view')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Fahrzeug ansehen"
+          >
+            <Eye className="h-4 w-4" />
+            Ansehen
+          </button>
+          
+          <button
+            onClick={() => onActionClick?.('sell')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 hover:bg-green-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Fahrzeug verkaufen"
+          >
+            <Tag className="h-4 w-4" />
+            Verkaufen
+          </button>
+          
+          <button
+            onClick={() => onActionClick?.('buy')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Fahrzeug kaufen"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            Kaufen
+          </button>
+          
+          <button
+            onClick={() => onActionClick?.('service')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-600 dark:text-orange-400 hover:bg-orange-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Service einplanen"
+          >
+            <Wrench className="h-4 w-4" />
+            Service
+          </button>
+          
+          <button
+            onClick={() => onActionClick?.('contract')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Vertrag erstellen"
+          >
+            <FileCheck className="h-4 w-4" />
+            Vertrag
+          </button>
+          
+          <button
+            onClick={() => onActionClick?.('edit')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Fahrzeug bearbeiten"
+          >
+            <Edit className="h-4 w-4" />
+            Bearbeiten
+          </button>
+          
+          <button
+            onClick={() => onActionClick?.('share')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Fahrzeug teilen"
+          >
+            <Share2 className="h-4 w-4" />
+            Teilen
+          </button>
+          
+          <button
+            onClick={() => onActionClick?.('archive')}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-500/10 border border-gray-500/30 text-gray-600 dark:text-gray-400 hover:bg-gray-500/20 transition-all text-xs font-medium whitespace-nowrap"
+            title="Fahrzeug archivieren"
+          >
+            <Archive className="h-4 w-4" />
+            Archivieren
+          </button>
+        </div>
+
+        {/* Comments Section */}
+        <div className="rounded-xl border border-border bg-surface p-4 shadow-sm">
+          <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border">
+            <MessageSquare className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-semibold text-foreground">Kommentare</h3>
+          </div>
+          <VehicleComments vehicleId={vehicle.id} />
+        </div>
+      </div>
       </div>
     </div>
   );

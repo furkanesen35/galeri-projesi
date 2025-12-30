@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Filter, Download, SortAsc, SortDesc } from 'lucide-react';
+import { Search, Filter, Download, FileText, SortAsc, SortDesc } from 'lucide-react';
 import { TaskDetailRow } from '../../types/domain';
 import { TaskTypeIcon, PriorityBadge, taskTypeConfig } from '../../config/taskIcons';
 
@@ -121,6 +121,156 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
     link.click();
   };
 
+  // Export to PDF (opens print dialog)
+  const exportToPDF = () => {
+    const priorityLabels: Record<string, string> = {
+      low: 'Niedrig',
+      medium: 'Mittel',
+      high: 'Hoch',
+      urgent: 'Dringend'
+    };
+
+    const statusLabels: Record<string, string> = {
+      pending: 'Ausstehend',
+      in_progress: 'In Bearbeitung',
+      done: 'Erledigt',
+      cancelled: 'Storniert'
+    };
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const tableRows = filteredAndSortedTasks.map(task => `
+      <tr>
+        <td>${task.title}</td>
+        <td>${taskTypeConfig[task.taskType]?.label || task.taskType}</td>
+        <td>${statusLabels[task.status] || task.status}</td>
+        <td>${priorityLabels[task.priority] || task.priority}</td>
+        <td>${task.vehicleName}</td>
+        <td>${task.licensePlate}</td>
+        <td>${task.assignee || '-'}</td>
+        <td>${task.dueDate}</td>
+        <td style="text-align: right;">${task.estimatedCost ? `${task.estimatedCost.toLocaleString('de-DE')} €` : '-'}</td>
+      </tr>
+    `).join('');
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <title>Aufgaben Details - ${new Date().toLocaleDateString('de-DE')}</title>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            color: #333;
+          }
+          .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #2563eb;
+          }
+          .header h1 { font-size: 24px; color: #1e40af; }
+          .header .date { color: #6b7280; font-size: 14px; }
+          .summary {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: #f3f4f6;
+            border-radius: 8px;
+          }
+          .summary-item { font-size: 14px; }
+          .summary-item strong { color: #2563eb; }
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 11px;
+          }
+          th { 
+            background: #1e40af; 
+            color: white; 
+            padding: 10px 8px; 
+            text-align: left;
+            font-weight: 600;
+          }
+          td { 
+            padding: 8px; 
+            border-bottom: 1px solid #e5e7eb;
+          }
+          tr:nth-child(even) { background: #f9fafb; }
+          tr:hover { background: #f3f4f6; }
+          .footer {
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 11px;
+            color: #9ca3af;
+            text-align: center;
+          }
+          @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>📋 Aufgaben Details</h1>
+          <div class="date">Erstellt am: ${new Date().toLocaleDateString('de-DE', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })}</div>
+        </div>
+        
+        <div class="summary">
+          <div class="summary-item">Gesamt: <strong>${filteredAndSortedTasks.length}</strong> Aufgaben</div>
+          <div class="summary-item">Ausstehend: <strong>${filteredAndSortedTasks.filter(t => t.status === 'pending').length}</strong></div>
+          <div class="summary-item">In Bearbeitung: <strong>${filteredAndSortedTasks.filter(t => t.status === 'in_progress').length}</strong></div>
+          <div class="summary-item">Erledigt: <strong>${filteredAndSortedTasks.filter(t => t.status === 'done').length}</strong></div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Aufgabe</th>
+              <th>Typ</th>
+              <th>Status</th>
+              <th>Priorität</th>
+              <th>Fahrzeug</th>
+              <th>Kennzeichen</th>
+              <th>Zuständig</th>
+              <th>Fällig am</th>
+              <th style="text-align: right;">Kosten (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows}
+          </tbody>
+        </table>
+
+        <div class="footer">
+          Autohaus Management System • Generiert am ${new Date().toLocaleString('de-DE')}
+        </div>
+
+        <script>
+          window.onload = function() { window.print(); }
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+  };
+
   return (
     <div className="space-y-4 p-6">
       {/* Filters and Search */}
@@ -167,14 +317,23 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
           <option value="urgent">Dringend</option>
         </select>
 
-        {/* Export Button */}
-        <button
-          onClick={exportToCSV}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-text text-sm font-semibold hover:bg-primary-hover transition-colors"
-        >
-          <Download className="h-4 w-4" />
-          Export CSV
-        </button>
+        {/* Export Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={exportToCSV}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-surface text-foreground text-sm font-semibold hover:bg-bg-secondary transition-colors"
+          >
+            <Download className="h-4 w-4" />
+            CSV
+          </button>
+          <button
+            onClick={exportToPDF}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-text text-sm font-semibold hover:bg-primary-hover transition-colors"
+          >
+            <FileText className="h-4 w-4" />
+            PDF
+          </button>
+        </div>
       </div>
 
       {/* Results Count */}

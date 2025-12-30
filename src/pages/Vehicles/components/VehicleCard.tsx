@@ -266,47 +266,38 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           )}
         </div>
 
-        {/* Feature Icons with Tooltips - Show ALL features, highlight available ones */}
+        {/* Feature Icons - Show ALL Available Features */}
         <div className="mt-3 pt-3 border-t border-border">
           <div className="flex flex-wrap gap-2">
-            {Object.entries(featureIconMap).map(([featureKey, featureData]) => {
-              const Icon = featureData.icon;
-              const isAvailable = vehicle.features?.includes(featureKey as VehicleFeature) || false;
-              
-              return (
-                <div
-                  key={featureKey}
-                  className="group/icon relative"
-                  title={featureData.label}
-                >
-                  <div className={`rounded-md p-1.5 border transition-all cursor-help ${
-                    isAvailable 
-                      ? 'bg-primary/10 border-primary/30 hover:border-primary/60 hover:bg-primary/15' 
-                      : 'bg-gray-50 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                  }`}>
-                    <Icon className={`h-4 w-4 transition-colors ${
-                      isAvailable 
-                        ? 'text-primary group-hover/icon:text-primary' 
-                        : 'text-gray-300 dark:text-gray-600 group-hover/icon:text-gray-400 dark:group-hover/icon:text-gray-500'
-                    }`} />
-                  </div>
-                  {/* Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover/icon:opacity-100 transition-opacity pointer-events-none z-10">
-                    <div className="bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap shadow-lg">
-                      <span className="flex items-center gap-1.5">
+            {vehicle.features && vehicle.features.length > 0 ? (
+              vehicle.features.map((featureKey) => {
+                const featureData = featureIconMap[featureKey];
+                if (!featureData) return null;
+                
+                const Icon = featureData.icon;
+                
+                return (
+                  <div
+                    key={featureKey}
+                    className="group/icon relative"
+                    title={featureData.label}
+                  >
+                    <div className="rounded-md p-1.5 border bg-primary/10 border-primary/30 hover:border-primary/60 hover:bg-primary/15 transition-all cursor-help">
+                      <Icon className="h-4 w-4 text-primary group-hover/icon:text-primary transition-colors" />
+                    </div>
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover/icon:opacity-100 transition-opacity pointer-events-none z-10">
+                      <div className="bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap shadow-lg">
                         {featureData.label}
-                        {isAvailable ? (
-                          <span className="text-green-400 font-bold">✓</span>
-                        ) : (
-                          <span className="text-red-400 font-bold">✗</span>
-                        )}
-                      </span>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <p className="text-xs text-text-secondary italic">Keine besonderen Ausstattungen</p>
+            )}
           </div>
         </div>
       </div>

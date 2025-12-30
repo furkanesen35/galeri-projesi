@@ -29,23 +29,23 @@
 +arabanin status görünmeli
 +status ve price hep görünmeli belki übersicht
 +calender interactive 
++ayrica bazi bilgiler yukarida gözüksün
++personal verfügbarkeit in calender belki outlook integration belki takvim ortaklasmasi
++summary Fahrzeug Details kommentar
++Fahrzeugverwaltung depopulation in the info
++fahrzeugverwaltung checklist ne yapilmasi gerekiyor
++satin almada ne yapilacak tek tek olacak
++tasklist in verwaltung ayrica aufgabe olusturma
++satis öncesi sonrasi fotolar biz arabaya bunlari yaptik
++document ler categorize edilecek vertrag tüv etc.
++belgenin kendisi gösterilecek
++left navibar template documents bütün template ler ayri bir tab olacak
++document categorizing
++foto sekmesi 2 sekme öncesi ve sonrasi
++document with placeholder task management another tab with detailed view and calender row editing
++dokument
 
-dokument
-ayrica bazi bilgiler yukarida gözüksün
 lead Management aufgabe tracking müsteri bilgileri
-summary Fahrzeug Details kommentar
 inner component dragging
-Fahrzeugverwaltung depopulation in the info
 suche ki
-fahrzeugverwaltung checklist ne yapilmasi gerekiyor
-satin almada ne yapilacak tek tek olacak
-tasklist in verwaltung ayrica aufgabe olusturma
-satis öncesi sonrasi fotolar biz arabaya bunlari yaptik
-document ler categorize edilecek vertrag tüv etc.
-belgenin kendisi gösterilecek
-left navibar template documents bütün template ler ayri bir tab olacak
 Dokument hochladen daha kücük yukarida
-document categorizing
-foto sekmesi 2 sekme öncesi ve sonrasi
-personal verfügbarkeit in calender belki outlook integration belki takvim ortaklasmasi
-document with placeholder task management another tab with detailed view and calender row editing
