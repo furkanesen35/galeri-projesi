@@ -23,10 +23,14 @@ import {
   Download,
   FileCheck2,
   AlertCircle,
+  Search,
+  Users,
 } from "lucide-react";
 import {
   salesContractData,
   buyerProfile,
+  buyerProfiles,
+  companyBuyerProfiles,
   dealerProfile,
   carForSale,
 } from "../../../../services/placeholderData";
@@ -38,6 +42,7 @@ interface Props {
 }
 
 type WizardStep =
+  | "client-selection"
   | "buyer-info"
   | "vehicle-confirm"
   | "price-payment"
@@ -46,9 +51,9 @@ type WizardStep =
   | "document-signature";
 
 export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>("buyer-info");
+  const [currentStep, setCurrentStep] = useState<WizardStep>("client-selection");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [buyerSignature, setBuyerSignature] = useState<string | null>(null);
   const [sellerSignature, setSellerSignature] = useState<string | null>(null);
@@ -56,6 +61,10 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
     "buyer" | "seller" | null
   >(null);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Start with empty data, will load after delay
   const [formData, setFormData] = useState({
@@ -111,15 +120,83 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
     contract: salesContractData.contract,
   });
 
-  // Simulate loading data from backend
+  // Simulate loading data from backend - only when client is selected
   useEffect(() => {
+    if (!selectedClientId) return;
+
+    setIsLoading(true);
     const timer = setTimeout(() => {
-      setFormData({ ...salesContractData });
+      // Find selected client from both private and company buyers
+      const allClients = [...buyerProfiles, ...companyBuyerProfiles];
+      const selectedClient = allClients.find(c => c.id === selectedClientId);
+      
+      if (selectedClient) {
+        // Map company buyer to the expected format
+        if (selectedClient.type === "company") {
+          const companyClient = selectedClient as any;
+          setFormData({
+            buyer: {
+              type: "company",
+              salutation: "",
+              firstName: companyClient.representative.name.split(' ')[0] || "",
+              lastName: companyClient.representative.name.split(' ').slice(1).join(' ') || "",
+              fullName: companyClient.companyName,
+              dateOfBirth: companyClient.representative.dateOfBirth,
+              street: companyClient.street,
+              city: `${companyClient.postalCode} ${companyClient.city}`,
+              phone: companyClient.phone,
+              email: companyClient.email,
+              idType: companyClient.representative.idType,
+              idNumber: companyClient.representative.idNumber,
+              driverLicenseNumber: "",
+              iban: companyClient.iban,
+              bic: companyClient.bic,
+              bankName: companyClient.bankName,
+            },
+            vehicle: salesContractData.vehicle,
+            price: salesContractData.price,
+            seller: salesContractData.seller,
+            handover: salesContractData.handover,
+            warranty: salesContractData.warranty,
+            terms: salesContractData.terms,
+            contract: salesContractData.contract,
+          });
+        } else {
+          // Private buyer
+          setFormData({
+            buyer: {
+              type: selectedClient.type,
+              salutation: selectedClient.salutation,
+              firstName: selectedClient.firstName,
+              lastName: selectedClient.lastName,
+              fullName: selectedClient.fullName,
+              dateOfBirth: selectedClient.dateOfBirth,
+              street: selectedClient.street,
+              city: `${selectedClient.postalCode} ${selectedClient.city}`,
+              phone: selectedClient.phone,
+              email: selectedClient.email,
+              idType: selectedClient.idType,
+              idNumber: selectedClient.idNumber,
+              driverLicenseNumber: selectedClient.driverLicenseNumber,
+              iban: selectedClient.iban,
+              bic: selectedClient.bic,
+              bankName: selectedClient.bankName,
+            },
+            vehicle: salesContractData.vehicle,
+            price: salesContractData.price,
+            seller: salesContractData.seller,
+            handover: salesContractData.handover,
+            warranty: salesContractData.warranty,
+            terms: salesContractData.terms,
+            contract: salesContractData.contract,
+          });
+        }
+      }
       setIsLoading(false);
     }, 2500); // 2.5 seconds delay
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [selectedClientId]);
 
   const updateFormData = (section: string, field: string, value: any) => {
     setFormData((prev) => ({
@@ -132,6 +209,7 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
   };
 
   const steps: { id: WizardStep; label: string; icon: typeof User }[] = [
+    { id: "client-selection", label: "Kunde wählen", icon: Users },
     { id: "buyer-info", label: "Käufer", icon: User },
     { id: "vehicle-confirm", label: "Fahrzeug", icon: Car },
     { id: "price-payment", label: "Preis & Zahlung", icon: Euro },
@@ -156,6 +234,63 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
   const handlePrev = () => {
     const prevIndex = currentStepIndex - 1;
     if (prevIndex >= 0) {
+      // If going back to client selection, reset the selected client and clear data
+      if (steps[prevIndex].id === "client-selection") {
+        setSelectedClientId(null);
+        setFormData({
+          buyer: {
+            type: "",
+            salutation: "",
+            firstName: "",
+            lastName: "",
+            fullName: "",
+            dateOfBirth: "",
+            street: "",
+            city: "",
+            phone: "",
+            email: "",
+            idType: "",
+            idNumber: "",
+            driverLicenseNumber: "",
+            iban: "",
+            bic: "",
+            bankName: "",
+          },
+          vehicle: {
+            brand: "",
+            model: "",
+            variant: "",
+            vin: "",
+            licensePlate: "",
+            firstRegistration: "",
+            mileage: 0,
+            color: "",
+            fuelType: "",
+            power: "",
+            transmission: "",
+            tuv: "",
+            previousOwners: 0,
+            condition: "",
+          },
+          price: {
+            salePrice: 0,
+            vatIncluded: true,
+            vatRate: 19,
+            netPrice: 0,
+            vatAmount: 0,
+            paymentMethod: "",
+            downPayment: 0,
+            remainingAmount: 0,
+            paymentDueDate: "",
+          },
+          seller: salesContractData.seller,
+          handover: salesContractData.handover,
+          warranty: salesContractData.warranty,
+          terms: salesContractData.terms,
+          contract: salesContractData.contract,
+        });
+      }
+      
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentStep(steps[prevIndex].id);
@@ -172,6 +307,52 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
       setIsProcessing(false);
       onComplete();
     }, 2000);
+  };
+
+  // Handle search with debounce
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setIsSearching(true);
+
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Debounce search
+    searchTimeoutRef.current = setTimeout(() => {
+      setIsSearching(false);
+    }, 800); // 800ms debounce
+  };
+
+  // Filter clients based on search
+  const filteredClients = [...buyerProfiles, ...companyBuyerProfiles].filter(
+    (client) => {
+      if (!searchQuery) return true;
+      const query = searchQuery.toLowerCase();
+      if (client.type === "company") {
+        const companyClient = client as any;
+        return (
+          companyClient.companyName.toLowerCase().includes(query) ||
+          companyClient.email.toLowerCase().includes(query) ||
+          companyClient.representative.name.toLowerCase().includes(query)
+        );
+      } else {
+        return (
+          client.fullName.toLowerCase().includes(query) ||
+          client.email.toLowerCase().includes(query) ||
+          client.phone.toLowerCase().includes(query)
+        );
+      }
+    }
+  );
+
+  const handleClientSelect = (clientId: string) => {
+    setSelectedClientId(clientId);
+    // Automatically move to next step after selection
+    setTimeout(() => {
+      handleNext();
+    }, 500);
   };
 
   return (
@@ -259,6 +440,16 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
             </div>
           ) : (
             <>
+              {currentStep === "client-selection" && (
+                <ClientSelectionStep
+                  searchQuery={searchQuery}
+                  onSearchChange={handleSearch}
+                  isSearching={isSearching}
+                  clients={filteredClients}
+                  selectedClientId={selectedClientId}
+                  onClientSelect={handleClientSelect}
+                />
+              )}
               {currentStep === "buyer-info" && (
                 <BuyerInfoStep
                   data={formData.buyer}
@@ -359,7 +550,8 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
           ) : (
             <button
               onClick={handleNext}
-              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-primary text-primary-text font-semibold hover:bg-primary-hover transition-all"
+              disabled={currentStep === "client-selection" && !selectedClientId}
+              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-primary text-primary-text font-semibold hover:bg-primary-hover transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Weiter
               <ChevronRight className="h-4 w-4" />
@@ -409,6 +601,143 @@ export const SalesWizard = ({ vehicle, onClose, onComplete }: Props) => {
 };
 
 // ============ STEP COMPONENTS ============
+
+const ClientSelectionStep = ({
+  searchQuery,
+  onSearchChange,
+  isSearching,
+  clients,
+  selectedClientId,
+  onClientSelect,
+}: {
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  isSearching: boolean;
+  clients: any[];
+  selectedClientId: string | null;
+  onClientSelect: (clientId: string) => void;
+}) => (
+  <div className="space-y-6">
+    <div>
+      <h3 className="text-lg font-semibold text-foreground mb-4">
+        Kunde auswählen
+      </h3>
+      <p className="text-sm text-text-secondary mb-6">
+        Wählen Sie einen Kunden aus der Datenbank oder suchen Sie nach einem bestimmten Kunden.
+      </p>
+    </div>
+
+    {/* Search Bar */}
+    <div className="relative">
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
+        <Search className="h-5 w-5" />
+      </div>
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => onSearchChange(e.target.value)}
+        placeholder="Suchen nach Name, Email, Firma..."
+        className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-surface text-foreground placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+      />
+      {isSearching && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+        </div>
+      )}
+    </div>
+
+    {/* Client List */}
+    <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+      {isSearching ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin h-8 w-8 border-3 border-primary border-t-transparent rounded-full mx-auto mb-3" />
+            <p className="text-sm text-text-secondary">Suche läuft...</p>
+          </div>
+        </div>
+      ) : clients.length === 0 ? (
+        <div className="text-center py-12">
+          <Users className="h-12 w-12 text-text-secondary mx-auto mb-3 opacity-50" />
+          <p className="text-sm text-text-secondary">
+            Keine Kunden gefunden. Bitte passen Sie Ihre Suche an.
+          </p>
+        </div>
+      ) : (
+        clients.map((client) => {
+          const isCompany = client.type === "company";
+          const isSelected = client.id === selectedClientId;
+          
+          return (
+            <button
+              key={client.id}
+              onClick={() => onClientSelect(client.id)}
+              className={`w-full text-left p-4 rounded-xl border transition-all ${
+                isSelected
+                  ? "border-primary bg-primary/10 shadow-lg scale-[1.02]"
+                  : "border-border bg-surface hover:bg-bg-secondary hover:border-primary/50"
+              }`}
+            >
+              <div className="flex items-start gap-4">
+                <div
+                  className={`p-3 rounded-lg ${
+                    isCompany
+                      ? "bg-purple-500/20 text-purple-500"
+                      : "bg-blue-500/20 text-blue-500"
+                  }`}
+                >
+                  {isCompany ? (
+                    <Building2 className="h-6 w-6" />
+                  ) : (
+                    <User className="h-6 w-6" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className="font-semibold text-foreground truncate">
+                      {isCompany
+                        ? (client as any).companyName
+                        : client.fullName}
+                    </h4>
+                    {isSelected && (
+                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    )}
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm text-text-secondary flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      {client.email}
+                    </p>
+                    <p className="text-sm text-text-secondary flex items-center gap-2">
+                      <Phone className="h-4 w-4" />
+                      {client.phone}
+                    </p>
+                    {isCompany && (
+                      <p className="text-xs text-text-secondary mt-2">
+                        Vertreter: {(client as any).representative.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </button>
+          );
+        })
+      )}
+    </div>
+
+    {!isSearching && clients.length > 0 && (
+      <div className="rounded-lg bg-blue-500/10 border border-blue-500/20 p-4">
+        <p className="text-sm text-foreground flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 text-blue-500" />
+          <span>
+            {clients.length} {clients.length === 1 ? 'Kunde gefunden' : 'Kunden gefunden'}. 
+            {selectedClientId ? ' Klicken Sie auf "Weiter", um fortzufahren.' : ' Wählen Sie einen Kunden aus.'}
+          </span>
+        </p>
+      </div>
+    )}
+  </div>
+);
 
 const BuyerInfoStep = ({
   data,
