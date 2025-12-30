@@ -210,3 +210,86 @@ export type Personnel = {
   hireDate: string;
   certifications?: string[];
 };
+
+// ============================================
+// Customer / CRM Types
+// ============================================
+
+export type CustomerType = 'private' | 'business' | 'dealer';
+export type CustomerStatus = 'active' | 'inactive' | 'lead' | 'blocked';
+export type Gender = 'male' | 'female' | 'other' | 'unknown';
+
+export type CustomerAddress = {
+  street: string;
+  houseNumber: string;
+  postalCode: string;
+  city: string;
+  country: string;
+};
+
+export type CustomerActivity = {
+  id: string;
+  type: 'vehicle_purchase' | 'vehicle_sale' | 'inquiry' | 'service' | 'document' | 'call' | 'email' | 'visit' | 'note';
+  title: string;
+  description: string;
+  date: string;
+  vehicleId?: string;
+  documentId?: string;
+  staffId?: string;
+};
+
+export type Customer = {
+  id: string;
+  customerId: string; // e.g., KD-2024-001
+  type: CustomerType;
+  status: CustomerStatus;
+  
+  // Personal/Company info
+  salutation?: string;
+  firstName: string;
+  lastName: string;
+  companyName?: string;
+  gender?: Gender;
+  dateOfBirth?: string;
+  
+  // Contact
+  email: string;
+  phone: string;
+  mobile?: string;
+  fax?: string;
+  website?: string;
+  
+  // Address
+  address: CustomerAddress;
+  billingAddress?: CustomerAddress;
+  
+  // Business specific
+  taxId?: string; // USt-IdNr
+  commercialRegister?: string; // Handelsregisternummer
+  
+  // Banking
+  iban?: string;
+  bic?: string;
+  bankName?: string;
+  
+  // Relationships
+  vehicleIds: string[]; // Linked vehicles
+  assignedStaffId?: string;
+  
+  // Preferences
+  preferredContactMethod?: 'email' | 'phone' | 'mail';
+  newsletter?: boolean;
+  marketingConsent?: boolean;
+  
+  // Financials
+  creditLimit?: number;
+  paymentTermDays?: number;
+  
+  // Meta
+  notes?: string;
+  tags?: string[];
+  source?: string; // How they found us
+  activities: CustomerActivity[];
+  createdAt: string;
+  updatedAt: string;
+};

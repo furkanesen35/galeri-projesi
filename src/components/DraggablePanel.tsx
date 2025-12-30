@@ -165,6 +165,7 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
       {/* Panel Header */}
       <div
         className={`
+          drag-handle cursor-grab active:cursor-grabbing
           flex items-center justify-between p-4 rounded-t-xl relative
           ${!hasCustomStyle ? variantClasses.header : ''}
           ${!isCollapsed ? 'border-b border-border' : 'rounded-b-xl'}
@@ -173,10 +174,10 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
         style={headerInlineStyles}
       >
         <div className="flex items-center gap-3">
-          {/* Drag Handle */}
+          {/* Drag Handle Icon */}
           {showDragHandle && (
             <div 
-              className="drag-handle cursor-grab active:cursor-grabbing p-1 -ml-1 rounded hover:bg-black/10 transition-colors"
+              className="p-1 -ml-1 rounded hover:bg-black/10 transition-colors"
               title="Ziehen zum Neuanordnen"
             >
               <GripVertical className="h-4 w-4" style={{ color: customStyle?.iconColor || customStyle?.headerTextColor || 'inherit', opacity: 0.6 }} />
@@ -194,7 +195,7 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
           <h3 className="text-lg font-semibold" style={{ color: customStyle?.headerTextColor || 'inherit' }}>{title}</h3>
         </div>
 
-        <div className="flex items-center gap-1 relative">
+        <div className="flex items-center gap-1 relative" onMouseDown={(e) => e.stopPropagation()}>
           {/* Style Button */}
           <StyleTriggerButton
             onClick={() => setShowStyler(!showStyler)}

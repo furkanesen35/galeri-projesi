@@ -13,6 +13,8 @@ import { Marketing } from './pages/Marketing';
 import { DamageAssessment } from './pages/DamageAssessment';
 import { OCRScanner } from './pages/OCRScanner';
 import { DocumentPool } from './pages/DocumentPool';
+import { Customers } from './pages/Customers';
+import { CustomerDetail } from './pages/Customers/CustomerDetail';
 
 const App = () => (
   <Routes>
@@ -63,6 +65,22 @@ const App = () => (
       element={
         <AppShell>
           <DocumentPool />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/customers"
+      element={
+        <AppShell>
+          <Customers />
+        </AppShell>
+      }
+    />
+    <Route
+      path="/customers/:id"
+      element={
+        <AppShell>
+          <CustomerDetail />
         </AppShell>
       }
     />

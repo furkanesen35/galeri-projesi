@@ -15,7 +15,8 @@ const resources = {
         ocrScanner: 'OCR Scanner',
         settings: 'Settings',
         marketing: 'Marketing',
-        documentPool: 'Document Pool'
+        documentPool: 'Document Pool',
+        customers: 'Customers'
       },
       actions: {
         add: 'Add',
@@ -143,7 +144,8 @@ const resources = {
         ocrScanner: 'OCR Scanner',
         settings: 'Einstellungen',
         marketing: 'Marketing',
-        documentPool: 'Dokumentenpool'
+        documentPool: 'Dokumentenpool',
+        customers: 'Kunden'
       },
       actions: {
         add: 'Hinzufügen',
@@ -271,7 +273,8 @@ const resources = {
         ocrScanner: 'OCR Tarayıcı',
         settings: 'Ayarlar',
         marketing: 'Pazarlama',
-        documentPool: 'Belge Havuzu'
+        documentPool: 'Belge Havuzu',
+        customers: 'Müşteriler'
       },
       actions: {
         add: 'Ekle',

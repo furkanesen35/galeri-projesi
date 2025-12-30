@@ -11,6 +11,7 @@ import {
   Wrench,
   Target,
   FolderOpen,
+  Users,
 } from "lucide-react";
 import { CarSearchIcon } from "../components/icons/CarSearchIcon";
 import { LanguageSelector } from "../components/LanguageSelector";
@@ -33,6 +34,7 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
     { to: "/photos", label: t("nav.photos"), icon: Camera },
     { to: "/ocr-scanner", label: t("nav.ocrScanner"), icon: ScanLine },
     { to: "/vehicles", label: t("nav.vehicles"), icon: CarSearchIcon },
+    { to: "/customers", label: t("nav.customers"), icon: Users },
     { to: "/document-pool", label: t("nav.documentPool"), icon: FolderOpen },
     { to: "/tasks", label: t("nav.tasks"), icon: ListTodo },
     { to: "/calendar", label: t("nav.calendar"), icon: CalendarIcon },
