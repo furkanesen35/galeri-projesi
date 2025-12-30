@@ -84,7 +84,7 @@ interface BackgroundState {
   selectedBackgroundId: string;
   backgroundOpacity: number; // 0-100
   backgroundBlur: number; // 0-20 px
-  
+
   // Actions
   setBackground: (id: string) => void;
   setOpacity: (opacity: number) => void;
@@ -103,24 +103,24 @@ export const useBackgroundStore = create<BackgroundState>()(
   persist(
     (set, get) => ({
       ...defaultState,
-      
+
       setBackground: (id) => {
         set({ selectedBackgroundId: id });
       },
-      
+
       setOpacity: (opacity) => {
         set({ backgroundOpacity: Math.max(0, Math.min(100, opacity)) });
       },
-      
+
       setBlur: (blur) => {
         set({ backgroundBlur: Math.max(0, Math.min(20, blur)) });
       },
-      
+
       getSelectedBackground: () => {
         const id = get().selectedBackgroundId;
-        return backgroundOptions.find(bg => bg.id === id) || backgroundOptions[0];
+        return backgroundOptions.find((bg) => bg.id === id) || backgroundOptions[0];
       },
-      
+
       reset: () => {
         set(defaultState);
       },

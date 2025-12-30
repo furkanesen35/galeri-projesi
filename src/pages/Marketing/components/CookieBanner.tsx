@@ -10,13 +10,13 @@ export const CookieBanner = ({ onAccept, onDecline }: CookieBannerProps) => {
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex-1">
-              <p className="text-sm text-foreground mb-1 font-semibold">
-                We use cookies
-              </p>
+              <p className="text-sm text-foreground mb-1 font-semibold">We use cookies</p>
               <p className="text-xs text-text-secondary">
-                We use cookies to improve your experience and analyze site traffic. 
-                By clicking "Accept", you consent to our use of cookies.{' '}
-                <a href="#" className="text-primary hover:underline">Learn more</a>
+                We use cookies to improve your experience and analyze site traffic. By clicking
+                "Accept", you consent to our use of cookies.{' '}
+                <a href="#" className="text-primary hover:underline">
+                  Learn more
+                </a>
               </p>
             </div>
             <div className="flex gap-3">

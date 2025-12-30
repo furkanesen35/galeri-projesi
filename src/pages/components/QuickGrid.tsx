@@ -4,14 +4,17 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 
 export const QuickGrid = () => {
   const { t } = useTranslation();
-  
-  const items = useMemo(() => [
-    { id: 'vehicles', title: t('nav.vehicles'), description: t('dashboard.manageFleet') },
-    { id: 'tasks', title: t('nav.tasks'), description: t('dashboard.assignTasks') },
-    { id: 'calendar', title: t('nav.calendar'), description: t('dashboard.viewSchedule') },
-    { id: 'photos', title: t('nav.photos'), description: t('dashboard.uploadMedia') }
-  ], [t]);
-  
+
+  const items = useMemo(
+    () => [
+      { id: 'vehicles', title: t('nav.vehicles'), description: t('dashboard.manageFleet') },
+      { id: 'tasks', title: t('nav.tasks'), description: t('dashboard.assignTasks') },
+      { id: 'calendar', title: t('nav.calendar'), description: t('dashboard.viewSchedule') },
+      { id: 'photos', title: t('nav.photos'), description: t('dashboard.uploadMedia') },
+    ],
+    [t]
+  );
+
   const data = items;
 
   const onDragEnd = (result: DropResult) => {

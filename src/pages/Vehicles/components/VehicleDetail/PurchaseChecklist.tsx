@@ -1,8 +1,21 @@
 import { useState } from 'react';
-import { 
-  CheckCircle2, Circle, ClipboardCheck, AlertCircle, 
-  Camera, FileText, Calculator, Car, Shield, Key,
-  CreditCard, User, Phone, Wrench, FileCheck, Calendar
+import {
+  CheckCircle2,
+  Circle,
+  ClipboardCheck,
+  AlertCircle,
+  Camera,
+  FileText,
+  Calculator,
+  Car,
+  Shield,
+  Key,
+  CreditCard,
+  User,
+  Phone,
+  Wrench,
+  FileCheck,
+  Calendar,
 } from 'lucide-react';
 import { Vehicle } from '../../../../types/domain';
 
@@ -64,7 +77,7 @@ const defaultChecklistItems: Omit<ChecklistItem, 'completed'>[] = [
     category: 'dokumente',
     required: false,
   },
-  
+
   // Prüfung
   {
     id: 'check-1',
@@ -106,7 +119,7 @@ const defaultChecklistItems: Omit<ChecklistItem, 'completed'>[] = [
     category: 'prüfung',
     required: false,
   },
-  
+
   // Finanzen
   {
     id: 'fin-1',
@@ -132,7 +145,7 @@ const defaultChecklistItems: Omit<ChecklistItem, 'completed'>[] = [
     category: 'finanzen',
     required: false,
   },
-  
+
   // Übergabe
   {
     id: 'trans-1',
@@ -185,30 +198,30 @@ const categoryLabels = {
 
 export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
   // Initialize state with default items - in real app this would come from vehicle data or API
-  const [items, setItems] = useState<ChecklistItem[]>(() => 
-    defaultChecklistItems.map(item => ({
+  const [items, setItems] = useState<ChecklistItem[]>(() =>
+    defaultChecklistItems.map((item) => ({
       ...item,
       // Mock: mark some items as completed based on vehicle status
-      completed: vehicle.status !== 'available' ? Math.random() > 0.5 : false
+      completed: vehicle.status !== 'available' ? Math.random() > 0.5 : false,
     }))
   );
-  
+
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(['dokumente', 'prüfung', 'finanzen', 'übergabe'])
   );
 
   const toggleItem = (itemId: string) => {
-    setItems(prev => prev.map(item => 
-      item.id === itemId ? { ...item, completed: !item.completed } : item
-    ));
-    const item = items.find(i => i.id === itemId);
+    setItems((prev) =>
+      prev.map((item) => (item.id === itemId ? { ...item, completed: !item.completed } : item))
+    );
+    const item = items.find((i) => i.id === itemId);
     if (item && onItemToggle) {
       onItemToggle(itemId, !item.completed);
     }
   };
 
   const toggleCategory = (category: string) => {
-    setExpandedCategories(prev => {
+    setExpandedCategories((prev) => {
       const next = new Set(prev);
       if (next.has(category)) {
         next.delete(category);
@@ -220,19 +233,22 @@ export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
   };
 
   // Group items by category
-  const itemsByCategory = items.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = [];
-    }
-    acc[item.category].push(item);
-    return acc;
-  }, {} as Record<string, ChecklistItem[]>);
+  const itemsByCategory = items.reduce(
+    (acc, item) => {
+      if (!acc[item.category]) {
+        acc[item.category] = [];
+      }
+      acc[item.category].push(item);
+      return acc;
+    },
+    {} as Record<string, ChecklistItem[]>
+  );
 
   // Calculate progress
   const totalItems = items.length;
-  const completedItems = items.filter(i => i.completed).length;
-  const requiredItems = items.filter(i => i.required);
-  const completedRequired = requiredItems.filter(i => i.completed).length;
+  const completedItems = items.filter((i) => i.completed).length;
+  const requiredItems = items.filter((i) => i.required);
+  const completedRequired = requiredItems.filter((i) => i.completed).length;
   const progressPercent = Math.round((completedItems / totalItems) * 100);
 
   const allRequiredComplete = completedRequired === requiredItems.length;
@@ -255,13 +271,15 @@ export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-primary">{progressPercent}%</div>
-            <div className="text-sm text-text-secondary">{completedItems} von {totalItems}</div>
+            <div className="text-sm text-text-secondary">
+              {completedItems} von {totalItems}
+            </div>
           </div>
         </div>
 
         {/* Progress Bar */}
         <div className="relative h-3 rounded-full bg-bg-secondary overflow-hidden">
-          <div 
+          <div
             className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-primary-hover rounded-full transition-all duration-500"
             style={{ width: `${progressPercent}%` }}
           />
@@ -285,8 +303,8 @@ export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
               )}
             </span>
           </div>
-          <button 
-            onClick={() => setItems(prev => prev.map(item => ({ ...item, completed: false })))}
+          <button
+            onClick={() => setItems((prev) => prev.map((item) => ({ ...item, completed: false })))}
             className="text-sm text-text-secondary hover:text-foreground transition-colors"
           >
             Zurücksetzen
@@ -298,11 +316,14 @@ export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
       <div className="space-y-4">
         {Object.entries(itemsByCategory).map(([category, categoryItems]) => {
           const config = categoryLabels[category as keyof typeof categoryLabels];
-          const completedInCategory = categoryItems.filter(i => i.completed).length;
+          const completedInCategory = categoryItems.filter((i) => i.completed).length;
           const isExpanded = expandedCategories.has(category);
 
           return (
-            <div key={category} className="rounded-xl border border-border bg-surface overflow-hidden">
+            <div
+              key={category}
+              className="rounded-xl border border-border bg-surface overflow-hidden"
+            >
               {/* Category Header */}
               <button
                 onClick={() => toggleCategory(category)}
@@ -321,18 +342,23 @@ export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-24 rounded-full bg-bg-secondary overflow-hidden">
-                    <div 
+                    <div
                       className={`h-full rounded-full transition-all ${config.bg.replace('/10', '')}`}
                       style={{ width: `${(completedInCategory / categoryItems.length) * 100}%` }}
                     />
                   </div>
-                  <svg 
+                  <svg
                     className={`h-5 w-5 text-text-secondary transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                    fill="none" 
-                    viewBox="0 0 24 24" 
+                    fill="none"
+                    viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
               </button>
@@ -360,20 +386,26 @@ export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
                         </div>
 
                         {/* Icon */}
-                        <div className={`flex-shrink-0 rounded-lg p-2 ${
-                          item.completed ? 'bg-green-500/10' : config.bg
-                        }`}>
-                          <Icon className={`h-5 w-5 ${
-                            item.completed ? 'text-green-500' : config.color
-                          }`} />
+                        <div
+                          className={`flex-shrink-0 rounded-lg p-2 ${
+                            item.completed ? 'bg-green-500/10' : config.bg
+                          }`}
+                        >
+                          <Icon
+                            className={`h-5 w-5 ${
+                              item.completed ? 'text-green-500' : config.color
+                            }`}
+                          />
                         </div>
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <h5 className={`font-medium ${
-                              item.completed ? 'text-green-600 line-through' : 'text-foreground'
-                            }`}>
+                            <h5
+                              className={`font-medium ${
+                                item.completed ? 'text-green-600 line-through' : 'text-foreground'
+                              }`}
+                            >
                               {item.title}
                             </h5>
                             {item.required && !item.completed && (
@@ -382,9 +414,11 @@ export const PurchaseChecklist = ({ vehicle, onItemToggle }: Props) => {
                               </span>
                             )}
                           </div>
-                          <p className={`text-sm mt-0.5 ${
-                            item.completed ? 'text-text-secondary/60' : 'text-text-secondary'
-                          }`}>
+                          <p
+                            className={`text-sm mt-0.5 ${
+                              item.completed ? 'text-text-secondary/60' : 'text-text-secondary'
+                            }`}
+                          >
                             {item.description}
                           </p>
                         </div>

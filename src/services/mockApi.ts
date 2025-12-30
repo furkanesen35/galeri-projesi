@@ -13,7 +13,7 @@ const MOCK_DELAY_MAX = 800;
 // Helper to simulate network delay
 const delay = (ms?: number) => {
   const delayTime = ms ?? Math.random() * (MOCK_DELAY_MAX - MOCK_DELAY_MIN) + MOCK_DELAY_MIN;
-  return new Promise(resolve => setTimeout(resolve, delayTime));
+  return new Promise((resolve) => setTimeout(resolve, delayTime));
 };
 
 // Generic mock response wrapper
@@ -27,14 +27,14 @@ interface MockResponse<T> {
 const success = <T>(data: T, message?: string): MockResponse<T> => ({
   data,
   status: 200,
-  message
+  message,
 });
 
 // Error response helper
 const error = <T = null>(status: number, message: string): MockResponse<T> => ({
   data: null as T,
   status,
-  message
+  message,
 });
 
 /**
@@ -55,7 +55,7 @@ export const mockDashboardApi = {
     await delay();
     // In real implementation, would filter by dateRange
     return success(fixtures.dashboard.quickStats);
-  }
+  },
 };
 
 /**
@@ -80,7 +80,7 @@ export const mockMarketingApi = {
   async getWebinars() {
     await delay();
     return success(fixtures.marketing.webinars);
-  }
+  },
 };
 
 /**
@@ -94,7 +94,7 @@ export const mockCasesApi = {
 
   async getCaseById(id: string) {
     await delay();
-    const caseData = fixtures.cases.list.find(c => c.id === id);
+    const caseData = fixtures.cases.list.find((c) => c.id === id);
     return caseData ? success(caseData) : error(404, 'Case not found');
   },
 
@@ -104,7 +104,7 @@ export const mockCasesApi = {
       id: `CASE-${Date.now()}`,
       ...data,
       status: 'new',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     return success(newCase, 'Case created successfully');
   },
@@ -112,7 +112,7 @@ export const mockCasesApi = {
   async updateCase(id: string, data: any) {
     await delay();
     return success({ id, ...data }, 'Case updated successfully');
-  }
+  },
 };
 
 /**
@@ -121,8 +121,8 @@ export const mockCasesApi = {
 export const mockPhotosApi = {
   async getPhotos(caseId?: string) {
     await delay();
-    const photos = caseId 
-      ? fixtures.photos.list.filter(p => p.caseId === caseId)
+    const photos = caseId
+      ? fixtures.photos.list.filter((p) => p.caseId === caseId)
       : fixtures.photos.list;
     return success(photos);
   },
@@ -137,25 +137,28 @@ export const mockPhotosApi = {
       fileName: file.name,
       size: file.size,
       uploadedAt: new Date().toISOString(),
-      tags: []
+      tags: [],
     };
     return success(newPhoto, 'Photo uploaded successfully');
   },
 
   async optimizePhoto(photoId: string) {
     await delay(2000); // Simulate optimization processing
-    return success({ 
-      originalSize: 2500000,
-      optimizedSize: 450000,
-      compressionRatio: 0.82,
-      dimensions: { width: 1920, height: 1080 }
-    }, 'Photo optimized successfully');
+    return success(
+      {
+        originalSize: 2500000,
+        optimizedSize: 450000,
+        compressionRatio: 0.82,
+        dimensions: { width: 1920, height: 1080 },
+      },
+      'Photo optimized successfully'
+    );
   },
 
   async deletePhoto(photoId: string) {
     await delay();
     return success(null, 'Photo deleted successfully');
-  }
+  },
 };
 
 /**
@@ -169,7 +172,7 @@ export const mockVehiclesApi = {
 
   async getVehicleByVIN(vin: string) {
     await delay();
-    const vehicle = fixtures.vehicles.list.find(v => v.vin === vin);
+    const vehicle = fixtures.vehicles.list.find((v) => v.vin === vin);
     return vehicle ? success(vehicle) : error(404, 'Vehicle not found');
   },
 
@@ -182,9 +185,9 @@ export const mockVehiclesApi = {
       year: 2020,
       engine: '2.0L Turbo',
       transmission: 'Automatic',
-      confidence: 0.95
+      confidence: 0.95,
     });
-  }
+  },
 };
 
 /**
@@ -205,13 +208,13 @@ export const mockValuationApi = {
     await delay();
     return success({
       vehicleClass,
-      dailyRate: 45.50,
-      weeklyRate: 280.00,
-      monthlyRate: 950.00,
+      dailyRate: 45.5,
+      weeklyRate: 280.0,
+      monthlyRate: 950.0,
       source: 'Mietwagenspiegel 2024',
-      updatedAt: '2024-01-15'
+      updatedAt: '2024-01-15',
     });
-  }
+  },
 };
 
 /**
@@ -228,7 +231,7 @@ export const mockOCRApi = {
         model: '320d',
         firstRegistration: '2020-03-15',
         owner: 'Max Mustermann',
-        address: 'Musterstraße 123, 80333 München'
+        address: 'Musterstraße 123, 80333 München',
       },
       confidence: {
         vin: 0.98,
@@ -237,11 +240,11 @@ export const mockOCRApi = {
         model: 0.97,
         firstRegistration: 0.92,
         owner: 0.88,
-        address: 0.85
+        address: 0.85,
       },
-      processingTime: 2340
+      processingTime: 2340,
     });
-  }
+  },
 };
 
 /**
@@ -250,18 +253,21 @@ export const mockOCRApi = {
 export const mockExportsApi = {
   async exportToProvider(caseId: string, provider: string) {
     await delay(1500);
-    return success({
-      exportId: `EXP-${Date.now()}`,
-      provider,
-      status: 'completed',
-      exportedAt: new Date().toISOString()
-    }, `Exported to ${provider} successfully`);
+    return success(
+      {
+        exportId: `EXP-${Date.now()}`,
+        provider,
+        status: 'completed',
+        exportedAt: new Date().toISOString(),
+      },
+      `Exported to ${provider} successfully`
+    );
   },
 
   async getExportHistory(caseId: string) {
     await delay();
     return success(fixtures.exports.history);
-  }
+  },
 };
 
 /**
@@ -279,7 +285,7 @@ export const mockBillingApi = {
       id: `INV-${Date.now()}`,
       ...data,
       status: 'draft',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     return success(newInvoice, 'Invoice created successfully');
   },
@@ -289,10 +295,10 @@ export const mockBillingApi = {
     return success({
       eligible: true,
       advanceRate: 0.85,
-      estimatedAmount: 8500.00,
-      fees: 125.00
+      estimatedAmount: 8500.0,
+      fees: 125.0,
     });
-  }
+  },
 };
 
 // Export unified mock API
@@ -305,5 +311,5 @@ export const mockApi = {
   valuation: mockValuationApi,
   ocr: mockOCRApi,
   exports: mockExportsApi,
-  billing: mockBillingApi
+  billing: mockBillingApi,
 };

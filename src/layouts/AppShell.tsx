@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { useTranslation } from "react-i18next";
+import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard,
   FileText,
@@ -12,12 +12,12 @@ import {
   Target,
   FolderOpen,
   Users,
-} from "lucide-react";
-import { CarSearchIcon } from "../components/icons/CarSearchIcon";
-import { LanguageSelector } from "../components/LanguageSelector";
-import { NavLinkItem } from "../components/NavLinkItem";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { useBackgroundStore } from "../store/useBackgroundStore";
+} from 'lucide-react';
+import { CarSearchIcon } from '../components/icons/CarSearchIcon';
+import { LanguageSelector } from '../components/LanguageSelector';
+import { NavLinkItem } from '../components/NavLinkItem';
+import { ThemeToggle } from '../components/ThemeToggle';
+import { useBackgroundStore } from '../store/useBackgroundStore';
 
 export const AppShell = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
@@ -25,21 +25,21 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
   const selectedBackground = getSelectedBackground();
 
   const navigation = [
-    { to: "/", label: t("nav.dashboard"), icon: LayoutDashboard },
+    { to: '/', label: t('nav.dashboard'), icon: LayoutDashboard },
     {
-      to: "/damage-assessment",
-      label: t("nav.damageAssessment"),
+      to: '/damage-assessment',
+      label: t('nav.damageAssessment'),
       icon: FileText,
     },
-    { to: "/photos", label: t("nav.photos"), icon: Camera },
-    { to: "/ocr-scanner", label: t("nav.ocrScanner"), icon: ScanLine },
-    { to: "/vehicles", label: t("nav.vehicles"), icon: CarSearchIcon },
-    { to: "/customers", label: t("nav.customers"), icon: Users },
-    { to: "/document-pool", label: t("nav.documentPool"), icon: FolderOpen },
-    { to: "/tasks", label: t("nav.tasks"), icon: ListTodo },
-    { to: "/calendar", label: t("nav.calendar"), icon: CalendarIcon },
-    { to: "/config", label: t("nav.config"), icon: Wrench },
-    { to: "/settings", label: t("nav.settings"), icon: SettingsIcon },
+    { to: '/photos', label: t('nav.photos'), icon: Camera },
+    { to: '/ocr-scanner', label: t('nav.ocrScanner'), icon: ScanLine },
+    { to: '/vehicles', label: t('nav.vehicles'), icon: CarSearchIcon },
+    { to: '/customers', label: t('nav.customers'), icon: Users },
+    { to: '/document-pool', label: t('nav.documentPool'), icon: FolderOpen },
+    { to: '/tasks', label: t('nav.tasks'), icon: ListTodo },
+    { to: '/calendar', label: t('nav.calendar'), icon: CalendarIcon },
+    { to: '/config', label: t('nav.config'), icon: Wrench },
+    { to: '/settings', label: t('nav.settings'), icon: SettingsIcon },
   ];
 
   // Generate background styles
@@ -71,7 +71,7 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-200 relative">
       {/* Background Layer */}
       {selectedBackground.type !== 'none' && (
-        <div 
+        <div
           className="fixed inset-0 z-0 pointer-events-none"
           style={{
             ...getBackgroundStyle(),
@@ -80,12 +80,12 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
           }}
         />
       )}
-      
+
       {/* Optional overlay for better readability */}
       {selectedBackground.type !== 'none' && (
-        <div 
+        <div
           className="fixed inset-0 z-0 pointer-events-none bg-background"
-          style={{ opacity: 1 - (backgroundOpacity / 100) }}
+          style={{ opacity: 1 - backgroundOpacity / 100 }}
         />
       )}
 
@@ -106,7 +106,7 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
           <div className="space-y-4">
             <div className="pt-4 border-t border-border">
               <NavLinkItem to="/marketing" icon={Target}>
-                {t("nav.marketing")}
+                {t('nav.marketing')}
               </NavLinkItem>
             </div>
             <LanguageSelector />

@@ -26,7 +26,7 @@ export const CasesTable = ({ cases, loading, onViewCase, selectedCaseId }: Cases
       'pending-approval': 'bg-warning/10 text-warning border-warning/20',
       approved: 'bg-success/10 text-success border-success/20',
       completed: 'bg-success/10 text-success border-success/20',
-      cancelled: 'bg-error/10 text-error border-error/20'
+      cancelled: 'bg-error/10 text-error border-error/20',
     };
     return colors[status] || colors.new;
   };
@@ -36,7 +36,7 @@ export const CasesTable = ({ cases, loading, onViewCase, selectedCaseId }: Cases
       low: 'text-text-muted',
       medium: 'text-primary',
       high: 'text-warning',
-      urgent: 'text-error'
+      urgent: 'text-error',
     };
     return colors[priority] || colors.medium;
   };
@@ -47,7 +47,7 @@ export const CasesTable = ({ cases, loading, onViewCase, selectedCaseId }: Cases
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }).format(new Date(dateString));
   };
 
@@ -55,7 +55,7 @@ export const CasesTable = ({ cases, loading, onViewCase, selectedCaseId }: Cases
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: 'EUR',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(amount);
   };
 
@@ -75,8 +75,18 @@ export const CasesTable = ({ cases, loading, onViewCase, selectedCaseId }: Cases
     return (
       <div className="bg-surface border border-border rounded-lg p-12 text-center">
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-secondary flex items-center justify-center">
-          <svg className="w-8 h-8 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <svg
+            className="w-8 h-8 text-text-muted"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
           </svg>
         </div>
         <h3 className="text-lg font-semibold text-foreground mb-2">No cases yet</h3>
@@ -138,12 +148,16 @@ export const CasesTable = ({ cases, loading, onViewCase, selectedCaseId }: Cases
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(caseItem.status)}`}>
+                  <span
+                    className={`px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(caseItem.status)}`}
+                  >
                     {caseItem.status.replace('-', ' ')}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`text-sm font-medium capitalize ${getPriorityColor(caseItem.priority)}`}>
+                  <span
+                    className={`text-sm font-medium capitalize ${getPriorityColor(caseItem.priority)}`}
+                  >
                     {caseItem.priority}
                   </span>
                 </td>

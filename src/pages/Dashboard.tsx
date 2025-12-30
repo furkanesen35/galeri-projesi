@@ -7,7 +7,11 @@ import { mockApi } from '../services/mockApi';
 import { KPICard } from './components/KPICard';
 import { RecentActivity } from './components/RecentActivity';
 import { QuickStats } from './components/QuickStats';
-import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../components/DraggablePanel';
+import {
+  DraggablePanel,
+  DraggablePanelContainer,
+  HiddenPanelsBar,
+} from '../components/DraggablePanel';
 import { PanelCustomizer } from '../components/PanelCustomizer';
 import { usePanelLayout } from '../hooks/usePanelLayout';
 
@@ -28,11 +32,8 @@ export const Dashboard = () => {
   const { t } = useTranslation();
   const [kpis, setKpis] = useState<KPI[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  const { 
-    panels,
-    checkVisibility 
-  } = usePanelLayout(VIEW_ID);
+
+  const { panels } = usePanelLayout(VIEW_ID);
 
   useEffect(() => {
     mockApi.dashboard.getKPIs().then((response) => {
@@ -44,7 +45,7 @@ export const Dashboard = () => {
   const stats = [
     { title: t('dashboard.activeVehicles'), value: '128', hint: `12 ${t('common.inMaintenance')}` },
     { title: t('dashboard.openTasks'), value: '34', hint: `7 ${t('common.overdue')}` },
-    { title: t('dashboard.upcomingAppointments'), value: '19', hint: t('common.thisWeek') }
+    { title: t('dashboard.upcomingAppointments'), value: '19', hint: t('common.thisWeek') },
   ];
 
   // Panel content components
@@ -53,13 +54,14 @@ export const Dashboard = () => {
       icon: <BarChart3 className="h-5 w-5 text-primary" />,
       content: (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {loading ? (
-            [...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-surface border border-border rounded-lg animate-pulse"></div>
-            ))
-          ) : (
-            kpis.map((kpi) => <KPICard key={kpi.id} kpi={kpi} />)
-          )}
+          {loading
+            ? [...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-32 bg-surface border border-border rounded-lg animate-pulse"
+                ></div>
+              ))
+            : kpis.map((kpi) => <KPICard key={kpi.id} kpi={kpi} />)}
         </div>
       ),
     },

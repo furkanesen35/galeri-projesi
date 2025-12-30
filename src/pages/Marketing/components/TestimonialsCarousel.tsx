@@ -25,7 +25,7 @@ export const TestimonialsCarousel = () => {
 
   useEffect(() => {
     if (testimonials.length === 0) return;
-    
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
     }, 6000);
@@ -56,7 +56,7 @@ export const TestimonialsCarousel = () => {
         <h2 className="text-3xl font-bold text-center text-foreground mb-12">
           What Our Customers Say
         </h2>
-        
+
         <div className="relative">
           {/* Testimonial content */}
           <div className="bg-surface border border-border rounded-xl p-8 md:p-12 shadow-lg">
@@ -67,7 +67,7 @@ export const TestimonialsCarousel = () => {
                   {currentTestimonial?.author.charAt(0)}
                 </span>
               </div>
-              
+
               <div>
                 <h3 className="font-semibold text-lg text-foreground">
                   {currentTestimonial?.author}
@@ -84,21 +84,19 @@ export const TestimonialsCarousel = () => {
                 </div>
               </div>
             </div>
-            
+
             <blockquote className="text-lg text-foreground leading-relaxed">
               "{currentTestimonial?.content}"
             </blockquote>
           </div>
-          
+
           {/* Navigation dots */}
           <div className="flex justify-center gap-2 mt-8">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 className={`w-3 h-3 rounded-full transition-all ${
-                  index === currentIndex
-                    ? 'bg-primary w-8'
-                    : 'bg-border hover:bg-border-hover'
+                  index === currentIndex ? 'bg-primary w-8' : 'bg-border hover:bg-border-hover'
                 }`}
                 onClick={() => goToSlide(index)}
                 aria-label={`Go to testimonial ${index + 1}`}

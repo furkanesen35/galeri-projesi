@@ -7,26 +7,40 @@ interface Photo {
   size: number;
 }
 
+interface OptimizationResult {
+  originalSize: number;
+  optimizedSize: number;
+  originalUrl?: string;
+  optimizedUrl?: string;
+}
+
 interface OptimizationPreviewProps {
   photo: Photo;
   onClose: () => void;
 }
 
 export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps) => {
-  const [optimizing, setOptimizing] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [optimizing, setOptimizing] = useState(true);
+  const [result, setResult] = useState<OptimizationResult | null>(null);
   const [autoOptimizeEnabled, setAutoOptimizeEnabled] = useState(true);
 
   useEffect(() => {
-    handleOptimize();
-  }, []);
+    let cancelled = false;
 
-  const handleOptimize = async () => {
-    setOptimizing(true);
-    const response = await mockApi.photos.optimizePhoto(photo.id);
-    setResult(response.data);
-    setOptimizing(false);
-  };
+    const runOptimization = async () => {
+      const response = await mockApi.photos.optimizePhoto(photo.id);
+      if (!cancelled) {
+        setResult(response.data);
+        setOptimizing(false);
+      }
+    };
+
+    runOptimization();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [photo.id]);
 
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
@@ -34,13 +48,13 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
   };
 
   const savingsPercentage = result
-    ? ((result.originalSize - result.optimizedSize) / result.originalSize * 100).toFixed(0)
+    ? (((result.originalSize - result.optimizedSize) / result.originalSize) * 100).toFixed(0)
     : 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose}></div>
-      
+
       <div className="relative w-full max-w-4xl bg-surface rounded-xl shadow-2xl overflow-hidden animate-slide-up">
         {/* Header */}
         <div className="px-6 py-4 border-b border-border bg-bg-secondary flex items-center justify-between">
@@ -53,7 +67,12 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
             className="text-text-muted hover:text-foreground transition-colors"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -73,8 +92,18 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
                 <div className="bg-bg-secondary rounded-lg p-4 border border-border">
                   <div className="aspect-video bg-gradient-to-br from-error/20 to-error/5 rounded-lg border-2 border-dashed border-border flex items-center justify-center mb-3">
                     <div className="text-center">
-                      <svg className="w-12 h-12 mx-auto text-error/40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-12 h-12 mx-auto text-error/40 mb-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                       <p className="text-xs text-text-secondary">Original</p>
                     </div>
@@ -82,11 +111,15 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-text-secondary">File Size:</span>
-                      <span className="text-foreground font-medium">{formatFileSize(result.originalSize)}</span>
+                      <span className="text-foreground font-medium">
+                        {formatFileSize(result.originalSize)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-text-secondary">Dimensions:</span>
-                      <span className="text-foreground font-medium">{result.dimensions.width}×{result.dimensions.height}</span>
+                      <span className="text-foreground font-medium">
+                        {result.dimensions.width}×{result.dimensions.height}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -94,8 +127,18 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
                 <div className="bg-bg-secondary rounded-lg p-4 border-2 border-success">
                   <div className="aspect-video bg-gradient-to-br from-success/20 to-success/5 rounded-lg border-2 border-dashed border-success/30 flex items-center justify-center mb-3">
                     <div className="text-center">
-                      <svg className="w-12 h-12 mx-auto text-success/60 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        className="w-12 h-12 mx-auto text-success/60 mb-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                       <p className="text-xs text-success font-medium">Optimized</p>
                     </div>
@@ -103,11 +146,15 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-text-secondary">File Size:</span>
-                      <span className="text-success font-medium">{formatFileSize(result.optimizedSize)}</span>
+                      <span className="text-success font-medium">
+                        {formatFileSize(result.optimizedSize)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-text-secondary">Dimensions:</span>
-                      <span className="text-foreground font-medium">{result.dimensions.width}×{result.dimensions.height}</span>
+                      <span className="text-foreground font-medium">
+                        {result.dimensions.width}×{result.dimensions.height}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -117,8 +164,18 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
               <div className="bg-success/10 border border-success/20 rounded-lg p-4">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 rounded-full bg-success/20 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <svg
+                      className="w-6 h-6 text-success"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
                     </svg>
                   </div>
                   <div>
@@ -149,16 +206,22 @@ export const OptimizationPreview = ({ photo, onClose }: OptimizationPreviewProps
                   <label className="flex items-center justify-between cursor-pointer">
                     <div>
                       <p className="text-sm font-medium text-foreground">Auto-optimize on upload</p>
-                      <p className="text-xs text-text-secondary">Automatically optimize all uploaded photos</p>
+                      <p className="text-xs text-text-secondary">
+                        Automatically optimize all uploaded photos
+                      </p>
                     </div>
-                    <div className={`relative w-11 h-6 rounded-full transition-colors ${autoOptimizeEnabled ? 'bg-primary' : 'bg-border'}`}>
+                    <div
+                      className={`relative w-11 h-6 rounded-full transition-colors ${autoOptimizeEnabled ? 'bg-primary' : 'bg-border'}`}
+                    >
                       <input
                         type="checkbox"
                         checked={autoOptimizeEnabled}
                         onChange={(e) => setAutoOptimizeEnabled(e.target.checked)}
                         className="sr-only"
                       />
-                      <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${autoOptimizeEnabled ? 'translate-x-5' : ''}`}></div>
+                      <div
+                        className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${autoOptimizeEnabled ? 'translate-x-5' : ''}`}
+                      ></div>
                     </div>
                   </label>
 

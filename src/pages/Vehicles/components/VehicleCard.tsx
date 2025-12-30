@@ -1,12 +1,12 @@
 import { Vehicle, VehicleFeature } from '../../../types/domain';
 import { featureIconMap } from '../../../config/featureIcons';
-import { 
-  Car, 
-  Fuel, 
-  Gauge, 
-  Calendar, 
-  Settings2, 
-  Euro, 
+import {
+  Car,
+  Fuel,
+  Gauge,
+  Calendar,
+  Settings2,
+  Euro,
   MapPin,
   Hash,
   Palette,
@@ -23,7 +23,7 @@ import {
   Archive,
   Eye,
   Edit,
-  Share2
+  Share2,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -37,7 +37,7 @@ const statusConfig = {
   reserved: { label: 'Reserviert', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
   sold: { label: 'Verkauft', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
   service: { label: 'Service', color: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
-  archived: { label: 'Archiviert', color: 'bg-slate-500/10 text-slate-400 border-slate-500/20' }
+  archived: { label: 'Archiviert', color: 'bg-slate-500/10 text-slate-400 border-slate-500/20' },
 };
 
 const fuelTypeConfig = {
@@ -45,7 +45,7 @@ const fuelTypeConfig = {
   diesel: { label: 'Diesel', shortLabel: 'Diesel' },
   elektro: { label: 'Elektro', shortLabel: 'Elektro' },
   hybrid: { label: 'Hybrid', shortLabel: 'Hybrid' },
-  'plug-in-hybrid': { label: 'Plug-In Hybrid', shortLabel: 'Plug-In' }
+  'plug-in-hybrid': { label: 'Plug-In Hybrid', shortLabel: 'Plug-In' },
 };
 
 const conditionConfig = {
@@ -53,7 +53,7 @@ const conditionConfig = {
   tageszulassung: { label: 'Neufahrzeug mit Tageszulassung' },
   jahreswagen: { label: 'Jahreswagen' },
   gebraucht: { label: 'Gebrauchtwagen' },
-  vorführwagen: { label: 'Vorführwagen' }
+  vorführwagen: { label: 'Vorführwagen' },
 };
 
 const categoryConfig = {
@@ -64,7 +64,7 @@ const categoryConfig = {
   coupe: 'Coupe',
   kleinwagen: 'Kleinwagen',
   van: 'Van/Kleinbus',
-  sportwagen: 'Sportwagen'
+  sportwagen: 'Sportwagen',
 };
 
 export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
@@ -76,16 +76,12 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
 
   const handlePrevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? vehicle.images.length - 1 : prev - 1
-    );
+    setCurrentImageIndex((prev) => (prev === 0 ? vehicle.images.length - 1 : prev - 1));
   };
 
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => 
-      prev === vehicle.images.length - 1 ? 0 : prev + 1
-    );
+    setCurrentImageIndex((prev) => (prev === vehicle.images.length - 1 ? 0 : prev + 1));
   };
 
   const handleActionClick = (e: React.MouseEvent, action: string) => {
@@ -95,21 +91,23 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
   };
 
   return (
-    <div 
+    <div
       onClick={onClick}
       className="group relative flex gap-4 overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all hover:shadow-xl hover:border-primary/50 cursor-pointer"
     >
       {/* Vehicle Image Carousel */}
       <div className="relative h-56 w-80 flex-shrink-0 overflow-hidden rounded-lg bg-bg-secondary">
-        <img 
-          src={vehicle.images[currentImageIndex]} 
+        <img
+          src={vehicle.images[currentImageIndex]}
           alt={`${vehicle.brand} ${vehicle.model}`}
           className="h-full w-full object-cover transition-transform group-hover:scale-105"
         />
-        
+
         {/* Status Badge on Image */}
         <div className="absolute top-2 right-2">
-          <span className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold backdrop-blur-sm ${status.color}`}>
+          <span
+            className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold backdrop-blur-sm ${status.color}`}
+          >
             {status.label}
           </span>
         </div>
@@ -141,9 +139,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
                 <div
                   key={index}
                   className={`h-1.5 rounded-full transition-all ${
-                    index === currentImageIndex 
-                      ? 'w-6 bg-white' 
-                      : 'w-1.5 bg-white/50'
+                    index === currentImageIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/50'
                   }`}
                 />
               ))}
@@ -166,12 +162,8 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
 
         {/* Engine & Transmission Details */}
         <div className="mt-2 text-xs text-text-secondary border-b border-border pb-2">
-          {vehicle.engine && (
-            <span>{vehicle.engine} </span>
-          )}
-          {vehicle.transmissionDetail && (
-            <span>{vehicle.transmissionDetail}, </span>
-          )}
+          {vehicle.engine && <span>{vehicle.engine} </span>}
+          {vehicle.transmissionDetail && <span>{vehicle.transmissionDetail}, </span>}
           <span className="font-semibold">
             {vehicle.power.kw} kW ({vehicle.power.ps} PS)
           </span>
@@ -189,7 +181,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           {/* Color */}
           <div className="flex items-center gap-1.5">
             {vehicle.colorHex && (
-              <div 
+              <div
                 className="h-3 w-3 rounded-full border-2 border-border flex-shrink-0"
                 style={{ backgroundColor: vehicle.colorHex }}
               />
@@ -206,14 +198,19 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           {/* Mileage */}
           <div className="flex items-center gap-1.5">
             <Gauge className="h-3.5 w-3.5 text-text-secondary flex-shrink-0" />
-            <span className="text-text-secondary">{vehicle.mileageKm.toLocaleString('de-DE')} km</span>
+            <span className="text-text-secondary">
+              {vehicle.mileageKm.toLocaleString('de-DE')} km
+            </span>
           </div>
 
           {/* First Registration */}
           <div className="flex items-center gap-1.5">
             <Calendar className="h-3.5 w-3.5 text-text-secondary flex-shrink-0" />
             <span className="text-text-secondary">
-              {new Date(vehicle.firstRegistration).toLocaleDateString('de-DE', { month: '2-digit', year: 'numeric' })}
+              {new Date(vehicle.firstRegistration).toLocaleDateString('de-DE', {
+                month: '2-digit',
+                year: 'numeric',
+              })}
             </span>
           </div>
         </div>
@@ -231,7 +228,10 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           </div>
           {/* Plate Number */}
           <div className="bg-white dark:bg-gray-100 px-3 py-1.5">
-            <span className="text-lg font-black text-black tracking-wide" style={{ fontFamily: 'monospace' }}>
+            <span
+              className="text-lg font-black text-black tracking-wide"
+              style={{ fontFamily: 'monospace' }}
+            >
               {vehicle.plate}
             </span>
           </div>
@@ -257,7 +257,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
               <p className="text-xs text-text-secondary mt-1">{vehicle.availability}</p>
             )}
           </div>
-          
+
           {vehicle.location && (
             <div className="flex items-center gap-1.5 text-text-secondary">
               <MapPin className="h-4 w-4" />
@@ -273,15 +273,11 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
               vehicle.features.map((featureKey) => {
                 const featureData = featureIconMap[featureKey];
                 if (!featureData) return null;
-                
+
                 const Icon = featureData.icon;
-                
+
                 return (
-                  <div
-                    key={featureKey}
-                    className="group/icon relative"
-                    title={featureData.label}
-                  >
+                  <div key={featureKey} className="group/icon relative" title={featureData.label}>
                     <div className="rounded-md p-1.5 border bg-primary/10 border-primary/30 hover:border-primary/60 hover:bg-primary/15 transition-all cursor-help">
                       <Icon className="h-4 w-4 text-primary group-hover/icon:text-primary transition-colors" />
                     </div>
@@ -312,7 +308,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           <Eye className="h-4 w-4" />
           Ansehen
         </button>
-        
+
         <button
           onClick={(e) => handleActionClick(e, 'sell')}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 hover:bg-green-500/20 transition-all text-xs font-medium whitespace-nowrap"
@@ -321,7 +317,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           <Tag className="h-4 w-4" />
           Verkaufen
         </button>
-        
+
         <button
           onClick={(e) => handleActionClick(e, 'buy')}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/20 transition-all text-xs font-medium whitespace-nowrap"
@@ -330,7 +326,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           <ShoppingCart className="h-4 w-4" />
           Kaufen
         </button>
-        
+
         <button
           onClick={(e) => handleActionClick(e, 'service')}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-600 dark:text-orange-400 hover:bg-orange-500/20 transition-all text-xs font-medium whitespace-nowrap"
@@ -339,7 +335,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           <Wrench className="h-4 w-4" />
           Service
         </button>
-        
+
         <button
           onClick={(e) => handleActionClick(e, 'contract')}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all text-xs font-medium whitespace-nowrap"
@@ -348,7 +344,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           <FileCheck className="h-4 w-4" />
           Vertrag
         </button>
-        
+
         <button
           onClick={(e) => handleActionClick(e, 'edit')}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all text-xs font-medium whitespace-nowrap"
@@ -357,7 +353,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           <Edit className="h-4 w-4" />
           Bearbeiten
         </button>
-        
+
         <button
           onClick={(e) => handleActionClick(e, 'share')}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all text-xs font-medium whitespace-nowrap"
@@ -366,7 +362,7 @@ export const VehicleCard = ({ vehicle, onClick }: VehicleCardProps) => {
           <Share2 className="h-4 w-4" />
           Teilen
         </button>
-        
+
         <button
           onClick={(e) => handleActionClick(e, 'archive')}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-500/10 border border-gray-500/30 text-gray-600 dark:text-gray-400 hover:bg-gray-500/20 transition-all text-xs font-medium whitespace-nowrap"

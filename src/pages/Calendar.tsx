@@ -3,7 +3,21 @@ import { Calendar, dayjsLocalizer, Views, EventProps } from 'react-big-calendar'
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Plus, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Car, User, Clock, X, CheckCircle2, AlertCircle, Coffee, Wrench, AlertTriangle } from 'lucide-react';
+import {
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Calendar as CalendarIcon,
+  Car,
+  User,
+  Clock,
+  X,
+  CheckCircle2,
+  AlertCircle,
+  Coffee,
+  Wrench,
+  AlertTriangle,
+} from 'lucide-react';
 import { CalendarEvent, Vehicle, Personnel } from '../types/domain';
 import { taskTypeConfig, TaskTypeIcon, PriorityBadge } from '../config/taskIcons';
 import { vehicleFixtures } from '../services/vehicleFixtures';
@@ -24,7 +38,7 @@ const initialEvents: CalendarEvent[] = [
     priority: 'urgent',
     vehicleName: 'BMW 320i',
     assignee: 'Anna',
-    description: 'TÜV Hauptuntersuchung durchführen'
+    description: 'TÜV Hauptuntersuchung durchführen',
   },
   {
     id: 'ev2',
@@ -35,7 +49,7 @@ const initialEvents: CalendarEvent[] = [
     priority: 'high',
     vehicleName: 'Audi A4',
     assignee: 'Max',
-    description: 'Bremsbeläge und Scheiben erneuern'
+    description: 'Bremsbeläge und Scheiben erneuern',
   },
   {
     id: 'ev3',
@@ -45,7 +59,7 @@ const initialEvents: CalendarEvent[] = [
     taskType: 'oil_change',
     priority: 'medium',
     vehicleName: 'VW Golf',
-    assignee: 'Lena'
+    assignee: 'Lena',
   },
   {
     id: 'ev4',
@@ -56,7 +70,7 @@ const initialEvents: CalendarEvent[] = [
     priority: 'high',
     vehicleName: 'Mercedes C200',
     assignee: 'Anna',
-    description: 'Check Engine Lampe diagnostizieren'
+    description: 'Check Engine Lampe diagnostizieren',
   },
   {
     id: 'ev5',
@@ -66,7 +80,7 @@ const initialEvents: CalendarEvent[] = [
     taskType: 'ac_repair',
     priority: 'low',
     vehicleName: 'BMW X5',
-    assignee: 'Max'
+    assignee: 'Max',
   },
   {
     id: 'ev6',
@@ -76,7 +90,7 @@ const initialEvents: CalendarEvent[] = [
     taskType: 'tire_rotation',
     priority: 'medium',
     vehicleName: 'Porsche 911',
-    assignee: 'Lena'
+    assignee: 'Lena',
   },
   {
     id: 'ev7',
@@ -85,7 +99,7 @@ const initialEvents: CalendarEvent[] = [
     end: dayjs().add(1, 'day').hour(15).toDate(),
     taskType: 'battery',
     priority: 'medium',
-    vehicleName: 'VW Passat'
+    vehicleName: 'VW Passat',
   },
   {
     id: 'ev8',
@@ -95,7 +109,7 @@ const initialEvents: CalendarEvent[] = [
     taskType: 'paint',
     priority: 'low',
     vehicleName: 'Audi Q7',
-    assignee: 'Max'
+    assignee: 'Max',
   },
   {
     id: 'ev9',
@@ -105,7 +119,7 @@ const initialEvents: CalendarEvent[] = [
     taskType: 'exhaust',
     priority: 'high',
     vehicleName: 'Ford Focus',
-    assignee: 'Anna'
+    assignee: 'Anna',
   },
   {
     id: 'ev10',
@@ -114,7 +128,7 @@ const initialEvents: CalendarEvent[] = [
     end: dayjs().add(4, 'day').hour(16).toDate(),
     taskType: 'cleaning',
     priority: 'low',
-    vehicleName: 'Tesla Model 3'
+    vehicleName: 'Tesla Model 3',
   },
 ];
 
@@ -123,7 +137,7 @@ const CustomEvent = ({ event }: EventProps<CalendarEvent>) => {
   const taskType = event.taskType || 'general';
   const config = taskTypeConfig[taskType];
   const Icon = config.icon;
-  
+
   return (
     <div className="flex items-center gap-1.5 h-full overflow-hidden px-1">
       <div className={`flex-shrink-0 p-0.5 rounded ${config.bgColor}`}>
@@ -298,12 +312,12 @@ export const CalendarPage = () => {
     title: '',
     taskType: '',
     priority: 'medium',
-    description: ''
+    description: '',
   });
   const [manualDateTime, setManualDateTime] = useState({
     date: dayjs().format('YYYY-MM-DD'),
     startTime: '09:00',
-    endTime: '11:00'
+    endTime: '11:00',
   });
 
   const handleSelectEvent = (event: CalendarEvent) => {
@@ -319,13 +333,13 @@ export const CalendarPage = () => {
       title: '',
       taskType: '',
       priority: 'medium',
-      description: ''
+      description: '',
     });
     // Reset manual date/time when selecting from calendar
     setManualDateTime({
       date: dayjs(slotInfo.start).format('YYYY-MM-DD'),
       startTime: dayjs(slotInfo.start).format('HH:mm'),
-      endTime: dayjs(slotInfo.end).format('HH:mm')
+      endTime: dayjs(slotInfo.end).format('HH:mm'),
     });
   };
 
@@ -339,13 +353,13 @@ export const CalendarPage = () => {
       title: '',
       taskType: '',
       priority: 'medium',
-      description: ''
+      description: '',
     });
     // Set default manual date/time
     setManualDateTime({
       date: dayjs().format('YYYY-MM-DD'),
       startTime: '09:00',
-      endTime: '11:00'
+      endTime: '11:00',
     });
   };
 
@@ -362,25 +376,25 @@ export const CalendarPage = () => {
       title: '',
       taskType: '',
       priority: 'medium',
-      description: ''
+      description: '',
     });
     setManualDateTime({
       date: dayjs().format('YYYY-MM-DD'),
       startTime: '09:00',
-      endTime: '11:00'
+      endTime: '11:00',
     });
   };
 
   const handleCreateTask = async () => {
     setIsCreating(true);
-    
+
     // Simulate backend API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // Determine start and end times
     let startDate: Date;
     let endDate: Date;
-    
+
     if (newTaskSlot) {
       // Time slot was selected from calendar
       startDate = newTaskSlot.start;
@@ -390,7 +404,7 @@ export const CalendarPage = () => {
       startDate = dayjs(`${manualDateTime.date} ${manualDateTime.startTime}`).toDate();
       endDate = dayjs(`${manualDateTime.date} ${manualDateTime.endTime}`).toDate();
     }
-    
+
     const newEvent: CalendarEvent = {
       id: `ev${Date.now()}`,
       title: formData.title,
@@ -399,12 +413,14 @@ export const CalendarPage = () => {
       taskType: formData.taskType,
       priority: formData.priority,
       vehicleId: selectedVehicle?.id,
-      vehicleName: selectedVehicle ? `${selectedVehicle.brand} ${selectedVehicle.model}` : undefined,
+      vehicleName: selectedVehicle
+        ? `${selectedVehicle.brand} ${selectedVehicle.model}`
+        : undefined,
       assignee: selectedPersonnel?.fullName,
       assigneeId: selectedPersonnel?.id,
       description: formData.description,
     };
-    
+
     setEvents([...events, newEvent]);
     setIsCreating(false);
     handleCloseNewTaskModal();
@@ -412,20 +428,23 @@ export const CalendarPage = () => {
 
   const handleDeleteEvent = () => {
     if (selectedEvent) {
-      setEvents(events.filter(e => e.id !== selectedEvent.id));
+      setEvents(events.filter((e) => e.id !== selectedEvent.id));
       setSelectedEvent(null);
     }
   };
 
-  const navigateCalendar = useCallback((direction: 'prev' | 'next' | 'today') => {
-    if (direction === 'today') {
-      setCurrentDate(new Date());
-    } else {
-      const amount = direction === 'prev' ? -1 : 1;
-      const unit = view === 'week' ? 'week' : view === 'month' ? 'month' : 'quarter';
-      setCurrentDate(dayjs(currentDate).add(amount, unit).toDate());
-    }
-  }, [currentDate, view]);
+  const navigateCalendar = useCallback(
+    (direction: 'prev' | 'next' | 'today') => {
+      if (direction === 'today') {
+        setCurrentDate(new Date());
+      } else {
+        const amount = direction === 'prev' ? -1 : 1;
+        const unit = view === 'week' ? 'week' : view === 'month' ? 'month' : 'quarter';
+        setCurrentDate(dayjs(currentDate).add(amount, unit).toDate());
+      }
+    },
+    [currentDate, view]
+  );
 
   const getDateRangeLabel = () => {
     if (view === 'week') {
@@ -457,21 +476,21 @@ export const CalendarPage = () => {
     return {
       style: {
         borderLeftColor: borderColor,
-      }
+      },
     };
   };
 
   return (
     <div className="space-y-4">
       <style>{calendarStyles}</style>
-      
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-xl font-semibold text-foreground">Werkstatt Kalender</h3>
           <p className="text-sm text-text-secondary">Alle Termine und Reparaturen im Überblick</p>
         </div>
-        <button 
+        <button
           onClick={handleOpenNewTaskModal}
           className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-text shadow hover:bg-primary-hover transition-colors"
         >
@@ -483,19 +502,21 @@ export const CalendarPage = () => {
       {/* Task Type Legend - Single Line */}
       <div className="flex flex-wrap items-center gap-2 p-4 rounded-xl bg-surface border border-border">
         <span className="text-xs text-text-secondary mr-2">Aufgabentypen:</span>
-        {Object.entries(taskTypeConfig).slice(0, 12).map(([key, config]) => {
-          const Icon = config.icon;
-          return (
-            <div 
-              key={key}
-              className={`flex items-center gap-1.5 px-2 py-1 rounded-lg ${config.bgColor} cursor-default`}
-              title={config.label}
-            >
-              <Icon className={`h-3.5 w-3.5 ${config.color}`} />
-              <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>
-            </div>
-          );
-        })}
+        {Object.entries(taskTypeConfig)
+          .slice(0, 12)
+          .map(([key, config]) => {
+            const Icon = config.icon;
+            return (
+              <div
+                key={key}
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg ${config.bgColor} cursor-default`}
+                title={config.label}
+              >
+                <Icon className={`h-3.5 w-3.5 ${config.color}`} />
+                <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>
+              </div>
+            );
+          })}
       </div>
 
       {/* Calendar - Full Width */}
@@ -545,68 +566,77 @@ export const CalendarPage = () => {
 
           {/* Calendar Component */}
           <div className="flex-1 p-4 overflow-auto">
-          {view === 'quarter' ? (
-            // Quarter View - 3 Months Side by Side
-            <div className="grid grid-cols-3 gap-4">
-              {[0, 1, 2].map((monthOffset) => {
-                const monthDate = dayjs(currentDate).startOf('quarter').add(monthOffset, 'month').toDate();
-                const monthEvents = events.filter(event => {
-                  const eventDate = dayjs(event.start);
-                  const targetMonth = dayjs(monthDate);
-                  return eventDate.month() === targetMonth.month() && eventDate.year() === targetMonth.year();
-                });
-                
-                return (
-                  <div key={monthOffset} className="border border-border rounded-lg overflow-hidden">
-                    <div className="bg-bg-secondary px-3 py-2 border-b border-border">
-                      <h4 className="text-sm font-semibold text-foreground text-center">
-                        {dayjs(monthDate).format('MMMM YYYY')}
-                      </h4>
+            {view === 'quarter' ? (
+              // Quarter View - 3 Months Side by Side
+              <div className="grid grid-cols-3 gap-4">
+                {[0, 1, 2].map((monthOffset) => {
+                  const monthDate = dayjs(currentDate)
+                    .startOf('quarter')
+                    .add(monthOffset, 'month')
+                    .toDate();
+                  const monthEvents = events.filter((event) => {
+                    const eventDate = dayjs(event.start);
+                    const targetMonth = dayjs(monthDate);
+                    return (
+                      eventDate.month() === targetMonth.month() &&
+                      eventDate.year() === targetMonth.year()
+                    );
+                  });
+
+                  return (
+                    <div
+                      key={monthOffset}
+                      className="border border-border rounded-lg overflow-hidden"
+                    >
+                      <div className="bg-bg-secondary px-3 py-2 border-b border-border">
+                        <h4 className="text-sm font-semibold text-foreground text-center">
+                          {dayjs(monthDate).format('MMMM YYYY')}
+                        </h4>
+                      </div>
+                      <Calendar
+                        localizer={localizer}
+                        events={monthEvents}
+                        startAccessor="start"
+                        endAccessor="end"
+                        date={monthDate}
+                        view={Views.MONTH}
+                        onNavigate={() => {}}
+                        toolbar={false}
+                        style={{ height: 500 }}
+                        onSelectEvent={handleSelectEvent}
+                        onSelectSlot={handleSelectSlot}
+                        selectable
+                        components={{
+                          event: CustomEvent,
+                        }}
+                        eventPropGetter={eventStyleGetter}
+                      />
                     </div>
-                    <Calendar
-                      localizer={localizer}
-                      events={monthEvents}
-                      startAccessor="start"
-                      endAccessor="end"
-                      date={monthDate}
-                      view={Views.MONTH}
-                      onNavigate={() => {}}
-                      toolbar={false}
-                      style={{ height: 500 }}
-                      onSelectEvent={handleSelectEvent}
-                      onSelectSlot={handleSelectSlot}
-                      selectable
-                      components={{
-                        event: CustomEvent,
-                      }}
-                      eventPropGetter={eventStyleGetter}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            // Week and Month Views
-            <Calendar
-              localizer={localizer}
-              events={events}
-              startAccessor="start"
-              endAccessor="end"
-              date={currentDate}
-              view={view === 'week' ? Views.WEEK : Views.MONTH}
-              onNavigate={setCurrentDate}
-              onView={(v) => setView(v.toLowerCase() as ViewType)}
-              views={[Views.WEEK, Views.MONTH]}
-              style={{ height: 600 }}
-              onSelectEvent={handleSelectEvent}
-              onSelectSlot={handleSelectSlot}
-              selectable
-              components={{
-                event: CustomEvent,
-              }}
-              eventPropGetter={eventStyleGetter}
-            />
-          )}
+                  );
+                })}
+              </div>
+            ) : (
+              // Week and Month Views
+              <Calendar
+                localizer={localizer}
+                events={events}
+                startAccessor="start"
+                endAccessor="end"
+                date={currentDate}
+                view={view === 'week' ? Views.WEEK : Views.MONTH}
+                onNavigate={setCurrentDate}
+                onView={(v) => setView(v.toLowerCase() as ViewType)}
+                views={[Views.WEEK, Views.MONTH]}
+                style={{ height: 600 }}
+                onSelectEvent={handleSelectEvent}
+                onSelectSlot={handleSelectSlot}
+                selectable
+                components={{
+                  event: CustomEvent,
+                }}
+                eventPropGetter={eventStyleGetter}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -647,7 +677,9 @@ export const CalendarPage = () => {
               {selectedEvent.vehicleName && (
                 <div className="flex items-center gap-3">
                   <Car className="h-4 w-4 text-text-secondary" />
-                  <span className="text-sm text-foreground font-medium">{selectedEvent.vehicleName}</span>
+                  <span className="text-sm text-foreground font-medium">
+                    {selectedEvent.vehicleName}
+                  </span>
                 </div>
               )}
 
@@ -669,7 +701,9 @@ export const CalendarPage = () => {
               {/* Date & Time */}
               <div className="grid grid-cols-2 gap-4 pt-2 border-t border-border">
                 <div>
-                  <label className="block text-xs font-medium text-text-secondary mb-1">Start</label>
+                  <label className="block text-xs font-medium text-text-secondary mb-1">
+                    Start
+                  </label>
                   <p className="text-sm text-foreground">
                     {dayjs(selectedEvent.start).format('DD.MM.YYYY')}
                     <br />
@@ -693,7 +727,9 @@ export const CalendarPage = () => {
               {/* Duration */}
               <div className="flex items-center gap-2 text-sm text-text-secondary">
                 <Clock className="h-4 w-4" />
-                <span>Dauer: {dayjs(selectedEvent.end).diff(dayjs(selectedEvent.start), 'hour')} Stunden</span>
+                <span>
+                  Dauer: {dayjs(selectedEvent.end).diff(dayjs(selectedEvent.start), 'hour')} Stunden
+                </span>
               </div>
             </div>
 
@@ -734,7 +770,7 @@ export const CalendarPage = () => {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              
+
               {/* Time Info */}
               {newTaskSlot ? (
                 <div className="mt-3 flex items-center gap-2 text-sm text-foreground">
@@ -755,29 +791,41 @@ export const CalendarPage = () => {
                   </div>
                   <div className="grid grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-text-secondary mb-1">Datum</label>
+                      <label className="block text-xs font-medium text-text-secondary mb-1">
+                        Datum
+                      </label>
                       <input
                         type="date"
                         value={manualDateTime.date}
-                        onChange={(e) => setManualDateTime({...manualDateTime, date: e.target.value})}
+                        onChange={(e) =>
+                          setManualDateTime({ ...manualDateTime, date: e.target.value })
+                        }
                         className="w-full px-2 py-1.5 text-sm bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-text-secondary mb-1">Von</label>
+                      <label className="block text-xs font-medium text-text-secondary mb-1">
+                        Von
+                      </label>
                       <input
                         type="time"
                         value={manualDateTime.startTime}
-                        onChange={(e) => setManualDateTime({...manualDateTime, startTime: e.target.value})}
+                        onChange={(e) =>
+                          setManualDateTime({ ...manualDateTime, startTime: e.target.value })
+                        }
                         className="w-full px-2 py-1.5 text-sm bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-text-secondary mb-1">Bis</label>
+                      <label className="block text-xs font-medium text-text-secondary mb-1">
+                        Bis
+                      </label>
                       <input
                         type="time"
                         value={manualDateTime.endTime}
-                        onChange={(e) => setManualDateTime({...manualDateTime, endTime: e.target.value})}
+                        onChange={(e) =>
+                          setManualDateTime({ ...manualDateTime, endTime: e.target.value })
+                        }
                         className="w-full px-2 py-1.5 text-sm bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
@@ -789,12 +837,13 @@ export const CalendarPage = () => {
             {/* Modal Content - Two Column Layout */}
             <div className="flex-1 overflow-y-auto">
               <div className="grid grid-cols-2 gap-6 p-6">
-                
                 {/* LEFT COLUMN - Vehicle & Personnel Selection */}
                 <div className="space-y-5">
                   <div className="flex items-center gap-2 pb-2 border-b border-border">
                     <Car className="h-4 w-4 text-primary" />
-                    <h4 className="text-sm font-semibold text-foreground">Fahrzeug & Mitarbeiter</h4>
+                    <h4 className="text-sm font-semibold text-foreground">
+                      Fahrzeug & Mitarbeiter
+                    </h4>
                   </div>
 
                   {/* Vehicle Selection */}
@@ -806,9 +855,9 @@ export const CalendarPage = () => {
                       required
                       value={selectedVehicle?.id || ''}
                       onChange={(e) => {
-                        const vehicle = vehicleFixtures.find(v => v.id === e.target.value);
+                        const vehicle = vehicleFixtures.find((v) => v.id === e.target.value);
                         setSelectedVehicle(vehicle || null);
-                        
+
                         // Auto-fill task details from vehicle service history
                         if (vehicle) {
                           const primaryIssue = getPrimaryServiceIssue(vehicle.id);
@@ -817,7 +866,7 @@ export const CalendarPage = () => {
                               title: primaryIssue.title,
                               taskType: primaryIssue.taskType,
                               priority: primaryIssue.priority,
-                              description: primaryIssue.description
+                              description: primaryIssue.description,
                             });
                           }
                         }
@@ -827,15 +876,16 @@ export const CalendarPage = () => {
                       <option value="">Fahrzeug wählen...</option>
                       {vehicleFixtures.map((vehicle) => {
                         const issues = getAllServiceIssues(vehicle.id);
-                        const hasUrgent = issues.some(i => i.priority === 'urgent');
+                        const hasUrgent = issues.some((i) => i.priority === 'urgent');
                         return (
                           <option key={vehicle.id} value={vehicle.id}>
-                            {hasUrgent ? '⚠️ ' : ''}{vehicle.brand} {vehicle.model} - {vehicle.plate}
+                            {hasUrgent ? '⚠️ ' : ''}
+                            {vehicle.brand} {vehicle.model} - {vehicle.plate}
                           </option>
                         );
                       })}
                     </select>
-                    
+
                     {/* Vehicle Info Card */}
                     {selectedVehicle && (
                       <div className="mt-3 p-4 rounded-lg bg-primary/5 border border-primary/20">
@@ -843,15 +893,28 @@ export const CalendarPage = () => {
                           <Car className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                           <div className="flex-1 text-sm space-y-2">
                             <p className="font-semibold text-foreground">
-                              {selectedVehicle.brand} {selectedVehicle.model} {selectedVehicle.variant}
+                              {selectedVehicle.brand} {selectedVehicle.model}{' '}
+                              {selectedVehicle.variant}
                             </p>
                             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-text-secondary">
-                              <p><span className="font-medium">Kennzeichen:</span> {selectedVehicle.plate}</p>
-                              <p><span className="font-medium">FIN:</span> {selectedVehicle.vin.slice(-8)}</p>
-                              <p><span className="font-medium">Laufleistung:</span> {selectedVehicle.mileageKm.toLocaleString()} km</p>
-                              <p><span className="font-medium">Erstzulassung:</span> {dayjs(selectedVehicle.firstRegistration).format('MM/YYYY')}</p>
+                              <p>
+                                <span className="font-medium">Kennzeichen:</span>{' '}
+                                {selectedVehicle.plate}
+                              </p>
+                              <p>
+                                <span className="font-medium">FIN:</span>{' '}
+                                {selectedVehicle.vin.slice(-8)}
+                              </p>
+                              <p>
+                                <span className="font-medium">Laufleistung:</span>{' '}
+                                {selectedVehicle.mileageKm.toLocaleString()} km
+                              </p>
+                              <p>
+                                <span className="font-medium">Erstzulassung:</span>{' '}
+                                {dayjs(selectedVehicle.firstRegistration).format('MM/YYYY')}
+                              </p>
                             </div>
-                            
+
                             {/* Known Issues */}
                             {(() => {
                               const issues = getAllServiceIssues(selectedVehicle.id);
@@ -868,7 +931,9 @@ export const CalendarPage = () => {
                                       {issues.slice(0, 3).map((issue, idx) => (
                                         <div key={idx} className="flex items-start gap-2 text-xs">
                                           <PriorityBadge priority={issue.priority} />
-                                          <span className="text-text-secondary flex-1">{issue.title}</span>
+                                          <span className="text-text-secondary flex-1">
+                                            {issue.title}
+                                          </span>
                                         </div>
                                       ))}
                                       {issues.length > 3 && (
@@ -896,7 +961,7 @@ export const CalendarPage = () => {
                       required
                       value={selectedPersonnel?.id || ''}
                       onChange={(e) => {
-                        const personnel = personnelFixtures.find(p => p.id === e.target.value);
+                        const personnel = personnelFixtures.find((p) => p.id === e.target.value);
                         setSelectedPersonnel(personnel || null);
                       }}
                       className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
@@ -904,25 +969,31 @@ export const CalendarPage = () => {
                       <option value="">Mitarbeiter wählen...</option>
                       {personnelFixtures.map((person) => (
                         <option key={person.id} value={person.id}>
-                          {person.fullName} - {person.role} 
-                          {person.status === 'available' ? ' ✓ Verfügbar' : person.status === 'busy' ? ' ⚠ Beschäftigt' : ' ✗ Abwesend'}
+                          {person.fullName} - {person.role}
+                          {person.status === 'available'
+                            ? ' ✓ Verfügbar'
+                            : person.status === 'busy'
+                              ? ' ⚠ Beschäftigt'
+                              : ' ✗ Abwesend'}
                         </option>
                       ))}
                     </select>
-                    
+
                     {/* Personnel Info Card */}
                     {selectedPersonnel && (
-                      <div className={`mt-3 p-4 rounded-lg border ${
-                        selectedPersonnel.status === 'available' 
-                          ? 'bg-green-500/5 border-green-500/20' 
-                          : selectedPersonnel.status === 'busy'
-                          ? 'bg-orange-500/5 border-orange-500/20'
-                          : 'bg-red-500/5 border-red-500/20'
-                      }`}>
+                      <div
+                        className={`mt-3 p-4 rounded-lg border ${
+                          selectedPersonnel.status === 'available'
+                            ? 'bg-green-500/5 border-green-500/20'
+                            : selectedPersonnel.status === 'busy'
+                              ? 'bg-orange-500/5 border-orange-500/20'
+                              : 'bg-red-500/5 border-red-500/20'
+                        }`}
+                      >
                         <div className="flex items-start gap-3">
                           {selectedPersonnel.image && (
-                            <img 
-                              src={selectedPersonnel.image} 
+                            <img
+                              src={selectedPersonnel.image}
                               alt={selectedPersonnel.fullName}
                               className="h-12 w-12 rounded-full object-cover flex-shrink-0"
                             />
@@ -954,23 +1025,34 @@ export const CalendarPage = () => {
                             <p className="text-xs text-text-secondary">{selectedPersonnel.role}</p>
                             {selectedPersonnel.availability.currentTask && (
                               <p className="text-xs text-text-secondary">
-                                <span className="font-medium">Aktuelle Aufgabe:</span> {selectedPersonnel.availability.currentTask}
+                                <span className="font-medium">Aktuelle Aufgabe:</span>{' '}
+                                {selectedPersonnel.availability.currentTask}
                               </p>
                             )}
                             {!selectedPersonnel.availability.isAvailable && (
                               <p className="text-xs text-text-secondary">
-                                <span className="font-medium">Verfügbar ab:</span> {dayjs(selectedPersonnel.availability.nextAvailableSlot).format('DD.MM.YYYY HH:mm')}
+                                <span className="font-medium">Verfügbar ab:</span>{' '}
+                                {dayjs(selectedPersonnel.availability.nextAvailableSlot).format(
+                                  'DD.MM.YYYY HH:mm'
+                                )}
                               </p>
                             )}
                             {selectedPersonnel.specializations.length > 0 && (
                               <div className="pt-2">
-                                <p className="text-xs font-medium text-foreground mb-1">Spezialisierungen:</p>
+                                <p className="text-xs font-medium text-foreground mb-1">
+                                  Spezialisierungen:
+                                </p>
                                 <div className="flex flex-wrap gap-1">
-                                  {selectedPersonnel.specializations.slice(0, 4).map((spec, idx) => (
-                                    <span key={idx} className="text-xs bg-bg-tertiary px-2 py-0.5 rounded text-text-secondary">
-                                      {taskTypeConfig[spec]?.label || spec}
-                                    </span>
-                                  ))}
+                                  {selectedPersonnel.specializations
+                                    .slice(0, 4)
+                                    .map((spec, idx) => (
+                                      <span
+                                        key={idx}
+                                        className="text-xs bg-bg-tertiary px-2 py-0.5 rounded text-text-secondary"
+                                      >
+                                        {taskTypeConfig[spec]?.label || spec}
+                                      </span>
+                                    ))}
                                 </div>
                               </div>
                             )}
@@ -993,9 +1075,12 @@ export const CalendarPage = () => {
                     <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
                       <AlertTriangle className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
                       <div className="flex-1">
-                        <p className="text-xs font-medium text-foreground">Automatisch ausgefüllt</p>
+                        <p className="text-xs font-medium text-foreground">
+                          Automatisch ausgefüllt
+                        </p>
                         <p className="text-xs text-text-secondary mt-0.5">
-                          Aufgabendaten wurden basierend auf dem Fahrzeugverlauf geladen. Sie können diese manuell anpassen.
+                          Aufgabendaten wurden basierend auf dem Fahrzeugverlauf geladen. Sie können
+                          diese manuell anpassen.
                         </p>
                       </div>
                     </div>
@@ -1003,12 +1088,14 @@ export const CalendarPage = () => {
 
                   {/* Title */}
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Aufgabentitel *</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Aufgabentitel *
+                    </label>
                     <input
                       type="text"
                       required
                       value={formData.title}
-                      onChange={(e) => setFormData({...formData, title: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                       className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       placeholder="z.B. Ölwechsel durchführen"
                     />
@@ -1017,26 +1104,32 @@ export const CalendarPage = () => {
                   {/* Task Type & Priority */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Aufgabentyp *</label>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Aufgabentyp *
+                      </label>
                       <select
                         required
                         value={formData.taskType}
-                        onChange={(e) => setFormData({...formData, taskType: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, taskType: e.target.value })}
                         className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       >
                         <option value="">Bitte wählen...</option>
                         {Object.entries(taskTypeConfig).map(([key, config]) => (
-                          <option key={key} value={key}>{config.label}</option>
+                          <option key={key} value={key}>
+                            {config.label}
+                          </option>
                         ))}
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Priorität *</label>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Priorität *
+                      </label>
                       <select
                         required
                         value={formData.priority}
-                        onChange={(e) => setFormData({...formData, priority: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                         className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       >
                         <option value="low">Niedrig</option>
@@ -1049,32 +1142,36 @@ export const CalendarPage = () => {
 
                   {/* Description */}
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Beschreibung</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Beschreibung
+                    </label>
                     <textarea
                       rows={6}
                       value={formData.description}
-                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                       placeholder="Detaillierte Beschreibung der Aufgabe, Schritte, benötigte Teile..."
                     />
                   </div>
 
                   {/* Estimated Duration (if available) */}
-                  {selectedVehicle && (() => {
-                    const primaryIssue = getPrimaryServiceIssue(selectedVehicle.id);
-                    if (primaryIssue && formData.taskType === primaryIssue.taskType) {
-                      return (
-                        <div className="p-3 rounded-lg bg-bg-secondary">
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4 text-text-secondary" />
-                            <span className="text-sm text-foreground">
-                              <span className="font-medium">Geschätzte Dauer:</span> {primaryIssue.estimatedDuration}h
-                            </span>
+                  {selectedVehicle &&
+                    (() => {
+                      const primaryIssue = getPrimaryServiceIssue(selectedVehicle.id);
+                      if (primaryIssue && formData.taskType === primaryIssue.taskType) {
+                        return (
+                          <div className="p-3 rounded-lg bg-bg-secondary">
+                            <div className="flex items-center gap-2">
+                              <Clock className="h-4 w-4 text-text-secondary" />
+                              <span className="text-sm text-foreground">
+                                <span className="font-medium">Geschätzte Dauer:</span>{' '}
+                                {primaryIssue.estimatedDuration}h
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    }
-                  })()}
+                        );
+                      }
+                    })()}
                 </div>
               </div>
             </div>
@@ -1103,7 +1200,13 @@ export const CalendarPage = () => {
                 <button
                   type="button"
                   onClick={handleCreateTask}
-                  disabled={isCreating || !selectedVehicle || !selectedPersonnel || !formData.title || !formData.taskType}
+                  disabled={
+                    isCreating ||
+                    !selectedVehicle ||
+                    !selectedPersonnel ||
+                    !formData.title ||
+                    !formData.taskType
+                  }
                   className="px-5 py-2 bg-primary text-primary-text rounded-lg font-medium hover:bg-primary-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[140px]"
                 >
                   {isCreating ? (

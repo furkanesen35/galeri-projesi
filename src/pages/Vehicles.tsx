@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, LayoutGrid, List, Filter } from 'lucide-react';
 import { Vehicle } from '../types/domain';
-import { vehicleFixtures, getAvailableVehicles, getReservedVehicles, getSoldVehicles } from '../services/vehicleFixtures';
+import {
+  vehicleFixtures,
+  getAvailableVehicles,
+  getReservedVehicles,
+  getSoldVehicles,
+} from '../services/vehicleFixtures';
 import { VehicleCard } from './Vehicles/components/VehicleCard';
 
 type ViewMode = 'grid' | 'list';
@@ -17,18 +22,19 @@ export const Vehicles = () => {
   // Filter vehicles based on active tab
   const getFilteredVehicles = (): Vehicle[] => {
     let filtered = vehicleFixtures;
-    
+
     if (activeTab !== 'all') {
-      filtered = vehicleFixtures.filter(v => v.status === activeTab);
+      filtered = vehicleFixtures.filter((v) => v.status === activeTab);
     }
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(v => 
-        v.brand.toLowerCase().includes(query) ||
-        v.model.toLowerCase().includes(query) ||
-        v.plate.toLowerCase().includes(query) ||
-        v.vin.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        (v) =>
+          v.brand.toLowerCase().includes(query) ||
+          v.model.toLowerCase().includes(query) ||
+          v.plate.toLowerCase().includes(query) ||
+          v.vin.toLowerCase().includes(query)
       );
     }
 
@@ -43,8 +49,8 @@ export const Vehicles = () => {
     available: getAvailableVehicles().length,
     reserved: getReservedVehicles().length,
     sold: getSoldVehicles().length,
-    service: vehicleFixtures.filter(v => v.status === 'service').length,
-    archived: vehicleFixtures.filter(v => v.status === 'archived').length
+    service: vehicleFixtures.filter((v) => v.status === 'service').length,
+    archived: vehicleFixtures.filter((v) => v.status === 'archived').length,
   };
 
   const tabs: { key: FilterTab; label: string; count: number }[] = [
@@ -53,7 +59,7 @@ export const Vehicles = () => {
     { key: 'reserved', label: 'Reserviert', count: counts.reserved },
     { key: 'sold', label: 'Verkauft', count: counts.sold },
     { key: 'service', label: 'Service', count: counts.service },
-    { key: 'archived', label: 'Archiviert', count: counts.archived }
+    { key: 'archived', label: 'Archiviert', count: counts.archived },
   ];
 
   return (
@@ -81,18 +87,21 @@ export const Vehicles = () => {
               onClick={() => setActiveTab(tab.key)}
               className={`
                 whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium transition-colors
-                ${activeTab === tab.key
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-text-secondary hover:border-border hover:text-foreground'
+                ${
+                  activeTab === tab.key
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-text-secondary hover:border-border hover:text-foreground'
                 }
               `}
             >
               {tab.label}
-              <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
-                activeTab === tab.key 
-                  ? 'bg-primary/10 text-primary' 
-                  : 'bg-bg-secondary text-text-secondary'
-              }`}>
+              <span
+                className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
+                  activeTab === tab.key
+                    ? 'bg-primary/10 text-primary'
+                    : 'bg-bg-secondary text-text-secondary'
+                }`}
+              >
                 {tab.count}
               </span>
             </button>
@@ -149,22 +158,20 @@ export const Vehicles = () => {
           </div>
           <h3 className="mt-4 text-lg font-semibold text-foreground">Keine Fahrzeuge gefunden</h3>
           <p className="mt-1 text-sm text-text-secondary">
-            {searchQuery 
+            {searchQuery
               ? `Keine Ergebnisse für "${searchQuery}"`
-              : 'Es gibt keine Fahrzeuge in dieser Kategorie'
-            }
+              : 'Es gibt keine Fahrzeuge in dieser Kategorie'}
           </p>
         </div>
       ) : (
-        <div className={`
-          ${viewMode === 'grid' 
-            ? 'grid grid-cols-1 gap-4' 
-            : 'flex flex-col gap-3'
-          }
-        `}>
+        <div
+          className={`
+          ${viewMode === 'grid' ? 'grid grid-cols-1 gap-4' : 'flex flex-col gap-3'}
+        `}
+        >
           {filteredVehicles.map((vehicle) => (
-            <VehicleCard 
-              key={vehicle.id} 
+            <VehicleCard
+              key={vehicle.id}
               vehicle={vehicle}
               onClick={() => navigate(`/vehicles/${vehicle.id}`)}
             />
@@ -178,7 +185,8 @@ export const Vehicles = () => {
           Zeige {filteredVehicles.length} von {counts.all} Fahrzeugen
         </p>
         <p className="text-xs">
-          Gesamtwert: {filteredVehicles.reduce((sum, v) => sum + v.price, 0).toLocaleString('de-DE')} €
+          Gesamtwert:{' '}
+          {filteredVehicles.reduce((sum, v) => sum + v.price, 0).toLocaleString('de-DE')} €
         </p>
       </div>
     </div>

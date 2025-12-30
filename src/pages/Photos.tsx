@@ -1,10 +1,17 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { mockApi } from '../services/mockApi';
 import { PhotoGallery } from './Photos/components/PhotoGallery';
 import { PhotoUpload } from './Photos/components/PhotoUpload';
 import { AnnotationModal } from './Photos/components/AnnotationModal';
 import { OptimizationPreview } from './Photos/components/OptimizationPreview';
+
+interface Annotation {
+  id: string;
+  x: number;
+  y: number;
+  text: string;
+}
 
 interface Photo {
   id: string;
@@ -15,7 +22,7 @@ interface Photo {
   size: number;
   uploadedAt: string;
   tags: string[];
-  annotations?: any[];
+  annotations?: Annotation[];
 }
 
 export const Photos = () => {
@@ -29,27 +36,26 @@ export const Photos = () => {
   const [filterTag, setFilterTag] = useState<string>('all');
 
   useEffect(() => {
+    const loadPhotos = async () => {
+      setLoading(true);
+      const response = await mockApi.photos.getPhotos();
+      setPhotos(response.data);
+      setLoading(false);
+    };
     loadPhotos();
   }, []);
 
-  const loadPhotos = async () => {
-    setLoading(true);
-    const response = await mockApi.photos.getPhotos();
-    setPhotos(response.data);
-    setLoading(false);
-  };
-
   const handleUpload = async (files: FileList) => {
     const fileArray = Array.from(files);
-    
+
     for (const file of fileArray) {
       const fileId = `upload-${Date.now()}-${Math.random()}`;
-      
+
       // Simulate upload progress
-      setUploadProgress(prev => ({ ...prev, [fileId]: 0 }));
-      
+      setUploadProgress((prev) => ({ ...prev, [fileId]: 0 }));
+
       const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
+        setUploadProgress((prev) => {
           const current = prev[fileId] || 0;
           if (current >= 100) {
             clearInterval(progressInterval);
@@ -61,15 +67,15 @@ export const Photos = () => {
 
       // Mock upload
       const response = await mockApi.photos.uploadPhoto(file, 'CASE-2024-001');
-      
+
       clearInterval(progressInterval);
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         const newProgress = { ...prev };
         delete newProgress[fileId];
         return newProgress;
       });
-      
-      setPhotos(prev => [response.data, ...prev]);
+
+      setPhotos((prev) => [response.data, ...prev]);
     }
   };
 
@@ -85,29 +91,22 @@ export const Photos = () => {
 
   const handleDeletePhoto = async (photoId: string) => {
     await mockApi.photos.deletePhoto(photoId);
-    setPhotos(photos.filter(p => p.id !== photoId));
+    setPhotos(photos.filter((p) => p.id !== photoId));
   };
 
   const handleAddTag = (photoId: string, tag: string) => {
-    setPhotos(photos.map(p => 
-      p.id === photoId 
-        ? { ...p, tags: [...p.tags, tag] }
-        : p
-    ));
+    setPhotos(photos.map((p) => (p.id === photoId ? { ...p, tags: [...p.tags, tag] } : p)));
   };
 
   const handleRemoveTag = (photoId: string, tag: string) => {
-    setPhotos(photos.map(p => 
-      p.id === photoId 
-        ? { ...p, tags: p.tags.filter(t => t !== tag) }
-        : p
-    ));
+    setPhotos(
+      photos.map((p) => (p.id === photoId ? { ...p, tags: p.tags.filter((t) => t !== tag) } : p))
+    );
   };
 
-  const allTags = Array.from(new Set(photos.flatMap(p => p.tags)));
-  const filteredPhotos = filterTag === 'all' 
-    ? photos 
-    : photos.filter(p => p.tags.includes(filterTag));
+  const allTags = Array.from(new Set(photos.flatMap((p) => p.tags)));
+  const filteredPhotos =
+    filterTag === 'all' ? photos : photos.filter((p) => p.tags.includes(filterTag));
 
   return (
     <div className="space-y-6">
@@ -115,17 +114,12 @@ export const Photos = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">{t('photos.title')}</h1>
-          <p className="text-sm text-text-secondary mt-1">
-            {t('photos.subtitle')}
-          </p>
+          <p className="text-sm text-text-secondary mt-1">{t('photos.subtitle')}</p>
         </div>
       </div>
 
       {/* Upload area */}
-      <PhotoUpload 
-        onUpload={handleUpload}
-        uploadProgress={uploadProgress}
-      />
+      <PhotoUpload onUpload={handleUpload} uploadProgress={uploadProgress} />
 
       {/* Tags filter */}
       <div className="flex items-center gap-2 flex-wrap">
@@ -140,7 +134,7 @@ export const Photos = () => {
         >
           {t('photos.all')} ({photos.length})
         </button>
-        {allTags.map(tag => (
+        {allTags.map((tag) => (
           <button
             key={tag}
             onClick={() => setFilterTag(tag)}
@@ -150,7 +144,7 @@ export const Photos = () => {
                 : 'bg-surface border border-border text-foreground hover:border-primary'
             }`}
           >
-            {tag} ({photos.filter(p => p.tags.includes(tag)).length})
+            {tag} ({photos.filter((p) => p.tags.includes(tag)).length})
           </button>
         ))}
       </div>
@@ -172,21 +166,14 @@ export const Photos = () => {
           photo={selectedPhoto}
           onClose={() => setShowAnnotation(false)}
           onSave={(annotations) => {
-            setPhotos(photos.map(p =>
-              p.id === selectedPhoto.id
-                ? { ...p, annotations }
-                : p
-            ));
+            setPhotos(photos.map((p) => (p.id === selectedPhoto.id ? { ...p, annotations } : p)));
             setShowAnnotation(false);
           }}
         />
       )}
 
       {showOptimization && selectedPhoto && (
-        <OptimizationPreview
-          photo={selectedPhoto}
-          onClose={() => setShowOptimization(false)}
-        />
+        <OptimizationPreview photo={selectedPhoto} onClose={() => setShowOptimization(false)} />
       )}
     </div>
   );

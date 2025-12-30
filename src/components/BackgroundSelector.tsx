@@ -1,6 +1,10 @@
 import React from 'react';
-import { Check, RotateCcw, Image as ImageIcon } from 'lucide-react';
-import { useBackgroundStore, backgroundOptions, BackgroundOption } from '../store/useBackgroundStore';
+import { Check, RotateCcw } from 'lucide-react';
+import {
+  useBackgroundStore,
+  backgroundOptions,
+  BackgroundOption,
+} from '../store/useBackgroundStore';
 
 interface BackgroundSelectorProps {
   className?: string;
@@ -12,21 +16,22 @@ const stopDragPropagation = (e: React.DragEvent | React.MouseEvent) => {
 };
 
 export const BackgroundSelector: React.FC<BackgroundSelectorProps> = ({ className = '' }) => {
-  const { 
-    selectedBackgroundId, 
-    backgroundOpacity, 
+  const {
+    selectedBackgroundId,
+    backgroundOpacity,
     backgroundBlur,
-    setBackground, 
+    setBackground,
     setOpacity,
     setBlur,
-    reset 
+    reset,
   } = useBackgroundStore();
 
   const getPreviewStyle = (bg: BackgroundOption): React.CSSProperties => {
     if (bg.type === 'none') {
-      return { 
-        background: 'linear-gradient(45deg, #1a1a2e 25%, transparent 25%, transparent 75%, #1a1a2e 75%)',
-        backgroundSize: '8px 8px'
+      return {
+        background:
+          'linear-gradient(45deg, #1a1a2e 25%, transparent 25%, transparent 75%, #1a1a2e 75%)',
+        backgroundSize: '8px 8px',
       };
     }
     if (bg.type === 'image') {
@@ -62,16 +67,14 @@ export const BackgroundSelector: React.FC<BackgroundSelectorProps> = ({ classNam
                 onClick={() => setBackground(bg.id)}
                 className={`
                   relative aspect-video rounded-lg overflow-hidden border-2 transition-all
-                  ${isSelected 
-                    ? 'border-primary ring-2 ring-primary/30' 
-                    : 'border-border hover:border-primary/50'
+                  ${
+                    isSelected
+                      ? 'border-primary ring-2 ring-primary/30'
+                      : 'border-border hover:border-primary/50'
                   }
                 `}
               >
-                <div 
-                  className="absolute inset-0"
-                  style={getPreviewStyle(bg)}
-                />
+                <div className="absolute inset-0" style={getPreviewStyle(bg)} />
                 {bg.type === 'none' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-xs text-text-secondary bg-bg-secondary/80 px-2 py-1 rounded">
@@ -97,16 +100,14 @@ export const BackgroundSelector: React.FC<BackgroundSelectorProps> = ({ classNam
 
       {/* Opacity Slider */}
       {selectedBackgroundId !== 'none' && (
-        <div 
+        <div
           className="p-4 rounded-xl bg-bg-secondary/50 border border-border"
           draggable={false}
           onDragStart={stopDragPropagation}
           onMouseDown={stopDragPropagation}
         >
           <div className="flex items-center justify-between mb-3">
-            <label className="text-sm font-medium text-foreground">
-              Deckkraft
-            </label>
+            <label className="text-sm font-medium text-foreground">Deckkraft</label>
             <span className="text-sm font-mono bg-bg-secondary px-2 py-0.5 rounded text-foreground">
               {backgroundOpacity}%
             </span>
@@ -154,16 +155,14 @@ export const BackgroundSelector: React.FC<BackgroundSelectorProps> = ({ classNam
 
       {/* Blur Slider */}
       {selectedBackgroundId !== 'none' && (
-        <div 
+        <div
           className="p-4 rounded-xl bg-bg-secondary/50 border border-border"
           draggable={false}
           onDragStart={stopDragPropagation}
           onMouseDown={stopDragPropagation}
         >
           <div className="flex items-center justify-between mb-3">
-            <label className="text-sm font-medium text-foreground">
-              Unschärfe
-            </label>
+            <label className="text-sm font-medium text-foreground">Unschärfe</label>
             <span className="text-sm font-mono bg-bg-secondary px-2 py-0.5 rounded text-foreground">
               {backgroundBlur}px
             </span>

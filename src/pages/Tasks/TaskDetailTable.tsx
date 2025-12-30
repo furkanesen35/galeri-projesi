@@ -10,6 +10,24 @@ interface TaskDetailTableProps {
 type SortKey = keyof TaskDetailRow;
 type SortDirection = 'asc' | 'desc';
 
+// Moved outside component to avoid recreating on each render
+const SortIcon = ({
+  columnKey,
+  sortKey,
+  sortDirection,
+}: {
+  columnKey: SortKey;
+  sortKey: SortKey;
+  sortDirection: SortDirection;
+}) => {
+  if (sortKey !== columnKey) return null;
+  return sortDirection === 'asc' ? (
+    <SortAsc className="h-3 w-3 inline ml-1" />
+  ) : (
+    <SortDesc className="h-3 w-3 inline ml-1" />
+  );
+};
+
 export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('dueDate');
@@ -29,41 +47,32 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
 
   // Filtering and sorting
   const filteredAndSortedTasks = tasks
-    .filter(task => {
-      const matchesSearch = 
+    .filter((task) => {
+      const matchesSearch =
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.vehicleName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.licensePlate.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.vin.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       const matchesStatus = filterStatus === 'all' || task.status === filterStatus;
       const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
-      
+
       return matchesSearch && matchesStatus && matchesPriority;
     })
     .sort((a, b) => {
       const aVal = a[sortKey];
       const bVal = b[sortKey];
-      
+
       if (typeof aVal === 'string' && typeof bVal === 'string') {
-        return sortDirection === 'asc' 
-          ? aVal.localeCompare(bVal) 
-          : bVal.localeCompare(aVal);
+        return sortDirection === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
       }
-      
+
       if (typeof aVal === 'number' && typeof bVal === 'number') {
         return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
       }
-      
+
       return 0;
     });
-
-  const SortIcon = ({ columnKey }: { columnKey: SortKey }) => {
-    if (sortKey !== columnKey) return null;
-    return sortDirection === 'asc' ? 
-      <SortAsc className="h-3 w-3 inline ml-1" /> : 
-      <SortDesc className="h-3 w-3 inline ml-1" />;
-  };
 
   // Export to CSV
   const exportToCSV = () => {
@@ -85,10 +94,10 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
       'Zuständig',
       'Fällig am',
       'Erstellt am',
-      'Notizen'
+      'Notizen',
     ];
-    
-    const rows = filteredAndSortedTasks.map(task => [
+
+    const rows = filteredAndSortedTasks.map((task) => [
       task.title,
       taskTypeConfig[task.taskType]?.label || task.taskType,
       task.status,
@@ -106,12 +115,12 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
       task.assignee || '-',
       task.dueDate,
       task.createdAt,
-      task.notes || '-'
+      task.notes || '-',
     ]);
 
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -127,20 +136,22 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
       low: 'Niedrig',
       medium: 'Mittel',
       high: 'Hoch',
-      urgent: 'Dringend'
+      urgent: 'Dringend',
     };
 
     const statusLabels: Record<string, string> = {
       pending: 'Ausstehend',
       in_progress: 'In Bearbeitung',
       done: 'Erledigt',
-      cancelled: 'Storniert'
+      cancelled: 'Storniert',
     };
 
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
 
-    const tableRows = filteredAndSortedTasks.map(task => `
+    const tableRows = filteredAndSortedTasks
+      .map(
+        (task) => `
       <tr>
         <td>${task.title}</td>
         <td>${taskTypeConfig[task.taskType]?.label || task.taskType}</td>
@@ -152,7 +163,9 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
         <td>${task.dueDate}</td>
         <td style="text-align: right;">${task.estimatedCost ? `${task.estimatedCost.toLocaleString('de-DE')} €` : '-'}</td>
       </tr>
-    `).join('');
+    `
+      )
+      .join('');
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -222,19 +235,19 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
       <body>
         <div class="header">
           <h1>📋 Aufgaben Details</h1>
-          <div class="date">Erstellt am: ${new Date().toLocaleDateString('de-DE', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+          <div class="date">Erstellt am: ${new Date().toLocaleDateString('de-DE', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
           })}</div>
         </div>
         
         <div class="summary">
           <div class="summary-item">Gesamt: <strong>${filteredAndSortedTasks.length}</strong> Aufgaben</div>
-          <div class="summary-item">Ausstehend: <strong>${filteredAndSortedTasks.filter(t => t.status === 'pending').length}</strong></div>
-          <div class="summary-item">In Bearbeitung: <strong>${filteredAndSortedTasks.filter(t => t.status === 'in_progress').length}</strong></div>
-          <div class="summary-item">Erledigt: <strong>${filteredAndSortedTasks.filter(t => t.status === 'done').length}</strong></div>
+          <div class="summary-item">Ausstehend: <strong>${filteredAndSortedTasks.filter((t) => t.status === 'pending').length}</strong></div>
+          <div class="summary-item">In Bearbeitung: <strong>${filteredAndSortedTasks.filter((t) => t.status === 'in_progress').length}</strong></div>
+          <div class="summary-item">Erledigt: <strong>${filteredAndSortedTasks.filter((t) => t.status === 'done').length}</strong></div>
         </div>
 
         <table>
@@ -346,124 +359,187 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
         <table className="w-full text-sm border-collapse">
           <thead className="bg-surface border-b border-border">
             <tr>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('title')}
               >
-                Aufgabe <SortIcon columnKey="title" />
+                Aufgabe{' '}
+                <SortIcon columnKey="title" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('taskType')}
               >
-                Typ <SortIcon columnKey="taskType" />
+                Typ{' '}
+                <SortIcon columnKey="taskType" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('status')}
               >
-                Status <SortIcon columnKey="status" />
+                Status{' '}
+                <SortIcon columnKey="status" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('priority')}
               >
-                Priorität <SortIcon columnKey="priority" />
+                Priorität{' '}
+                <SortIcon columnKey="priority" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('vehicleName')}
               >
-                Fahrzeug <SortIcon columnKey="vehicleName" />
+                Fahrzeug{' '}
+                <SortIcon columnKey="vehicleName" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">Marke</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">Modell</th>
-              <th 
+              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">
+                Marke
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">
+                Modell
+              </th>
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('licensePlate')}
               >
-                Kennzeichen <SortIcon columnKey="licensePlate" />
+                Kennzeichen{' '}
+                <SortIcon
+                  columnKey="licensePlate"
+                  sortKey={sortKey}
+                  sortDirection={sortDirection}
+                />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">FIN</th>
-              <th 
+              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">
+                FIN
+              </th>
+              <th
                 className="px-4 py-3 text-right text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('mileage')}
               >
-                KM <SortIcon columnKey="mileage" />
+                KM <SortIcon columnKey="mileage" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">Erstzulassung</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">Kraftstoff</th>
-              <th 
+              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">
+                Erstzulassung
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-semibold uppercase border-r border-border">
+                Kraftstoff
+              </th>
+              <th
                 className="px-4 py-3 text-right text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('price')}
               >
-                Preis <SortIcon columnKey="price" />
+                Preis <SortIcon columnKey="price" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-right text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('estimatedCost')}
               >
-                Kosten <SortIcon columnKey="estimatedCost" />
+                Kosten{' '}
+                <SortIcon
+                  columnKey="estimatedCost"
+                  sortKey={sortKey}
+                  sortDirection={sortDirection}
+                />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('assignee')}
               >
-                Zuständig <SortIcon columnKey="assignee" />
+                Zuständig{' '}
+                <SortIcon columnKey="assignee" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('dueDate')}
               >
-                Fällig am <SortIcon columnKey="dueDate" />
+                Fällig am{' '}
+                <SortIcon columnKey="dueDate" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-xs font-semibold uppercase cursor-pointer hover:bg-background/50 transition-colors border-r border-border"
                 onClick={() => handleSort('createdAt')}
               >
-                Erstellt <SortIcon columnKey="createdAt" />
+                Erstellt{' '}
+                <SortIcon columnKey="createdAt" sortKey={sortKey} sortDirection={sortDirection} />
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase">Notizen</th>
             </tr>
           </thead>
           <tbody className="bg-background">
             {filteredAndSortedTasks.map((task, idx) => (
-              <tr 
-                key={task.id}
-                className="border-b border-border group"
-              >
-                <td className="px-4 py-3 font-medium border-r border-border group-hover:bg-surface/20 transition-colors">{task.title}</td>
+              <tr key={task.id} className="border-b border-border group">
+                <td className="px-4 py-3 font-medium border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.title}
+                </td>
                 <td className="px-4 py-3 border-r border-border group-hover:bg-surface/20 transition-colors">
                   <div className="flex items-center gap-2">
                     <TaskTypeIcon type={task.taskType} size="sm" />
                   </div>
                 </td>
                 <td className="px-4 py-3 border-r border-border group-hover:bg-surface/20 transition-colors">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                    task.status === 'done' ? 'bg-green-500/10 text-green-500' :
-                    task.status === 'in_progress' ? 'bg-blue-500/10 text-blue-500' :
-                    'bg-gray-500/10 text-gray-500'
-                  }`}>
-                    {task.status === 'done' ? 'Erledigt' : task.status === 'in_progress' ? 'In Bearbeitung' : 'Ausstehend'}
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                      task.status === 'done'
+                        ? 'bg-green-500/10 text-green-500'
+                        : task.status === 'in_progress'
+                          ? 'bg-blue-500/10 text-blue-500'
+                          : 'bg-gray-500/10 text-gray-500'
+                    }`}
+                  >
+                    {task.status === 'done'
+                      ? 'Erledigt'
+                      : task.status === 'in_progress'
+                        ? 'In Bearbeitung'
+                        : 'Ausstehend'}
                   </span>
                 </td>
                 <td className="px-4 py-3 border-r border-border group-hover:bg-surface/20 transition-colors">
                   <PriorityBadge priority={task.priority} />
                 </td>
-                <td className="px-4 py-3 font-medium border-r border-border group-hover:bg-surface/20 transition-colors">{task.vehicleName}</td>
-                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">{task.brand}</td>
-                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">{task.model}</td>
-                <td className="px-4 py-3 font-mono text-xs border-r border-border group-hover:bg-surface/20 transition-colors">{task.licensePlate}</td>
-                <td className="px-4 py-3 font-mono text-xs text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">{task.vin}</td>
-                <td className="px-4 py-3 text-right text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">{task.mileage.toLocaleString()}</td>
-                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">{task.firstRegistration}</td>
-                <td className="px-4 py-3 text-text-secondary capitalize border-r border-border group-hover:bg-surface/20 transition-colors">{task.fuelType}</td>
-                <td className="px-4 py-3 text-right font-semibold border-r border-border group-hover:bg-surface/20 transition-colors">{task.price.toLocaleString()} €</td>
-                <td className="px-4 py-3 text-right text-orange-500 font-semibold border-r border-border group-hover:bg-surface/20 transition-colors">{task.estimatedCost.toLocaleString()} €</td>
-                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">{task.assignee || '-'}</td>
-                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">{task.dueDate}</td>
-                <td className="px-4 py-3 text-text-secondary text-xs border-r border-border group-hover:bg-surface/20 transition-colors">{task.createdAt}</td>
-                <td className="px-4 py-3 text-text-secondary text-xs group-hover:bg-surface/20 transition-colors">{task.notes || '-'}</td>
+                <td className="px-4 py-3 font-medium border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.vehicleName}
+                </td>
+                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.brand}
+                </td>
+                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.model}
+                </td>
+                <td className="px-4 py-3 font-mono text-xs border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.licensePlate}
+                </td>
+                <td className="px-4 py-3 font-mono text-xs text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.vin}
+                </td>
+                <td className="px-4 py-3 text-right text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.mileage.toLocaleString()}
+                </td>
+                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.firstRegistration}
+                </td>
+                <td className="px-4 py-3 text-text-secondary capitalize border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.fuelType}
+                </td>
+                <td className="px-4 py-3 text-right font-semibold border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.price.toLocaleString()} €
+                </td>
+                <td className="px-4 py-3 text-right text-orange-500 font-semibold border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.estimatedCost.toLocaleString()} €
+                </td>
+                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.assignee || '-'}
+                </td>
+                <td className="px-4 py-3 text-text-secondary border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.dueDate}
+                </td>
+                <td className="px-4 py-3 text-text-secondary text-xs border-r border-border group-hover:bg-surface/20 transition-colors">
+                  {task.createdAt}
+                </td>
+                <td className="px-4 py-3 text-text-secondary text-xs group-hover:bg-surface/20 transition-colors">
+                  {task.notes || '-'}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -471,9 +547,7 @@ export const TaskDetailTable = ({ tasks }: TaskDetailTableProps) => {
       </div>
 
       {filteredAndSortedTasks.length === 0 && (
-        <div className="text-center py-12 text-text-secondary">
-          Keine Aufgaben gefunden
-        </div>
+        <div className="text-center py-12 text-text-secondary">Keine Aufgaben gefunden</div>
       )}
     </div>
   );

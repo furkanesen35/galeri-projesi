@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Table, GitBranch } from 'lucide-react';
 import { mockApi } from '../services/mockApi';
 import { CaseWizard } from './DamageAssessment/components/CaseWizard';
 import { CasesTable } from './DamageAssessment/components/CasesTable';
 import { StatusTimeline } from './DamageAssessment/components/StatusTimeline';
-import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../components/DraggablePanel';
+import {
+  DraggablePanel,
+  DraggablePanelContainer,
+  HiddenPanelsBar,
+} from '../components/DraggablePanel';
 import { PanelCustomizer } from '../components/PanelCustomizer';
-import { usePanelLayout } from '../hooks/usePanelLayout';
 
 interface Case {
   id: string;
@@ -31,22 +33,18 @@ export const DamageAssessment = () => {
   const [loading, setLoading] = useState(true);
   const [showWizard, setShowWizard] = useState(false);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
-  const navigate = useNavigate();
-  
-  const { panels, checkVisibility } = usePanelLayout(VIEW_ID);
 
   useEffect(() => {
+    const loadCases = async () => {
+      setLoading(true);
+      const response = await mockApi.cases.getCases();
+      setCases(response.data);
+      setLoading(false);
+    };
     loadCases();
   }, []);
 
-  const loadCases = async () => {
-    setLoading(true);
-    const response = await mockApi.cases.getCases();
-    setCases(response.data);
-    setLoading(false);
-  };
-
-  const handleCreateCase = async (data: any) => {
+  const handleCreateCase = async (data: Record<string, unknown>) => {
     const response = await mockApi.cases.createCase(data);
     setCases([response.data, ...cases]);
     setShowWizard(false);
@@ -57,8 +55,8 @@ export const DamageAssessment = () => {
   };
 
   const handleStatusChange = async (caseId: string, newStatus: string) => {
-    const response = await mockApi.cases.updateCase(caseId, { status: newStatus });
-    setCases(cases.map(c => c.id === caseId ? { ...c, status: newStatus } : c));
+    await mockApi.cases.updateCase(caseId, { status: newStatus });
+    setCases(cases.map((c) => (c.id === caseId ? { ...c, status: newStatus } : c)));
   };
 
   return (
@@ -67,9 +65,7 @@ export const DamageAssessment = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">{t('damageAssessment.title')}</h1>
-          <p className="text-sm text-text-secondary mt-1">
-            {t('damageAssessment.subtitle')}
-          </p>
+          <p className="text-sm text-text-secondary mt-1">{t('damageAssessment.subtitle')}</p>
         </div>
         <button
           onClick={() => setShowWizard(true)}
@@ -109,10 +105,7 @@ export const DamageAssessment = () => {
           icon={<GitBranch className="h-5 w-5 text-primary" />}
         >
           {selectedCase ? (
-            <StatusTimeline
-              caseItem={selectedCase}
-              onStatusChange={handleStatusChange}
-            />
+            <StatusTimeline caseItem={selectedCase} onStatusChange={handleStatusChange} />
           ) : (
             <div className="text-center py-8 text-text-secondary">
               Wählen Sie einen Fall aus, um die Timeline anzuzeigen
@@ -138,10 +131,7 @@ export const DamageAssessment = () => {
 
       {/* Wizard modal */}
       {showWizard && (
-        <CaseWizard
-          onClose={() => setShowWizard(false)}
-          onSubmit={handleCreateCase}
-        />
+        <CaseWizard onClose={() => setShowWizard(false)} onSubmit={handleCreateCase} />
       )}
     </div>
   );

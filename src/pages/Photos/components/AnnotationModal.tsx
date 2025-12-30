@@ -6,16 +6,23 @@ interface Photo {
   url: string;
 }
 
+interface Annotation {
+  id: string;
+  type: 'arrow' | 'circle' | 'text';
+  x: number;
+  y: number;
+  text?: string;
+}
+
 interface AnnotationModalProps {
   photo: Photo;
   onClose: () => void;
-  onSave: (annotations: any[]) => void;
+  onSave: (annotations: Annotation[]) => void;
 }
 
 export const AnnotationModal = ({ photo, onClose, onSave }: AnnotationModalProps) => {
   const [tool, setTool] = useState<'arrow' | 'circle' | 'text'>('arrow');
-  const [annotations, setAnnotations] = useState<any[]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const [annotations, setAnnotations] = useState<Annotation[]>([]);
 
   const handleSave = () => {
     onSave(annotations);
@@ -24,7 +31,7 @@ export const AnnotationModal = ({ photo, onClose, onSave }: AnnotationModalProps
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose}></div>
-      
+
       <div className="relative w-full max-w-6xl bg-surface rounded-xl shadow-2xl overflow-hidden animate-slide-up flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="px-6 py-4 border-b border-border bg-bg-secondary flex items-center justify-between">
@@ -37,7 +44,12 @@ export const AnnotationModal = ({ photo, onClose, onSave }: AnnotationModalProps
             className="text-text-muted hover:text-foreground transition-colors"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -55,7 +67,12 @@ export const AnnotationModal = ({ photo, onClose, onSave }: AnnotationModalProps
             title="Arrow"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
             </svg>
           </button>
           <button
@@ -81,19 +98,29 @@ export const AnnotationModal = ({ photo, onClose, onSave }: AnnotationModalProps
             title="Text"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
             </svg>
           </button>
-          
+
           <div className="w-px h-6 bg-border mx-2"></div>
-          
+
           <button
             onClick={() => setAnnotations([])}
             className="p-2 rounded-lg text-error hover:bg-error/10 transition-colors"
             title="Clear all"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
             </svg>
           </button>
         </div>
@@ -104,8 +131,18 @@ export const AnnotationModal = ({ photo, onClose, onSave }: AnnotationModalProps
             <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg border-2 border-border flex items-center justify-center">
               {/* Photo placeholder */}
               <div className="text-center">
-                <svg className="w-20 h-20 mx-auto text-primary/40 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <svg
+                  className="w-20 h-20 mx-auto text-primary/40 mb-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
                 </svg>
                 <p className="text-text-secondary">
                   {tool === 'arrow' && 'Click and drag to draw an arrow'}

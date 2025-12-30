@@ -26,7 +26,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'diesel',
     price: 32900,
     estimatedCost: 350,
-    notes: 'Kunde wünscht Mobil 1 Öl, Termin bereits vereinbart'
+    notes: 'Kunde wünscht Mobil 1 Öl, Termin bereits vereinbart',
   },
   {
     id: 't2',
@@ -49,7 +49,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'diesel',
     price: 28500,
     estimatedCost: 280,
-    notes: 'Reifendrucksensor prüfen, Winterreifen bereits gelagert'
+    notes: 'Reifendrucksensor prüfen, Winterreifen bereits gelagert',
   },
   {
     id: 't3',
@@ -72,7 +72,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 24900,
     estimatedCost: 185,
-    notes: 'DRINGEND! TÜV läuft in 3 Tagen ab, Kunde bereits informiert'
+    notes: 'DRINGEND! TÜV läuft in 3 Tagen ab, Kunde bereits informiert',
   },
   {
     id: 't4',
@@ -95,7 +95,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 36500,
     estimatedCost: 650,
-    notes: 'Original Mercedes-Teile verwenden, Bremsflüssigkeit ebenfalls erneuern'
+    notes: 'Original Mercedes-Teile verwenden, Bremsflüssigkeit ebenfalls erneuern',
   },
   {
     id: 't5',
@@ -118,7 +118,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'diesel',
     price: 38900,
     estimatedCost: 450,
-    notes: 'Lambdasonde wahrscheinlich defekt, Ersatzteil bereits bestellt'
+    notes: 'Lambdasonde wahrscheinlich defekt, Ersatzteil bereits bestellt',
   },
   {
     id: 't6',
@@ -141,7 +141,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 52900,
     estimatedCost: 220,
-    notes: 'Erledigt - Klimaanlage funktioniert einwandfrei, Kunde zufrieden'
+    notes: 'Erledigt - Klimaanlage funktioniert einwandfrei, Kunde zufrieden',
   },
   {
     id: 't7',
@@ -164,7 +164,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'diesel',
     price: 19900,
     estimatedCost: 280,
-    notes: 'Erledigt - Varta AGM Batterie verbaut, Ladetest durchgeführt'
+    notes: 'Erledigt - Varta AGM Batterie verbaut, Ladetest durchgeführt',
   },
   {
     id: 't8',
@@ -186,7 +186,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 142000,
     estimatedCost: 1200,
-    notes: 'High-End Service, 3-Stufen-Politur + Keramikversiegelung für 2 Jahre'
+    notes: 'High-End Service, 3-Stufen-Politur + Keramikversiegelung für 2 Jahre',
   },
   {
     id: 't9',
@@ -209,7 +209,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'diesel',
     price: 15900,
     estimatedCost: 950,
-    notes: 'WICHTIG! Kilometergrenze erreicht, Zahnriemen muss dringend gewechselt werden'
+    notes: 'WICHTIG! Kilometergrenze erreicht, Zahnriemen muss dringend gewechselt werden',
   },
   {
     id: 't10',
@@ -232,7 +232,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 48900,
     estimatedCost: 520,
-    notes: 'Automatikgetriebe - Original Motorcraft Öl verwenden'
+    notes: 'Automatikgetriebe - Original Motorcraft Öl verwenden',
   },
   {
     id: 't11',
@@ -255,7 +255,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 24900,
     estimatedCost: 380,
-    notes: 'Rostschaden am Endtopf, ggf. komplett erneuern falls Schweißen nicht möglich'
+    notes: 'Rostschaden am Endtopf, ggf. komplett erneuern falls Schweißen nicht möglich',
   },
   {
     id: 't12',
@@ -278,7 +278,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'diesel',
     price: 19900,
     estimatedCost: 620,
-    notes: 'Kunde bemängelt instabiles Fahrverhalten, Stoßdämpfer undicht'
+    notes: 'Kunde bemängelt instabiles Fahrverhalten, Stoßdämpfer undicht',
   },
   {
     id: 't13',
@@ -301,7 +301,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 36500,
     estimatedCost: 350,
-    notes: 'Für Verkaufsvorbereitung - Fahrzeug soll in Top-Zustand präsentiert werden'
+    notes: 'Für Verkaufsvorbereitung - Fahrzeug soll in Top-Zustand präsentiert werden',
   },
   {
     id: 't14',
@@ -324,7 +324,7 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'diesel',
     price: 32900,
     estimatedCost: 85,
-    notes: 'Erledigt - Scheinwerfer neu eingestellt, Leuchtweitenregulierung geprüft'
+    notes: 'Erledigt - Scheinwerfer neu eingestellt, Leuchtweitenregulierung geprüft',
   },
   {
     id: 't15',
@@ -347,6 +347,6 @@ export const taskDetailFixtures: TaskDetailRow[] = [
     fuelType: 'benzin',
     price: 52900,
     estimatedCost: 890,
-    notes: 'Original Audi Scheibe mit Regensensor und Head-Up Display Beschichtung'
-  }
+    notes: 'Original Audi Scheibe mit Regensensor und Head-Up Display Beschichtung',
+  },
 ];

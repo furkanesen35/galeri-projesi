@@ -1,12 +1,5 @@
-import React, { useState, useRef, createContext, useContext, useEffect, useCallback, useMemo } from 'react';
-import { 
-  GripVertical, 
-  Eye, 
-  EyeOff, 
-  Minimize2,
-  Maximize2,
-  RotateCcw
-} from 'lucide-react';
+import React, { useState, useRef, createContext, useEffect, useCallback, useMemo } from 'react';
+import { GripVertical, Eye, EyeOff, Minimize2, Maximize2, RotateCcw } from 'lucide-react';
 import { usePanelLayoutStore, ViewId, PanelStyle } from '../store/usePanelLayoutStore';
 import { getShadowStyle } from './PanelStyleEditor';
 import { InlinePanelStyler, StyleTriggerButton } from './InlinePanelStyler';
@@ -27,7 +20,7 @@ const DragContext = createContext<DragContextType>({
 // Helper to build inline styles from PanelStyle
 function buildContainerStyles(style?: PanelStyle): React.CSSProperties {
   if (!style) return {};
-  
+
   return {
     backgroundColor: style.bgColor || undefined,
     color: style.textColor || undefined,
@@ -41,19 +34,20 @@ function buildContainerStyles(style?: PanelStyle): React.CSSProperties {
 
 function buildHeaderStyles(style?: PanelStyle): React.CSSProperties {
   if (!style) return {};
-  
+
   return {
     backgroundColor: style.headerBgColor || undefined,
     color: style.headerTextColor || undefined,
-    borderRadius: style.borderRadius !== undefined 
-      ? `${Math.max(0, style.borderRadius - 1)}px ${Math.max(0, style.borderRadius - 1)}px 0 0` 
-      : undefined,
+    borderRadius:
+      style.borderRadius !== undefined
+        ? `${Math.max(0, style.borderRadius - 1)}px ${Math.max(0, style.borderRadius - 1)}px 0 0`
+        : undefined,
   };
 }
 
 function buildContentStyles(style?: PanelStyle): React.CSSProperties {
   if (!style) return {};
-  
+
   return {
     color: style.textColor || undefined,
   };
@@ -109,20 +103,28 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
   showDragHandle = true,
   variant = 'default',
 }) => {
-  const { isPanelVisible, togglePanelCollapsed, togglePanelVisibility, layouts, updatePanelStyle, resetPanelStyle } = usePanelLayoutStore();
+  const {
+    isPanelVisible,
+    togglePanelCollapsed,
+    togglePanelVisibility,
+    layouts,
+    updatePanelStyle,
+    resetPanelStyle,
+  } = usePanelLayoutStore();
   const panelRef = useRef<HTMLDivElement>(null);
   const [showStyler, setShowStyler] = useState(false);
 
   // Get panel state from store
   const layout = layouts[viewId];
-  const panelConfig = layout?.panels.find(p => p.id === id);
+  const panelConfig = layout?.panels.find((p) => p.id === id);
   const isCollapsed = panelConfig?.collapsed ?? false;
   const isVisible = isPanelVisible(viewId, id);
   const customStyle = panelConfig?.style;
-  const hasCustomStyle = customStyle && Object.keys(customStyle).some(k => customStyle[k as keyof PanelStyle]);
+  const hasCustomStyle =
+    customStyle && Object.keys(customStyle).some((k) => customStyle[k as keyof PanelStyle]);
 
   const variantClasses = variantStyles[variant];
-  
+
   // Build inline styles for custom styling
   const containerInlineStyles = useMemo(() => buildContainerStyles(customStyle), [customStyle]);
   const headerInlineStyles = useMemo(() => buildHeaderStyles(customStyle), [customStyle]);
@@ -138,9 +140,12 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
     togglePanelVisibility(viewId, id);
   };
 
-  const handleStyleChange = useCallback((style: Partial<PanelStyle>) => {
-    updatePanelStyle(viewId, id, style);
-  }, [viewId, id, updatePanelStyle]);
+  const handleStyleChange = useCallback(
+    (style: Partial<PanelStyle>) => {
+      updatePanelStyle(viewId, id, style);
+    },
+    [viewId, id, updatePanelStyle]
+  );
 
   const handleResetStyle = useCallback(() => {
     resetPanelStyle(viewId, id);
@@ -176,23 +181,37 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
         <div className="flex items-center gap-3">
           {/* Drag Handle Icon */}
           {showDragHandle && (
-            <div 
+            <div
               className="p-1 -ml-1 rounded hover:bg-black/10 transition-colors"
               title="Ziehen zum Neuanordnen"
             >
-              <GripVertical className="h-4 w-4" style={{ color: customStyle?.iconColor || customStyle?.headerTextColor || 'inherit', opacity: 0.6 }} />
+              <GripVertical
+                className="h-4 w-4"
+                style={{
+                  color: customStyle?.iconColor || customStyle?.headerTextColor || 'inherit',
+                  opacity: 0.6,
+                }}
+              />
             </div>
           )}
-          
+
           {/* Icon */}
           {icon && (
-            <div className="flex-shrink-0" style={{ color: customStyle?.iconColor || customStyle?.headerTextColor || 'inherit' }}>
+            <div
+              className="flex-shrink-0"
+              style={{ color: customStyle?.iconColor || customStyle?.headerTextColor || 'inherit' }}
+            >
               {icon}
             </div>
           )}
-          
+
           {/* Title */}
-          <h3 className="text-lg font-semibold" style={{ color: customStyle?.headerTextColor || 'inherit' }}>{title}</h3>
+          <h3
+            className="text-lg font-semibold"
+            style={{ color: customStyle?.headerTextColor || 'inherit' }}
+          >
+            {title}
+          </h3>
         </div>
 
         <div className="flex items-center gap-1 relative" onMouseDown={(e) => e.stopPropagation()}>
@@ -233,11 +252,7 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
               style={{ color: customStyle?.headerTextColor || 'inherit', opacity: 0.7 }}
               title={isCollapsed ? 'Panel erweitern' : 'Panel minimieren'}
             >
-              {isCollapsed ? (
-                <Maximize2 className="h-4 w-4" />
-              ) : (
-                <Minimize2 className="h-4 w-4" />
-              )}
+              {isCollapsed ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
             </button>
           )}
         </div>
@@ -253,9 +268,7 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
         `}
         style={contentInlineStyles}
       >
-        <div className="p-6">
-          {children}
-        </div>
+        <div className="p-6">{children}</div>
       </div>
     </div>
   );
@@ -271,12 +284,7 @@ interface DropZoneProps {
   onDragOver: (e: React.DragEvent, index: number) => void;
 }
 
-export const DropZone: React.FC<DropZoneProps> = ({
-  index,
-  isActive,
-  onDrop,
-  onDragOver,
-}) => {
+export const DropZone: React.FC<DropZoneProps> = ({ index, isActive, onDrop, onDragOver }) => {
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -296,15 +304,14 @@ export const DropZone: React.FC<DropZoneProps> = ({
       onDrop={handleDrop}
       className={`
         transition-all duration-200 rounded-lg
-        ${isActive 
-          ? 'h-20 bg-primary/20 border-2 border-dashed border-primary my-3 flex items-center justify-center' 
-          : 'h-3 my-0'
+        ${
+          isActive
+            ? 'h-20 bg-primary/20 border-2 border-dashed border-primary my-3 flex items-center justify-center'
+            : 'h-3 my-0'
         }
       `}
     >
-      {isActive && (
-        <span className="text-sm text-primary font-medium">Hier ablegen</span>
-      )}
+      {isActive && <span className="text-sm text-primary font-medium">Hier ablegen</span>}
     </div>
   );
 };
@@ -333,7 +340,7 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
   const isDraggingRef = useRef(false);
 
   const panels = getPanels(viewId);
-  const visiblePanels = panels.filter(p => p.visible);
+  const visiblePanels = panels.filter((p) => p.visible);
 
   // Auto-scroll function using document-level events
   const startAutoScroll = useCallback((clientY: number) => {
@@ -375,12 +382,12 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
     const handleDocumentDrag = (e: DragEvent) => {
       if (isDraggingRef.current) {
         startAutoScroll(e.clientY);
-        
+
         // Calculate which panel we're over and set drop target
         if (containerRef.current) {
           const panelElements = Array.from(panelRefs.current.values());
           let newDropIndex = visiblePanels.length; // Default to end
-          
+
           for (let i = 0; i < panelElements.length; i++) {
             const rect = panelElements[i]?.getBoundingClientRect();
             if (rect) {
@@ -391,7 +398,7 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
               }
             }
           }
-          
+
           setDropTargetIndex(newDropIndex);
         }
       }
@@ -416,37 +423,35 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
     setActiveDropZone(index);
   };
 
-  const handleDrop = useCallback((dropIndex: number) => {
-    stopAutoScroll();
-    
-    if (!draggedPanelId) {
-      console.log('No dragged panel ID');
-      return;
-    }
+  const handleDrop = useCallback(
+    (dropIndex: number) => {
+      stopAutoScroll();
 
-    const fromIndex = visiblePanels.findIndex(p => p.id === draggedPanelId);
-    console.log('Drop:', { draggedPanelId, dropIndex, fromIndex, visiblePanels: visiblePanels.map(p => p.id) });
-    
-    if (fromIndex === -1) {
-      console.log('Panel not found in visible panels');
-      return;
-    }
+      if (!draggedPanelId) {
+        return;
+      }
 
-    let targetIndex = dropIndex;
-    if (fromIndex < dropIndex) {
-      targetIndex = dropIndex - 1;
-    }
+      const fromIndex = visiblePanels.findIndex((p) => p.id === draggedPanelId);
 
-    console.log('Reorder:', { fromIndex, targetIndex });
+      if (fromIndex === -1) {
+        return;
+      }
 
-    if (fromIndex !== targetIndex && targetIndex >= 0) {
-      reorderPanels(viewId, fromIndex, targetIndex);
-    }
+      let targetIndex = dropIndex;
+      if (fromIndex < dropIndex) {
+        targetIndex = dropIndex - 1;
+      }
 
-    setDraggedPanelId(null);
-    setActiveDropZone(null);
-    setDropTargetIndex(null);
-  }, [draggedPanelId, visiblePanels, reorderPanels, viewId, stopAutoScroll]);
+      if (fromIndex !== targetIndex && targetIndex >= 0) {
+        reorderPanels(viewId, fromIndex, targetIndex);
+      }
+
+      setDraggedPanelId(null);
+      setActiveDropZone(null);
+      setDropTargetIndex(null);
+    },
+    [draggedPanelId, visiblePanels, reorderPanels, viewId, stopAutoScroll]
+  );
 
   const handleContainerDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -454,38 +459,48 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
   };
 
   // Handle drop anywhere in the container (not just on drop zones)
-  const handleContainerDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    stopAutoScroll();
-    
-    if (!draggedPanelId) {
+  const handleContainerDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      stopAutoScroll();
+
+      if (!draggedPanelId) {
+        setDraggedPanelId(null);
+        setActiveDropZone(null);
+        setDropTargetIndex(null);
+        return;
+      }
+
+      // Use the calculated drop target index if no specific drop zone was active
+      const finalDropIndex = activeDropZone ?? dropTargetIndex ?? visiblePanels.length;
+
+      const fromIndex = visiblePanels.findIndex((p) => p.id === draggedPanelId);
+
+      if (fromIndex !== -1) {
+        let targetIndex = finalDropIndex;
+        if (fromIndex < finalDropIndex) {
+          targetIndex = finalDropIndex - 1;
+        }
+
+        if (fromIndex !== targetIndex && targetIndex >= 0) {
+          reorderPanels(viewId, fromIndex, targetIndex);
+        }
+      }
+
       setDraggedPanelId(null);
       setActiveDropZone(null);
       setDropTargetIndex(null);
-      return;
-    }
-
-    // Use the calculated drop target index if no specific drop zone was active
-    const finalDropIndex = activeDropZone ?? dropTargetIndex ?? visiblePanels.length;
-    
-    const fromIndex = visiblePanels.findIndex(p => p.id === draggedPanelId);
-    console.log('Container drop:', { draggedPanelId, finalDropIndex, fromIndex, activeDropZone, dropTargetIndex });
-    
-    if (fromIndex !== -1) {
-      let targetIndex = finalDropIndex;
-      if (fromIndex < finalDropIndex) {
-        targetIndex = finalDropIndex - 1;
-      }
-
-      if (fromIndex !== targetIndex && targetIndex >= 0) {
-        reorderPanels(viewId, fromIndex, targetIndex);
-      }
-    }
-
-    setDraggedPanelId(null);
-    setActiveDropZone(null);
-    setDropTargetIndex(null);
-  }, [draggedPanelId, activeDropZone, dropTargetIndex, visiblePanels, reorderPanels, viewId, stopAutoScroll]);
+    },
+    [
+      draggedPanelId,
+      activeDropZone,
+      dropTargetIndex,
+      visiblePanels,
+      reorderPanels,
+      viewId,
+      stopAutoScroll,
+    ]
+  );
 
   // Filter and sort visible children
   const visibleChildren = React.Children.toArray(children)
@@ -493,13 +508,13 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
       if (!React.isValidElement(child)) return false;
       const panelId = child.props?.id;
       if (!panelId) return false;
-      return visiblePanels.some(p => p.id === panelId);
+      return visiblePanels.some((p) => p.id === panelId);
     })
     .sort((a, b) => {
       const aId = a.props?.id;
       const bId = b.props?.id;
-      const aIndex = visiblePanels.findIndex(p => p.id === aId);
-      const bIndex = visiblePanels.findIndex(p => p.id === bId);
+      const aIndex = visiblePanels.findIndex((p) => p.id === aId);
+      const bIndex = visiblePanels.findIndex((p) => p.id === bId);
       return aIndex - bIndex;
     });
 
@@ -511,10 +526,10 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
       panelRefs.current.delete(id);
     }
   }, []);
-  
+
   return (
     <DragContext.Provider value={{ draggedPanelId, setDraggedPanelId }}>
-      <div 
+      <div
         ref={containerRef}
         className={`${className}`}
         onDragOver={handleContainerDragOver}
@@ -529,23 +544,21 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
             onDragOver={handleDragOver}
           />
         )}
-        
+
         {visibleChildren.map((child, index) => {
           const panelId = child.props?.id;
           const isDropTarget = dropTargetIndex === index + 1 && activeDropZone === null;
-          
+
           return (
             <React.Fragment key={panelId || index}>
               <DraggableWrapper
                 panelId={panelId}
                 isDragging={draggedPanelId === panelId}
                 onDragStart={() => {
-                  console.log('Drag start:', panelId);
                   isDraggingRef.current = true;
                   setDraggedPanelId(panelId);
                 }}
                 onDragEnd={() => {
-                  console.log('Drag end');
                   isDraggingRef.current = false;
                   stopAutoScroll();
                   setDraggedPanelId(null);
@@ -556,7 +569,7 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
               >
                 {child}
               </DraggableWrapper>
-              
+
               {/* Drop zone after each panel */}
               {draggedPanelId && (
                 <DropZone
@@ -566,11 +579,9 @@ export const DraggablePanelContainer: React.FC<DraggablePanelContainerProps> = (
                   onDragOver={handleDragOver}
                 />
               )}
-              
+
               {/* Normal spacing when not dragging */}
-              {!draggedPanelId && index < visibleChildren.length - 1 && (
-                <div className="h-6" />
-              )}
+              {!draggedPanelId && index < visibleChildren.length - 1 && <div className="h-6" />}
             </React.Fragment>
           );
         })}
@@ -686,7 +697,7 @@ export const HiddenPanelsBar: React.FC<HiddenPanelsBarProps> = ({
 }) => {
   const { getPanels, togglePanelVisibility, resetLayout } = usePanelLayoutStore();
   const panels = getPanels(viewId);
-  const hiddenPanels = panels.filter(p => !p.visible);
+  const hiddenPanels = panels.filter((p) => !p.visible);
 
   // Check if any panel order has changed from default (simple check)
   const hasCustomization = hiddenPanels.length > 0;
@@ -694,7 +705,9 @@ export const HiddenPanelsBar: React.FC<HiddenPanelsBarProps> = ({
   if (!hasCustomization && !showResetButton) return null;
 
   return (
-    <div className={`flex flex-wrap items-center gap-2 p-3 rounded-lg bg-bg-secondary/50 border border-dashed border-border ${className}`}>
+    <div
+      className={`flex flex-wrap items-center gap-2 p-3 rounded-lg bg-bg-secondary/50 border border-dashed border-border ${className}`}
+    >
       {hiddenPanels.length > 0 && (
         <>
           <span className="text-xs text-text-secondary mr-2">Ausgeblendete Panels:</span>
@@ -713,10 +726,10 @@ export const HiddenPanelsBar: React.FC<HiddenPanelsBarProps> = ({
           ))}
         </>
       )}
-      
+
       {/* Spacer */}
       {hiddenPanels.length > 0 && showResetButton && <div className="flex-1" />}
-      
+
       {/* Reset Button */}
       {showResetButton && (
         <button

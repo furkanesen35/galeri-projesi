@@ -22,7 +22,7 @@ interface VehicleCommentsProps {
 
 // Mock initial comments
 const mockComments: Record<string, VehicleComment[]> = {
-  'v1': [
+  v1: [
     {
       id: 'c1',
       author: 'Anna Schmidt',
@@ -36,8 +36,8 @@ const mockComments: Record<string, VehicleComment[]> = {
       authorRole: 'Werkstattleiter',
       text: 'Ölwechsel überfällig! Vor Verkauf unbedingt durchführen.',
       createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    }
-  ]
+    },
+  ],
 };
 
 export const VehicleComments = ({ vehicleId }: VehicleCommentsProps) => {
@@ -62,7 +62,7 @@ export const VehicleComments = ({ vehicleId }: VehicleCommentsProps) => {
   };
 
   const handleEditComment = (id: string) => {
-    const comment = comments.find(c => c.id === id);
+    const comment = comments.find((c) => c.id === id);
     if (comment) {
       setEditingId(id);
       setEditText(comment.text);
@@ -72,18 +72,18 @@ export const VehicleComments = ({ vehicleId }: VehicleCommentsProps) => {
   const handleSaveEdit = () => {
     if (!editText.trim() || !editingId) return;
 
-    setComments(comments.map(c => 
-      c.id === editingId 
-        ? { ...c, text: editText, updatedAt: new Date().toISOString() }
-        : c
-    ));
+    setComments(
+      comments.map((c) =>
+        c.id === editingId ? { ...c, text: editText, updatedAt: new Date().toISOString() } : c
+      )
+    );
     setEditingId(null);
     setEditText('');
   };
 
   const handleDeleteComment = (id: string) => {
     if (confirm('Möchten Sie diesen Kommentar wirklich löschen?')) {
-      setComments(comments.filter(c => c.id !== id));
+      setComments(comments.filter((c) => c.id !== id));
     }
   };
 
@@ -95,7 +95,6 @@ export const VehicleComments = ({ vehicleId }: VehicleCommentsProps) => {
 
   return (
     <div className="space-y-4">
-
       {/* Add New Comment */}
       <div className="rounded-lg border border-border bg-surface p-4">
         <textarea
@@ -107,9 +106,7 @@ export const VehicleComments = ({ vehicleId }: VehicleCommentsProps) => {
           className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
         />
         <div className="flex items-center justify-between mt-2">
-          <span className="text-xs text-text-secondary">
-            Drücken Sie Strg+Enter zum Senden
-          </span>
+          <span className="text-xs text-text-secondary">Drücken Sie Strg+Enter zum Senden</span>
           <button
             onClick={handleAddComment}
             disabled={!newComment.trim()}
@@ -131,7 +128,7 @@ export const VehicleComments = ({ vehicleId }: VehicleCommentsProps) => {
           </div>
         ) : (
           comments.map((comment) => (
-            <div 
+            <div
               key={comment.id}
               className="rounded-lg border border-border bg-surface p-4 hover:border-primary/30 transition-colors"
             >
@@ -202,9 +199,7 @@ export const VehicleComments = ({ vehicleId }: VehicleCommentsProps) => {
                     </div>
                   ) : (
                     <>
-                      <p className="text-sm text-foreground whitespace-pre-wrap">
-                        {comment.text}
-                      </p>
+                      <p className="text-sm text-foreground whitespace-pre-wrap">{comment.text}</p>
                       <div className="flex items-center gap-2 mt-2 text-xs text-text-secondary">
                         <span>{dayjs(comment.createdAt).fromNow()}</span>
                         {comment.updatedAt && (

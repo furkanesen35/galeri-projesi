@@ -14,6 +14,5 @@ export const useAppConfig = create<AppConfigState>((set) => ({
   language: 'de',
   theme: 'dark',
   setLanguage: (language) => set({ language }),
-  toggleTheme: () =>
-    set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' }))
+  toggleTheme: () => set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
 }));

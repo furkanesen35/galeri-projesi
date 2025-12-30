@@ -33,7 +33,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Sofort verfügbar',
     images: [
       'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800',
-      'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800'
+      'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800',
     ],
     features: [
       'automatik',
@@ -57,18 +57,18 @@ export const vehicleFixtures: Vehicle[] = [
       'bluetooth',
       'usb',
       'isofix',
-      'start-stop-automatik'
+      'start-stop-automatik',
     ] as VehicleFeature[],
     co2Emission: 138,
     consumption: {
       city: 6.2,
       highway: 4.8,
-      combined: 5.3
+      combined: 5.3,
     },
     description: 'Gepflegter BMW 3er mit Vollausstattung, Erstbesitz, Scheckheftgepflegt',
     location: 'Berlin',
     createdAt: '2024-12-01T10:00:00Z',
-    updatedAt: '2024-12-24T14:30:00Z'
+    updatedAt: '2024-12-24T14:30:00Z',
   },
   {
     id: 'v2',
@@ -99,7 +99,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Sofort verfügbar',
     images: [
       'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800',
-      'https://images.unsplash.com/photo-1614026480886-81f71d3a9c71?w=800'
+      'https://images.unsplash.com/photo-1614026480886-81f71d3a9c71?w=800',
     ],
     features: [
       'automatik',
@@ -121,14 +121,14 @@ export const vehicleFixtures: Vehicle[] = [
       'android-auto',
       'bluetooth',
       'usb',
-      'isofix'
+      'isofix',
     ] as VehicleFeature[],
     description: 'Komfortabler Kombi mit quattro-Antrieb, ideal für Familien',
     location: 'München',
     createdAt: '2024-11-15T09:00:00Z',
     updatedAt: '2024-12-23T16:00:00Z',
     co2Emission: 128,
-    consumption: { city: 5.2, highway: 4.1, combined: 4.5 }
+    consumption: { city: 5.2, highway: 4.1, combined: 4.5 },
   },
   {
     id: 'v3',
@@ -159,7 +159,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Reserviert',
     images: [
       'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800',
-      'https://images.unsplash.com/photo-1610884461619-7f4e2f3e8c3c?w=800'
+      'https://images.unsplash.com/photo-1610884461619-7f4e2f3e8c3c?w=800',
     ],
     features: [
       'digitales-kombiinstrument',
@@ -176,7 +176,7 @@ export const vehicleFixtures: Vehicle[] = [
       'start-stop-automatik',
       'isofix',
       'regensensor',
-      'lichtsensor'
+      'lichtsensor',
     ] as VehicleFeature[],
     description: 'Neuwertig, wenig Kilometer, ideales Stadtauto',
     location: 'Hamburg',
@@ -184,7 +184,7 @@ export const vehicleFixtures: Vehicle[] = [
     createdAt: '2024-12-10T11:00:00Z',
     updatedAt: '2024-12-24T10:00:00Z',
     co2Emission: 122,
-    consumption: { city: 6.1, highway: 4.3, combined: 4.9 }
+    consumption: { city: 6.1, highway: 4.3, combined: 4.9 },
   },
   {
     id: 'v4',
@@ -215,7 +215,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Sofort verfügbar',
     images: [
       'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800',
-      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800'
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800',
     ],
     features: [
       'automatik',
@@ -239,14 +239,14 @@ export const vehicleFixtures: Vehicle[] = [
       'apple-carplay',
       'android-auto',
       'bluetooth',
-      'usb'
+      'usb',
     ] as VehicleFeature[],
     description: 'Sportliches Design, gehobene Ausstattung, gepflegter Zustand',
     location: 'Stuttgart',
     createdAt: '2024-11-20T14:00:00Z',
     updatedAt: '2024-12-22T09:00:00Z',
     co2Emission: 135,
-    consumption: { city: 5.8, highway: 4.2, combined: 4.8 }
+    consumption: { city: 5.8, highway: 4.2, combined: 4.8 },
   },
   {
     id: 'v5',
@@ -277,7 +277,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Sofort verfügbar',
     images: [
       'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800',
-      'https://images.unsplash.com/photo-1617704548623-340376564e68?w=800'
+      'https://images.unsplash.com/photo-1617704548623-340376564e68?w=800',
     ],
     features: [
       'automatik',
@@ -295,14 +295,14 @@ export const vehicleFixtures: Vehicle[] = [
       'usb',
       'isofix',
       'regensensor',
-      'start-stop-automatik'
+      'start-stop-automatik',
     ] as VehicleFeature[],
     description: 'Elektroauto mit großer Reichweite, umweltfreundlich und kostengünstig',
     location: 'Köln',
     createdAt: '2024-12-05T08:00:00Z',
     updatedAt: '2024-12-24T12:00:00Z',
     co2Emission: 0,
-    consumption: { city: 0, highway: 0, combined: 0 }
+    consumption: { city: 0, highway: 0, combined: 0 },
   },
   {
     id: 'v6',
@@ -333,7 +333,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Sofort verfügbar',
     images: [
       'https://images.unsplash.com/photo-1611859266238-4b98091d9d9b?w=800',
-      'https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800'
+      'https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800',
     ],
     features: [
       'automatik',
@@ -357,14 +357,14 @@ export const vehicleFixtures: Vehicle[] = [
       'leichtmetallfelgen',
       'apple-carplay',
       'android-auto',
-      'bluetooth'
+      'bluetooth',
     ] as VehicleFeature[],
     description: 'Luxus-SUV mit Hybrid-Antrieb, maximaler Komfort und Performance',
     location: 'Frankfurt',
     createdAt: '2024-11-25T15:00:00Z',
     updatedAt: '2024-12-23T11:00:00Z',
     co2Emission: 75,
-    consumption: { city: 3.2, highway: 6.8, combined: 4.5 }
+    consumption: { city: 3.2, highway: 6.8, combined: 4.5 },
   },
   {
     id: 'v7',
@@ -395,7 +395,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Verkauft',
     images: [
       'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800',
-      'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800'
+      'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800',
     ],
     features: [
       'automatik',
@@ -415,7 +415,7 @@ export const vehicleFixtures: Vehicle[] = [
       'leichtmetallfelgen',
       'bluetooth',
       'usb',
-      'isofix'
+      'isofix',
     ] as VehicleFeature[],
     description: 'Zuverlässiger Hybrid-SUV mit geringem Verbrauch',
     location: 'Dresden',
@@ -423,7 +423,7 @@ export const vehicleFixtures: Vehicle[] = [
     createdAt: '2024-11-10T10:00:00Z',
     updatedAt: '2024-12-20T14:00:00Z',
     co2Emission: 102,
-    consumption: { city: 4.8, highway: 4.3, combined: 4.5 }
+    consumption: { city: 4.8, highway: 4.3, combined: 4.5 },
   },
   {
     id: 'v8',
@@ -454,7 +454,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Sofort verfügbar',
     images: [
       'https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800',
-      'https://images.unsplash.com/photo-1612825173281-9a193378527e?w=800'
+      'https://images.unsplash.com/photo-1612825173281-9a193378527e?w=800',
     ],
     features: [
       'automatik',
@@ -478,14 +478,14 @@ export const vehicleFixtures: Vehicle[] = [
       'apple-carplay',
       'android-auto',
       'bluetooth',
-      'usb'
+      'usb',
     ] as VehicleFeature[],
     description: 'Sportlicher Elektro-SUV mit beeindruckender Reichweite',
     location: 'Leipzig',
     createdAt: '2024-12-08T13:00:00Z',
     updatedAt: '2024-12-24T08:00:00Z',
     co2Emission: 0,
-    consumption: { city: 0, highway: 0, combined: 0 }
+    consumption: { city: 0, highway: 0, combined: 0 },
   },
   {
     id: 'v9',
@@ -516,7 +516,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'In Wartung',
     images: [
       'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800',
-      'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800'
+      'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800',
     ],
     features: [
       'navigationssystem',
@@ -531,14 +531,14 @@ export const vehicleFixtures: Vehicle[] = [
       'leichtmetallfelgen',
       'regensensor',
       'lichtsensor',
-      'start-stop-automatik'
+      'start-stop-automatik',
     ] as VehicleFeature[],
     description: 'Praktischer Kombi mit viel Platz, zuverlässig und sparsam',
     location: 'Nürnberg',
     createdAt: '2024-11-18T12:00:00Z',
     updatedAt: '2024-12-21T10:00:00Z',
     co2Emission: 118,
-    consumption: { city: 5.0, highway: 3.9, combined: 4.3 }
+    consumption: { city: 5.0, highway: 3.9, combined: 4.3 },
   },
   {
     id: 'v10',
@@ -569,7 +569,7 @@ export const vehicleFixtures: Vehicle[] = [
     availability: 'Sofort verfügbar',
     images: [
       'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800',
-      'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800'
+      'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800',
     ],
     features: [
       'klimaanlage',
@@ -586,20 +586,20 @@ export const vehicleFixtures: Vehicle[] = [
       'isofix',
       'start-stop-automatik',
       'regensensor',
-      'lichtsensor'
+      'lichtsensor',
     ] as VehicleFeature[],
     description: 'Kompakter Kleinwagen, ideal für die Stadt, modern und effizient',
     location: 'Duisburg',
     createdAt: '2024-12-12T09:00:00Z',
     updatedAt: '2024-12-24T07:00:00Z',
     co2Emission: 108,
-    consumption: { city: 5.8, highway: 4.0, combined: 4.7 }
-  }
+    consumption: { city: 5.8, highway: 4.0, combined: 4.7 },
+  },
 ];
 
 // Helper functions for filtering and searching
 export const getVehiclesByStatus = (status: Vehicle['status']) => {
-  return vehicleFixtures.filter(v => v.status === status);
+  return vehicleFixtures.filter((v) => v.status === status);
 };
 
 export const getAvailableVehicles = () => getVehiclesByStatus('available');
@@ -608,10 +608,11 @@ export const getSoldVehicles = () => getVehiclesByStatus('sold');
 
 export const searchVehicles = (query: string) => {
   const lowerQuery = query.toLowerCase();
-  return vehicleFixtures.filter(v => 
-    v.brand.toLowerCase().includes(lowerQuery) ||
-    v.model.toLowerCase().includes(lowerQuery) ||
-    v.plate.toLowerCase().includes(lowerQuery) ||
-    v.vin.toLowerCase().includes(lowerQuery)
+  return vehicleFixtures.filter(
+    (v) =>
+      v.brand.toLowerCase().includes(lowerQuery) ||
+      v.model.toLowerCase().includes(lowerQuery) ||
+      v.plate.toLowerCase().includes(lowerQuery) ||
+      v.vin.toLowerCase().includes(lowerQuery)
   );
 };

@@ -22,7 +22,13 @@ interface OCRResultsProps {
   onManualEntry: () => void;
 }
 
-export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onManualEntry }: OCRResultsProps) => {
+export const OCRResults = ({
+  result,
+  uploadedFile,
+  onRetry,
+  onApplyToCase,
+  onManualEntry,
+}: OCRResultsProps) => {
   const [editedFields, setEditedFields] = useState(result.extractedFields);
 
   const getConfidenceColor = (confidence: number) => {
@@ -32,16 +38,20 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
   };
 
   const getConfidenceBadge = (confidence: number) => {
-    if (confidence >= 0.9) return { label: 'High', color: 'bg-success/10 text-success border-success/20' };
-    if (confidence >= 0.7) return { label: 'Medium', color: 'bg-warning/10 text-warning border-warning/20' };
+    if (confidence >= 0.9)
+      return { label: 'High', color: 'bg-success/10 text-success border-success/20' };
+    if (confidence >= 0.7)
+      return { label: 'Medium', color: 'bg-warning/10 text-warning border-warning/20' };
     return { label: 'Low', color: 'bg-error/10 text-error border-error/20' };
   };
 
   const updateField = (field: string, value: string) => {
-    setEditedFields(prev => ({ ...prev, [field]: value }));
+    setEditedFields((prev) => ({ ...prev, [field]: value }));
   };
 
-  const averageConfidence = Object.values(result.confidence).reduce((a, b) => a + b, 0) / Object.values(result.confidence).length;
+  const averageConfidence =
+    Object.values(result.confidence).reduce((a, b) => a + b, 0) /
+    Object.values(result.confidence).length;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -57,14 +67,26 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
               ← Upload Different
             </button>
           </div>
-          
+
           {/* Document preview placeholder */}
           <div className="aspect-[3/4] bg-gradient-to-br from-bg-secondary to-bg-tertiary rounded-lg border border-border flex items-center justify-center">
             <div className="text-center">
-              <svg className="w-16 h-16 mx-auto text-text-muted mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                className="w-16 h-16 mx-auto text-text-muted mb-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
-              <p className="text-sm text-text-secondary">{uploadedFile?.name || 'Document Preview'}</p>
+              <p className="text-sm text-text-secondary">
+                {uploadedFile?.name || 'Document Preview'}
+              </p>
               <p className="text-xs text-text-muted mt-1">
                 {uploadedFile ? `${(uploadedFile.size / 1024).toFixed(0)} KB` : ''}
               </p>
@@ -75,7 +97,9 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
           <div className="mt-4 p-3 bg-bg-secondary rounded-lg border border-border">
             <div className="flex items-center justify-between text-sm mb-2">
               <span className="text-text-secondary">Processing Time:</span>
-              <span className="text-foreground font-medium">{(result.processingTime / 1000).toFixed(2)}s</span>
+              <span className="text-foreground font-medium">
+                {(result.processingTime / 1000).toFixed(2)}s
+              </span>
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-text-secondary">Average Confidence:</span>
@@ -91,14 +115,17 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
       <div className="space-y-4">
         <div className="bg-surface border border-border rounded-lg p-4">
           <h3 className="font-semibold text-foreground mb-4">Extracted Information</h3>
-          
+
           <div className="space-y-4">
             {/* VIN */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-foreground">VIN Number</label>
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.vin).color}`}>
-                  {getConfidenceBadge(result.confidence.vin).label} {(result.confidence.vin * 100).toFixed(0)}%
+                <span
+                  className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.vin).color}`}
+                >
+                  {getConfidenceBadge(result.confidence.vin).label}{' '}
+                  {(result.confidence.vin * 100).toFixed(0)}%
                 </span>
               </div>
               <input
@@ -113,8 +140,11 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-foreground">License Plate</label>
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.licensePlate).color}`}>
-                  {getConfidenceBadge(result.confidence.licensePlate).label} {(result.confidence.licensePlate * 100).toFixed(0)}%
+                <span
+                  className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.licensePlate).color}`}
+                >
+                  {getConfidenceBadge(result.confidence.licensePlate).label}{' '}
+                  {(result.confidence.licensePlate * 100).toFixed(0)}%
                 </span>
               </div>
               <input
@@ -130,7 +160,9 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-sm font-medium text-foreground">Make</label>
-                  <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.make).color}`}>
+                  <span
+                    className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.make).color}`}
+                  >
                     {(result.confidence.make * 100).toFixed(0)}%
                   </span>
                 </div>
@@ -144,7 +176,9 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-sm font-medium text-foreground">Model</label>
-                  <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.model).color}`}>
+                  <span
+                    className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.model).color}`}
+                  >
                     {(result.confidence.model * 100).toFixed(0)}%
                   </span>
                 </div>
@@ -160,8 +194,12 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
             {/* First Registration */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-foreground">First Registration</label>
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.firstRegistration).color}`}>
+                <label className="block text-sm font-medium text-foreground">
+                  First Registration
+                </label>
+                <span
+                  className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.firstRegistration).color}`}
+                >
                   {(result.confidence.firstRegistration * 100).toFixed(0)}%
                 </span>
               </div>
@@ -177,7 +215,9 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-foreground">Owner Name</label>
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.owner).color}`}>
+                <span
+                  className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.owner).color}`}
+                >
                   {(result.confidence.owner * 100).toFixed(0)}%
                 </span>
               </div>
@@ -193,7 +233,9 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-foreground">Address</label>
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.address).color}`}>
+                <span
+                  className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getConfidenceBadge(result.confidence.address).color}`}
+                >
                   {(result.confidence.address * 100).toFixed(0)}%
                 </span>
               </div>
@@ -209,11 +251,22 @@ export const OCRResults = ({ result, uploadedFile, onRetry, onApplyToCase, onMan
           {/* Privacy notice */}
           <div className="mt-4 p-3 bg-bg-secondary rounded-lg border border-border">
             <div className="flex items-start gap-2">
-              <svg className="w-4 h-4 text-text-muted mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              <svg
+                className="w-4 h-4 text-text-muted mt-0.5 flex-shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
               </svg>
               <p className="text-xs text-text-secondary">
-                GPS/EXIF metadata has been automatically removed from the uploaded document for privacy protection.
+                GPS/EXIF metadata has been automatically removed from the uploaded document for
+                privacy protection.
               </p>
             </div>
           </div>

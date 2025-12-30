@@ -1,13 +1,26 @@
 export type VehicleStatus = 'available' | 'reserved' | 'sold' | 'service' | 'archived';
 export type FuelType = 'benzin' | 'diesel' | 'elektro' | 'hybrid' | 'plug-in-hybrid';
 export type Transmission = 'automatik' | 'manuell';
-export type Condition = 'neufahrzeug' | 'tageszulassung' | 'jahreswagen' | 'gebraucht' | 'vorführwagen';
-export type VehicleCategory = 'limousine' | 'kombi' | 'suv' | 'cabrio' | 'coupe' | 'kleinwagen' | 'van' | 'sportwagen';
+export type Condition =
+  | 'neufahrzeug'
+  | 'tageszulassung'
+  | 'jahreswagen'
+  | 'gebraucht'
+  | 'vorführwagen';
+export type VehicleCategory =
+  | 'limousine'
+  | 'kombi'
+  | 'suv'
+  | 'cabrio'
+  | 'coupe'
+  | 'kleinwagen'
+  | 'van'
+  | 'sportwagen';
 
 // Feature icons mapping
-export type VehicleFeature = 
-  | 'automatik' 
-  | 'klimaanlage' 
+export type VehicleFeature =
+  | 'automatik'
+  | 'klimaanlage'
   | 'klimaautomatik'
   | '2-zonen-klimaautomatik'
   | 'sitzheizung'
@@ -101,7 +114,7 @@ export type Vehicle = {
 
 export type TaskStatus = 'pending' | 'in_progress' | 'done' | 'cancelled';
 
-export type TaskType = 
+export type TaskType =
   | 'oil_change'
   | 'tire_rotation'
   | 'tire_change'
@@ -229,7 +242,16 @@ export type CustomerAddress = {
 
 export type CustomerActivity = {
   id: string;
-  type: 'vehicle_purchase' | 'vehicle_sale' | 'inquiry' | 'service' | 'document' | 'call' | 'email' | 'visit' | 'note';
+  type:
+    | 'vehicle_purchase'
+    | 'vehicle_sale'
+    | 'inquiry'
+    | 'service'
+    | 'document'
+    | 'call'
+    | 'email'
+    | 'visit'
+    | 'note';
   title: string;
   description: string;
   date: string;
@@ -243,7 +265,7 @@ export type Customer = {
   customerId: string; // e.g., KD-2024-001
   type: CustomerType;
   status: CustomerStatus;
-  
+
   // Personal/Company info
   salutation?: string;
   firstName: string;
@@ -251,40 +273,40 @@ export type Customer = {
   companyName?: string;
   gender?: Gender;
   dateOfBirth?: string;
-  
+
   // Contact
   email: string;
   phone: string;
   mobile?: string;
   fax?: string;
   website?: string;
-  
+
   // Address
   address: CustomerAddress;
   billingAddress?: CustomerAddress;
-  
+
   // Business specific
   taxId?: string; // USt-IdNr
   commercialRegister?: string; // Handelsregisternummer
-  
+
   // Banking
   iban?: string;
   bic?: string;
   bankName?: string;
-  
+
   // Relationships
   vehicleIds: string[]; // Linked vehicles
   assignedStaffId?: string;
-  
+
   // Preferences
   preferredContactMethod?: 'email' | 'phone' | 'mail';
   newsletter?: boolean;
   marketingConsent?: boolean;
-  
+
   // Financials
   creditLimit?: number;
   paymentTermDays?: number;
-  
+
   // Meta
   notes?: string;
   tags?: string[];

@@ -9,7 +9,10 @@ export const Auth = () => (
       </label>
       <label className="flex flex-col gap-1">
         <span className="text-text-secondary">Password</span>
-        <input type="password" className="rounded-lg border border-border bg-bg-secondary px-3 py-2" />
+        <input
+          type="password"
+          className="rounded-lg border border-border bg-bg-secondary px-3 py-2"
+        />
       </label>
       <button className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-text shadow hover:bg-primary-hover">
         Sign in

@@ -1,15 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { 
-  Palette, 
-  Type, 
-  Square, 
+import {
+  Palette,
+  Type,
+  Square,
   Sun,
   RotateCcw,
   Copy,
   Check,
   ChevronDown,
   ChevronUp,
-  Droplets
+  Droplets,
 } from 'lucide-react';
 import { PanelStyle } from '../store/usePanelLayoutStore';
 
@@ -74,15 +74,9 @@ interface ColorPickerProps {
   presets: { name: string; value: string }[];
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({
-  label,
-  icon,
-  value,
-  onChange,
-  presets,
-}) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ label, icon, value, onChange, presets }) => {
   const [showPresets, setShowPresets] = useState(false);
-  const [customColor, setCustomColor] = useState(value || '');
+  const [_customColor, setCustomColor] = useState(value || '');
 
   const handleCustomColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -99,7 +93,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         </label>
         <div className="flex items-center gap-2">
           {/* Color preview */}
-          <div 
+          <div
             className="w-6 h-6 rounded border border-border"
             style={{ backgroundColor: value || 'transparent' }}
           />
@@ -113,7 +107,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
           />
         </div>
       </div>
-      
+
       {/* Preset colors */}
       <button
         onClick={() => setShowPresets(!showPresets)}
@@ -122,7 +116,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         {showPresets ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
         Vorlagen anzeigen
       </button>
-      
+
       {showPresets && (
         <div className="grid grid-cols-8 gap-1 p-2 bg-bg-secondary rounded-lg">
           {presets.map((preset) => (
@@ -131,9 +125,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
               onClick={() => onChange(preset.value)}
               className={`
                 w-6 h-6 rounded border-2 transition-all hover:scale-110
-                ${value === preset.value 
-                  ? 'border-primary ring-2 ring-primary/30' 
-                  : 'border-border hover:border-primary/50'
+                ${
+                  value === preset.value
+                    ? 'border-primary ring-2 ring-primary/30'
+                    : 'border-border hover:border-primary/50'
                 }
                 ${!preset.value ? 'bg-gradient-to-br from-gray-200 to-gray-400 dark:from-gray-600 dark:to-gray-800' : ''}
               `}
@@ -170,26 +165,29 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const handleStyleChange = useCallback((key: keyof PanelStyle, value: string | number) => {
-    onChange({ [key]: value });
-  }, [onChange]);
-
-  const hasCustomStyles = style && Object.keys(style).some(key => 
-    style[key as keyof PanelStyle] !== undefined && style[key as keyof PanelStyle] !== ''
+  const handleStyleChange = useCallback(
+    (key: keyof PanelStyle, value: string | number) => {
+      onChange({ [key]: value });
+    },
+    [onChange]
   );
+
+  const hasCustomStyles =
+    style &&
+    Object.keys(style).some(
+      (key) => style[key as keyof PanelStyle] !== undefined && style[key as keyof PanelStyle] !== ''
+    );
 
   return (
     <div className={`bg-surface border border-border rounded-xl overflow-hidden ${className}`}>
       {/* Header */}
-      <div 
+      <div
         className="flex items-center justify-between p-3 bg-bg-secondary cursor-pointer hover:bg-bg-secondary/80 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-2">
           <Palette className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium text-foreground">
-            {panelTitle} - Stil anpassen
-          </span>
+          <span className="text-sm font-medium text-foreground">{panelTitle} - Stil anpassen</span>
           {hasCustomStyles && (
             <span className="px-1.5 py-0.5 text-xs bg-primary/20 text-primary rounded">
               Angepasst
@@ -211,7 +209,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
             <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
               Hintergrund
             </h4>
-            
+
             <ColorPicker
               label="Panel-Hintergrund"
               icon={<Square className="h-4 w-4" />}
@@ -219,7 +217,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
               onChange={(color) => handleStyleChange('bgColor', color)}
               presets={colorPresets.backgrounds}
             />
-            
+
             <ColorPicker
               label="Header-Hintergrund"
               icon={<Square className="h-4 w-4" />}
@@ -234,7 +232,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
             <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
               Text & Icons
             </h4>
-            
+
             <ColorPicker
               label="Textfarbe"
               icon={<Type className="h-4 w-4" />}
@@ -242,7 +240,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
               onChange={(color) => handleStyleChange('textColor', color)}
               presets={colorPresets.text}
             />
-            
+
             <ColorPicker
               label="Header-Textfarbe"
               icon={<Type className="h-4 w-4" />}
@@ -250,7 +248,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
               onChange={(color) => handleStyleChange('headerTextColor', color)}
               presets={colorPresets.text}
             />
-            
+
             <ColorPicker
               label="Icon-Farbe"
               icon={<Type className="h-4 w-4" />}
@@ -265,7 +263,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
             <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
               Rahmen
             </h4>
-            
+
             <ColorPicker
               label="Rahmenfarbe"
               icon={<Square className="h-4 w-4" />}
@@ -273,7 +271,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
               onChange={(color) => handleStyleChange('borderColor', color)}
               presets={colorPresets.backgrounds}
             />
-            
+
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-foreground">Rahmenbreite</label>
               <div className="flex items-center gap-2">
@@ -288,7 +286,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
                 <span className="text-sm text-text-secondary w-8">{style?.borderWidth ?? 1}px</span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-foreground">Eckenradius</label>
               <div className="flex items-center gap-2">
@@ -300,7 +298,9 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
                   onChange={(e) => handleStyleChange('borderRadius', parseInt(e.target.value))}
                   className="w-24 accent-primary"
                 />
-                <span className="text-sm text-text-secondary w-8">{style?.borderRadius ?? 12}px</span>
+                <span className="text-sm text-text-secondary w-8">
+                  {style?.borderRadius ?? 12}px
+                </span>
               </div>
             </div>
           </div>
@@ -310,7 +310,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
             <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
               Effekte
             </h4>
-            
+
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Droplets className="h-4 w-4" />
@@ -328,7 +328,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
                 ))}
               </select>
             </div>
-            
+
             {style?.shadowSize && style.shadowSize !== 'none' && (
               <ColorPicker
                 label="Schattenfarbe"
@@ -338,7 +338,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
                 presets={colorPresets.backgrounds}
               />
             )}
-            
+
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Sun className="h-4 w-4" />
@@ -363,7 +363,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
             <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
               Vorschau
             </h4>
-            <div 
+            <div
               className="p-4 transition-all"
               style={{
                 backgroundColor: style?.bgColor || undefined,
@@ -376,7 +376,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
                 boxShadow: getShadowStyle(style?.shadowSize, style?.shadowColor),
               }}
             >
-              <div 
+              <div
                 className="p-2 rounded-t-lg mb-2"
                 style={{
                   backgroundColor: style?.headerBgColor || 'rgba(0,0,0,0.1)',
@@ -417,7 +417,7 @@ export const PanelStyleEditor: React.FC<PanelStyleEditorProps> = ({
 // Helper function to generate box-shadow CSS
 function getShadowStyle(size?: PanelStyle['shadowSize'], color?: string): string {
   const shadowColor = color || 'rgba(0, 0, 0, 0.1)';
-  
+
   switch (size) {
     case 'sm':
       return `0 1px 2px 0 ${shadowColor}`;
@@ -448,7 +448,7 @@ export const stylePresets = {
       borderWidth: 1,
       borderRadius: 8,
       shadowSize: 'md' as const,
-    }
+    },
   },
   vibrant: {
     name: 'Lebhaft',
@@ -461,7 +461,7 @@ export const stylePresets = {
       borderWidth: 2,
       borderRadius: 16,
       shadowSize: 'lg' as const,
-    }
+    },
   },
   warning: {
     name: 'Warnung',
@@ -474,7 +474,7 @@ export const stylePresets = {
       borderWidth: 2,
       borderRadius: 12,
       shadowSize: 'sm' as const,
-    }
+    },
   },
   success: {
     name: 'Erfolg',
@@ -487,7 +487,7 @@ export const stylePresets = {
       borderWidth: 2,
       borderRadius: 12,
       shadowSize: 'sm' as const,
-    }
+    },
   },
   danger: {
     name: 'Gefahr',
@@ -500,7 +500,7 @@ export const stylePresets = {
       borderWidth: 2,
       borderRadius: 12,
       shadowSize: 'sm' as const,
-    }
+    },
   },
   elegant: {
     name: 'Elegant',
@@ -514,7 +514,7 @@ export const stylePresets = {
       borderRadius: 6,
       shadowSize: 'xl' as const,
       shadowColor: 'rgba(0, 0, 0, 0.3)',
-    }
+    },
   },
   glass: {
     name: 'Glas',
@@ -528,6 +528,6 @@ export const stylePresets = {
       borderRadius: 16,
       shadowSize: 'lg' as const,
       opacity: 90,
-    }
+    },
   },
 };

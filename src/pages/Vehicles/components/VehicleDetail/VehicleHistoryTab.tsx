@@ -1,7 +1,16 @@
 import { Vehicle } from '../../../../types/domain';
-import { 
-  History, User, Calendar, Euro, Car, FileText, 
-  Edit, Eye, Tag, MapPin, Clock
+import {
+  History,
+  User,
+  Calendar,
+  Euro,
+  Car,
+  FileText,
+  Edit,
+  Eye,
+  Tag,
+  MapPin,
+  Clock,
 } from 'lucide-react';
 
 interface Props {
@@ -18,7 +27,7 @@ const mockHistory = [
     user: 'Max Mustermann',
     date: '2024-12-24T14:30:00Z',
     icon: Tag,
-    color: 'text-green-500 bg-green-500/10'
+    color: 'text-green-500 bg-green-500/10',
   },
   {
     id: 'h2',
@@ -28,7 +37,7 @@ const mockHistory = [
     user: 'Max Mustermann',
     date: '2024-12-20T10:15:00Z',
     icon: Euro,
-    color: 'text-amber-500 bg-amber-500/10'
+    color: 'text-amber-500 bg-amber-500/10',
   },
   {
     id: 'h3',
@@ -38,7 +47,7 @@ const mockHistory = [
     user: 'Sarah Schmidt',
     date: '2024-12-15T09:00:00Z',
     icon: FileText,
-    color: 'text-blue-500 bg-blue-500/10'
+    color: 'text-blue-500 bg-blue-500/10',
   },
   {
     id: 'h4',
@@ -48,7 +57,7 @@ const mockHistory = [
     user: 'System',
     date: '2024-12-10T16:45:00Z',
     icon: Eye,
-    color: 'text-purple-500 bg-purple-500/10'
+    color: 'text-purple-500 bg-purple-500/10',
   },
   {
     id: 'h5',
@@ -58,7 +67,7 @@ const mockHistory = [
     user: 'Max Mustermann',
     date: '2024-12-08T11:20:00Z',
     icon: Tag,
-    color: 'text-amber-500 bg-amber-500/10'
+    color: 'text-amber-500 bg-amber-500/10',
   },
   {
     id: 'h6',
@@ -68,7 +77,7 @@ const mockHistory = [
     user: 'Max Mustermann',
     date: '2024-12-05T14:00:00Z',
     icon: Edit,
-    color: 'text-slate-500 bg-slate-500/10'
+    color: 'text-slate-500 bg-slate-500/10',
   },
   {
     id: 'h7',
@@ -78,7 +87,7 @@ const mockHistory = [
     user: 'Transport GmbH',
     date: '2024-12-02T08:30:00Z',
     icon: MapPin,
-    color: 'text-indigo-500 bg-indigo-500/10'
+    color: 'text-indigo-500 bg-indigo-500/10',
   },
   {
     id: 'h8',
@@ -88,25 +97,25 @@ const mockHistory = [
     user: 'Max Mustermann',
     date: '2024-12-01T10:00:00Z',
     icon: Car,
-    color: 'text-primary bg-primary/10'
+    color: 'text-primary bg-primary/10',
   },
 ];
 
 export const VehicleHistoryTab = ({ vehicle }: Props) => {
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('de-DE', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: 'numeric' 
+    return date.toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
   };
 
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleTimeString('de-DE', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return date.toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -136,7 +145,9 @@ export const VehicleHistoryTab = ({ vehicle }: Props) => {
             return (
               <div key={item.id} className="relative flex gap-4">
                 {/* Icon */}
-                <div className={`relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-4 border-background ${item.color}`}>
+                <div
+                  className={`relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-4 border-background ${item.color}`}
+                >
                   <Icon className="h-5 w-5" />
                 </div>
 

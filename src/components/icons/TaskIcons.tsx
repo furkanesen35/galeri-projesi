@@ -24,7 +24,15 @@ export const EngineIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Tire Icon - wheel with treads
 export const TireIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Outer tire */}
     <circle cx="12" cy="12" r="10" />
     {/* Inner rim */}
@@ -45,7 +53,15 @@ export const TireIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Brake Disc with Caliper Icon
 export const BrakeIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Brake disc outer */}
     <circle cx="12" cy="12" r="9" />
     {/* Disc ventilation slots */}
@@ -63,7 +79,15 @@ export const BrakeIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Oil Drop Icon
 export const OilDropIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Oil drop shape */}
     <path d="M12 2c0 0-7 8-7 13a7 7 0 0 0 14 0c0-5-7-13-7-13z" />
     {/* Shine */}
@@ -73,7 +97,15 @@ export const OilDropIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Transmission/Gearbox Icon
 export const TransmissionIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Gear shift pattern */}
     <path d="M6 4v6" />
     <path d="M12 4v6" />
@@ -94,7 +126,15 @@ export const TransmissionIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Car Battery Icon
 export const CarBatteryIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Battery body */}
     <rect x="2" y="7" width="20" height="12" rx="2" />
     {/* Terminals */}
@@ -109,7 +149,15 @@ export const CarBatteryIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // AC/Climate Icon - Snowflake with air flow
 export const ACIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Snowflake */}
     <path d="M12 2v20" />
     <path d="M2 12h20" />
@@ -129,7 +177,15 @@ export const ACIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Car Body/Bodywork Icon
 export const CarBodyIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Car body profile */}
     <path d="M3 14l2-6h4l3-3h4l2 3h3l2 6" />
     <path d="M3 14h18v3H3z" />
@@ -145,7 +201,15 @@ export const CarBodyIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Paint Spray Gun Icon
 export const PaintSprayIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Spray gun body */}
     <path d="M5 12h8l2 3v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8z" />
     {/* Trigger */}
@@ -163,7 +227,15 @@ export const PaintSprayIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Electrical/Wiring Icon
 export const ElectricalIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Lightning bolt */}
     <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="none" />
   </svg>
@@ -171,7 +243,15 @@ export const ElectricalIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Inspection/Checklist Icon
 export const InspectionIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Clipboard */}
     <rect x="4" y="4" width="16" height="18" rx="2" />
     <path d="M8 2h8v4H8z" />
@@ -183,7 +263,15 @@ export const InspectionIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Car Wash/Cleaning Icon
 export const CleaningIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Water drops */}
     <path d="M12 3c0 0-4 4-4 7a4 4 0 0 0 8 0c0-3-4-7-4-7z" />
     {/* Sparkles */}
@@ -198,7 +286,15 @@ export const CleaningIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Windshield/Glass Icon
 export const GlassIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Windshield shape */}
     <path d="M4 18L6 6h12l2 12z" />
     {/* Crack */}
@@ -210,7 +306,15 @@ export const GlassIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Exhaust/Muffler Icon
 export const ExhaustIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Exhaust pipe */}
     <path d="M2 14h6l2-2h4l2 2h6" />
     <ellipse cx="20" cy="14" rx="2" ry="3" />
@@ -223,7 +327,15 @@ export const ExhaustIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Suspension/Shock Absorber Icon
 export const SuspensionIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Spring coils */}
     <path d="M12 3v2" />
     <path d="M8 5h8" />
@@ -239,7 +351,15 @@ export const SuspensionIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Steering Wheel Icon
 export const SteeringIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Outer ring */}
     <circle cx="12" cy="12" r="9" />
     {/* Center hub */}
@@ -253,7 +373,15 @@ export const SteeringIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Headlight Icon
 export const HeadlightIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Light housing */}
     <ellipse cx="8" cy="12" rx="4" ry="6" />
     {/* Light beams */}
@@ -267,7 +395,15 @@ export const HeadlightIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Car Seat/Interior Icon
 export const InteriorIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Seat back */}
     <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10H7V4z" />
     {/* Seat cushion */}
@@ -282,7 +418,15 @@ export const InteriorIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Wrench/General Repair Icon
 export const GeneralRepairIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Wrench */}
     <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
   </svg>
@@ -290,7 +434,15 @@ export const GeneralRepairIcon: React.FC<IconProps> = ({ className = '' }) => (
 
 // Diagnostic Scanner Icon
 export const DiagnosticIcon: React.FC<IconProps> = ({ className = '' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
     {/* Scanner device */}
     <rect x="3" y="6" width="12" height="14" rx="2" />
     {/* Screen */}

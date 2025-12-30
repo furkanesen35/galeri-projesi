@@ -16,7 +16,7 @@ const resources = {
         settings: 'Settings',
         marketing: 'Marketing',
         documentPool: 'Document Pool',
-        customers: 'Customers'
+        customers: 'Customers',
       },
       actions: {
         add: 'Add',
@@ -27,7 +27,7 @@ const resources = {
         next: 'Next',
         back: 'Back',
         submit: 'Submit',
-        viewAll: 'View All'
+        viewAll: 'View All',
       },
       common: {
         loading: 'Loading...',
@@ -35,7 +35,7 @@ const resources = {
         vsLastMonth: 'vs last month',
         inMaintenance: 'in maintenance',
         overdue: 'overdue',
-        thisWeek: 'This week'
+        thisWeek: 'This week',
       },
       dashboard: {
         title: 'Operations Overview',
@@ -62,7 +62,7 @@ const resources = {
         estimateSent: 'Estimate sent to customer',
         photosUploaded: 'photos uploaded',
         frontDamage: 'Front damage assessment',
-        completeDocs: 'Complete damage documentation'
+        completeDocs: 'Complete damage documentation',
       },
       damageAssessment: {
         title: 'Damage Assessment',
@@ -92,7 +92,7 @@ const resources = {
         rearImpact: 'Rear Impact',
         high: 'High',
         medium: 'Medium',
-        low: 'Low'
+        low: 'Low',
       },
       photos: {
         title: 'Photo Gallery',
@@ -111,7 +111,7 @@ const resources = {
         damage: 'damage',
         exterior: 'Exterior',
         interior: 'Interior',
-        rear: 'Rear'
+        rear: 'Rear',
       },
       ocr: {
         title: 'OCR Scanner',
@@ -127,9 +127,9 @@ const resources = {
         make: 'Make',
         model: 'Model',
         year: 'Year',
-        privacyNotice: 'Privacy Notice: All document data is processed securely and not stored.'
-      }
-    }
+        privacyNotice: 'Privacy Notice: All document data is processed securely and not stored.',
+      },
+    },
   },
   de: {
     translation: {
@@ -145,7 +145,7 @@ const resources = {
         settings: 'Einstellungen',
         marketing: 'Marketing',
         documentPool: 'Dokumentenpool',
-        customers: 'Kunden'
+        customers: 'Kunden',
       },
       actions: {
         add: 'Hinzufügen',
@@ -156,7 +156,7 @@ const resources = {
         next: 'Weiter',
         back: 'Zurück',
         submit: 'Absenden',
-        viewAll: 'Alle anzeigen'
+        viewAll: 'Alle anzeigen',
       },
       common: {
         loading: 'Lädt...',
@@ -164,7 +164,7 @@ const resources = {
         vsLastMonth: 'vs letzter Monat',
         inMaintenance: 'in Wartung',
         overdue: 'überfällig',
-        thisWeek: 'Diese Woche'
+        thisWeek: 'Diese Woche',
       },
       dashboard: {
         title: 'Betriebsübersicht',
@@ -191,7 +191,7 @@ const resources = {
         estimateSent: 'Kostenvoranschlag an Kunden gesendet',
         photosUploaded: 'Fotos hochgeladen',
         frontDamage: 'Bewertung Frontschaden',
-        completeDocs: 'Vollständige Schadendokumentation'
+        completeDocs: 'Vollständige Schadendokumentation',
       },
       damageAssessment: {
         title: 'Schadenbewertung',
@@ -221,7 +221,7 @@ const resources = {
         rearImpact: 'Heckaufprall',
         high: 'Hoch',
         medium: 'Mittel',
-        low: 'Niedrig'
+        low: 'Niedrig',
       },
       photos: {
         title: 'Fotogalerie',
@@ -240,7 +240,7 @@ const resources = {
         damage: 'Schaden',
         exterior: 'Außen',
         interior: 'Innen',
-        rear: 'Hinten'
+        rear: 'Hinten',
       },
       ocr: {
         title: 'OCR Scanner',
@@ -256,9 +256,10 @@ const resources = {
         make: 'Marke',
         model: 'Modell',
         year: 'Jahr',
-        privacyNotice: 'Datenschutzhinweis: Alle Dokumentdaten werden sicher verarbeitet und nicht gespeichert.'
-      }
-    }
+        privacyNotice:
+          'Datenschutzhinweis: Alle Dokumentdaten werden sicher verarbeitet und nicht gespeichert.',
+      },
+    },
   },
   tr: {
     translation: {
@@ -274,7 +275,7 @@ const resources = {
         settings: 'Ayarlar',
         marketing: 'Pazarlama',
         documentPool: 'Belge Havuzu',
-        customers: 'Müşteriler'
+        customers: 'Müşteriler',
       },
       actions: {
         add: 'Ekle',
@@ -285,7 +286,7 @@ const resources = {
         next: 'İleri',
         back: 'Geri',
         submit: 'Gönder',
-        viewAll: 'Tümünü Gör'
+        viewAll: 'Tümünü Gör',
       },
       common: {
         loading: 'Yükleniyor...',
@@ -293,7 +294,7 @@ const resources = {
         vsLastMonth: 'geçen aya göre',
         inMaintenance: 'bakımda',
         overdue: 'gecikmiş',
-        thisWeek: 'Bu hafta'
+        thisWeek: 'Bu hafta',
       },
       dashboard: {
         title: 'Operasyon Özeti',
@@ -320,7 +321,7 @@ const resources = {
         estimateSent: 'Müşteriye teklif gönderildi',
         photosUploaded: 'fotoğraf yüklendi',
         frontDamage: 'Ön hasar değerlendirmesi',
-        completeDocs: 'Tam hasar dokümantasyonu'
+        completeDocs: 'Tam hasar dokümantasyonu',
       },
       damageAssessment: {
         title: 'Hasar Değerlendirme',
@@ -350,11 +351,12 @@ const resources = {
         rearImpact: 'Arkadan Çarpma',
         high: 'Yüksek',
         medium: 'Orta',
-        low: 'Düşük'
+        low: 'Düşük',
       },
       photos: {
         title: 'Fotoğraf Galerisi',
-        subtitle: 'Fotoğrafları yükle, açıkla, optimize et ve hasar dokümantasyonu fotoğraflarını yönet',
+        subtitle:
+          'Fotoğrafları yükle, açıkla, optimize et ve hasar dokümantasyonu fotoğraflarını yönet',
         uploadBtn: 'Fotoğraf Yükle',
         dropHere: 'Fotoğrafları buraya bırak veya göz atmak için tıkla',
         supportedFormats: 'Desteklenen JPG, PNG, HEIC • Dosya başına maks 50MB',
@@ -369,7 +371,7 @@ const resources = {
         damage: 'hasar',
         exterior: 'Dış',
         interior: 'İç',
-        rear: 'Arka'
+        rear: 'Arka',
       },
       ocr: {
         title: 'OCR Tarayıcı',
@@ -385,10 +387,11 @@ const resources = {
         make: 'Marka',
         model: 'Model',
         year: 'Yıl',
-        privacyNotice: 'Gizlilik Bildirimi: Tüm belge verileri güvenli bir şekilde işlenir ve saklanmaz.'
-      }
-    }
-  }
+        privacyNotice:
+          'Gizlilik Bildirimi: Tüm belge verileri güvenli bir şekilde işlenir ve saklanmaz.',
+      },
+    },
+  },
 };
 
 i18n.use(initReactI18next).init({
@@ -396,8 +399,8 @@ i18n.use(initReactI18next).init({
   lng: 'de',
   fallbackLng: 'en',
   interpolation: {
-    escapeValue: false
-  }
+    escapeValue: false,
+  },
 });
 
 export default i18n;

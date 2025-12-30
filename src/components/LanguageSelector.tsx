@@ -6,7 +6,7 @@ import { useAppConfig, SupportedLanguage } from '../store/useAppConfig';
 const languages: { value: SupportedLanguage; label: string; flag: string }[] = [
   { value: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { value: 'en', label: 'English', flag: '🇬🇧' },
-  { value: 'tr', label: 'Türkçe', flag: '🇹🇷' }
+  { value: 'tr', label: 'Türkçe', flag: '🇹🇷' },
 ];
 
 export const LanguageSelector = () => {
@@ -20,8 +20,6 @@ export const LanguageSelector = () => {
     setIsOpen(false);
   };
 
-  const currentLang = languages.find(l => l.value === language);
-
   return (
     <div className="relative group">
       <button
@@ -32,9 +30,9 @@ export const LanguageSelector = () => {
       >
         <Languages className="h-5 w-5" strokeWidth={2} />
       </button>
-      
+
       {isOpen && (
-        <div 
+        <div
           className="absolute left-full ml-0 bottom-0 bg-surface border border-border rounded-lg shadow-lg overflow-hidden min-w-[160px]"
           style={{ zIndex: 9999 }}
           onMouseEnter={() => setIsOpen(true)}

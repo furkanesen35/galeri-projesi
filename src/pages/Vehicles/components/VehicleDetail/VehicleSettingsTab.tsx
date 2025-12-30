@@ -1,8 +1,15 @@
 import { useState } from 'react';
 import { Vehicle } from '../../../../types/domain';
-import { 
-  Settings2, Tag, MapPin, Eye, EyeOff, Globe, 
-  AlertTriangle, Save, RotateCcw
+import {
+  Settings2,
+  Tag,
+  MapPin,
+  Eye,
+  EyeOff,
+  Globe,
+  AlertTriangle,
+  Save,
+  RotateCcw,
 } from 'lucide-react';
 
 interface Props {
@@ -57,7 +64,9 @@ export const VehicleSettingsTab = ({ vehicle }: Props) => {
         </h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Aktueller Standort</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Aktueller Standort
+            </label>
             <input
               type="text"
               value={location}
@@ -85,7 +94,9 @@ export const VehicleSettingsTab = ({ vehicle }: Props) => {
               )}
               <div>
                 <p className="font-medium text-foreground">Intern sichtbar</p>
-                <p className="text-sm text-text-secondary">Fahrzeug wird im internen System angezeigt</p>
+                <p className="text-sm text-text-secondary">
+                  Fahrzeug wird im internen System angezeigt
+                </p>
               </div>
             </div>
             <button
@@ -104,10 +115,14 @@ export const VehicleSettingsTab = ({ vehicle }: Props) => {
 
           <div className="flex items-center justify-between py-3">
             <div className="flex items-center gap-3">
-              <Globe className={`h-5 w-5 ${publishToPortals ? 'text-primary' : 'text-text-secondary'}`} />
+              <Globe
+                className={`h-5 w-5 ${publishToPortals ? 'text-primary' : 'text-text-secondary'}`}
+              />
               <div>
                 <p className="font-medium text-foreground">Auf Portalen veröffentlichen</p>
-                <p className="text-sm text-text-secondary">Fahrzeug wird auf mobile.de, AutoScout24, etc. angezeigt</p>
+                <p className="text-sm text-text-secondary">
+                  Fahrzeug wird auf mobile.de, AutoScout24, etc. angezeigt
+                </p>
               </div>
             </div>
             <button
@@ -136,7 +151,9 @@ export const VehicleSettingsTab = ({ vehicle }: Props) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-foreground">Fahrzeug archivieren</p>
-              <p className="text-sm text-text-secondary">Das Fahrzeug wird aus der aktiven Liste entfernt</p>
+              <p className="text-sm text-text-secondary">
+                Das Fahrzeug wird aus der aktiven Liste entfernt
+              </p>
             </div>
             <button className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-500 hover:bg-amber-500/20 transition-colors">
               Archivieren
@@ -146,7 +163,9 @@ export const VehicleSettingsTab = ({ vehicle }: Props) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-foreground">Fahrzeug löschen</p>
-              <p className="text-sm text-text-secondary">Diese Aktion kann nicht rückgängig gemacht werden</p>
+              <p className="text-sm text-text-secondary">
+                Diese Aktion kann nicht rückgängig gemacht werden
+              </p>
             </div>
             <button className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500/20 transition-colors">
               Löschen

@@ -7,98 +7,98 @@ import { TaskDetailTable } from './Tasks/TaskDetailTable';
 import { taskDetailFixtures } from '../services/taskDetailFixtures';
 
 const initialTasks: TaskItem[] = [
-  { 
-    id: 't1', 
-    title: 'Ölwechsel', 
+  {
+    id: 't1',
+    title: 'Ölwechsel',
     description: 'Motoröl und Filter wechseln',
     taskType: 'oil_change',
     priority: 'medium',
-    assignee: 'Anna', 
-    status: 'pending', 
+    assignee: 'Anna',
+    status: 'pending',
     dueDate: '2024-05-11',
-    vehicleName: 'BMW 320i'
+    vehicleName: 'BMW 320i',
   },
-  { 
-    id: 't2', 
-    title: 'Reifenwechsel', 
+  {
+    id: 't2',
+    title: 'Reifenwechsel',
     description: 'Winterreifen montieren',
     taskType: 'tire_rotation',
     priority: 'high',
-    assignee: 'Max', 
-    status: 'in_progress', 
+    assignee: 'Max',
+    status: 'in_progress',
     dueDate: '2024-05-13',
-    vehicleName: 'Audi A4'
+    vehicleName: 'Audi A4',
   },
-  { 
-    id: 't3', 
-    title: 'HU/AU Inspektion', 
+  {
+    id: 't3',
+    title: 'HU/AU Inspektion',
     description: 'TÜV Hauptuntersuchung',
     taskType: 'inspection',
     priority: 'urgent',
-    assignee: 'Lena', 
-    status: 'pending', 
+    assignee: 'Lena',
+    status: 'pending',
     dueDate: '2024-05-10',
-    vehicleName: 'VW Golf'
+    vehicleName: 'VW Golf',
   },
-  { 
-    id: 't4', 
-    title: 'Bremsen vorne', 
+  {
+    id: 't4',
+    title: 'Bremsen vorne',
     description: 'Bremsbeläge und Scheiben erneuern',
     taskType: 'brake_repair',
     priority: 'high',
-    assignee: 'Max', 
-    status: 'pending', 
+    assignee: 'Max',
+    status: 'pending',
     dueDate: '2024-05-14',
-    vehicleName: 'Mercedes C200'
+    vehicleName: 'Mercedes C200',
   },
-  { 
-    id: 't5', 
-    title: 'Motordiagnose', 
+  {
+    id: 't5',
+    title: 'Motordiagnose',
     description: 'Check Engine Lampe prüfen',
     taskType: 'engine_repair',
     priority: 'medium',
-    assignee: 'Anna', 
-    status: 'in_progress', 
+    assignee: 'Anna',
+    status: 'in_progress',
     dueDate: '2024-05-12',
-    vehicleName: 'BMW X3'
+    vehicleName: 'BMW X3',
   },
-  { 
-    id: 't6', 
-    title: 'Klimaanlage Service', 
+  {
+    id: 't6',
+    title: 'Klimaanlage Service',
     description: 'Klimaanlage befüllen und desinfizieren',
     taskType: 'ac_repair',
     priority: 'low',
-    status: 'done', 
+    status: 'done',
     dueDate: '2024-05-08',
-    vehicleName: 'Audi Q5'
+    vehicleName: 'Audi Q5',
   },
-  { 
-    id: 't7', 
-    title: 'Batterie tauschen', 
+  {
+    id: 't7',
+    title: 'Batterie tauschen',
     description: 'Neue Starterbatterie einbauen',
     taskType: 'battery',
     priority: 'medium',
-    assignee: 'Lena', 
-    status: 'done', 
+    assignee: 'Lena',
+    status: 'done',
     dueDate: '2024-05-09',
-    vehicleName: 'VW Passat'
+    vehicleName: 'VW Passat',
   },
-  { 
-    id: 't8', 
-    title: 'Lack polieren', 
+  {
+    id: 't8',
+    title: 'Lack polieren',
     description: 'Fahrzeug polieren und versiegeln',
     taskType: 'paint',
     priority: 'low',
-    status: 'pending', 
+    status: 'pending',
     dueDate: '2024-05-15',
-    vehicleName: 'Porsche 911'
+    vehicleName: 'Porsche 911',
   },
 ];
 
 const columns: { key: TaskItem['status']; title: string; color: string }[] = [
   { key: 'pending', title: 'Ausstehend', color: 'border-gray-500/30' },
   { key: 'in_progress', title: 'In Bearbeitung', color: 'border-blue-500/30' },
-  { key: 'done', title: 'Erledigt', color: 'border-green-500/30' }
+  { key: 'done', title: 'Erledigt', color: 'border-green-500/30' },
 ];
 
 export const Tasks = () => {
@@ -110,13 +110,15 @@ export const Tasks = () => {
     if (!destination) return;
 
     const next = tasks.map((task) =>
-      task.id === draggableId ? { ...task, status: destination.droppableId as TaskItem['status'] } : task
+      task.id === draggableId
+        ? { ...task, status: destination.droppableId as TaskItem['status'] }
+        : task
     );
     setTasks(next);
   };
 
-  const getTaskCountByStatus = (status: TaskItem['status']) => 
-    tasks.filter(t => t.status === status).length;
+  const getTaskCountByStatus = (status: TaskItem['status']) =>
+    tasks.filter((t) => t.status === status).length;
 
   return (
     <div className="space-y-6">
@@ -163,19 +165,21 @@ export const Tasks = () => {
           {/* Task Type Legend */}
           <div className="flex flex-wrap gap-2 p-4 rounded-xl bg-surface border border-border">
             <span className="text-xs text-text-secondary mr-2 self-center">Aufgabentypen:</span>
-            {Object.entries(taskTypeConfig).slice(0, 10).map(([key, config]) => {
-              const Icon = config.icon;
-              return (
-                <div 
-                  key={key}
-                  className={`flex items-center gap-1.5 px-2 py-1 rounded-lg ${config.bgColor} cursor-default`}
-                  title={config.label}
-                >
-                  <Icon className={`h-3.5 w-3.5 ${config.color}`} />
-                  <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>
-                </div>
-              );
-            })}
+            {Object.entries(taskTypeConfig)
+              .slice(0, 10)
+              .map(([key, config]) => {
+                const Icon = config.icon;
+                return (
+                  <div
+                    key={key}
+                    className={`flex items-center gap-1.5 px-2 py-1 rounded-lg ${config.bgColor} cursor-default`}
+                    title={config.label}
+                  >
+                    <Icon className={`h-3.5 w-3.5 ${config.color}`} />
+                    <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>
+                  </div>
+                );
+              })}
           </div>
 
           <DragDropContext onDragEnd={onDragEnd}>
@@ -209,9 +213,10 @@ export const Tasks = () => {
                                   {...drag.dragHandleProps}
                                   className={`
                                     rounded-xl border bg-bg-secondary p-4 transition-all
-                                    ${dragSnapshot.isDragging 
-                                      ? 'border-primary shadow-lg scale-[1.02]' 
-                                      : 'border-border hover:border-primary/50'
+                                    ${
+                                      dragSnapshot.isDragging
+                                        ? 'border-primary shadow-lg scale-[1.02]'
+                                        : 'border-border hover:border-primary/50'
                                     }
                                   `}
                                 >
@@ -224,7 +229,10 @@ export const Tasks = () => {
                                           {task.title}
                                         </h5>
                                         {task.priority && (
-                                          <PriorityBadge priority={task.priority} showLabel={false} />
+                                          <PriorityBadge
+                                            priority={task.priority}
+                                            showLabel={false}
+                                          />
                                         )}
                                       </div>
                                       {task.description && (
@@ -246,7 +254,12 @@ export const Tasks = () => {
                                     {task.dueDate && (
                                       <div className="flex items-center gap-1">
                                         <Calendar className="h-3 w-3" />
-                                        <span>{new Date(task.dueDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}</span>
+                                        <span>
+                                          {new Date(task.dueDate).toLocaleDateString('de-DE', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                          })}
+                                        </span>
                                       </div>
                                     )}
                                     {task.assignee && (

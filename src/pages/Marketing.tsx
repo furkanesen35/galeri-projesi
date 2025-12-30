@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { HeroSection } from './Marketing/components/HeroSection';
 import { TrustLogos } from './Marketing/components/TrustLogos';
 import { HotspotExplainer } from './Marketing/components/HotspotExplainer';
@@ -10,15 +10,11 @@ import { VideoModal } from './Marketing/components/VideoModal';
 
 export const Marketing = () => {
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [showCookieBanner, setShowCookieBanner] = useState(false);
-
-  useEffect(() => {
-    // Check if user has already accepted/declined cookies
+  // Initialize state based on localStorage (no effect needed)
+  const [showCookieBanner, setShowCookieBanner] = useState(() => {
     const cookieConsent = localStorage.getItem('cookieConsent');
-    if (!cookieConsent) {
-      setShowCookieBanner(true);
-    }
-  }, []);
+    return !cookieConsent;
+  });
 
   const handleCookieConsent = (accepted: boolean) => {
     localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined');
@@ -33,14 +29,14 @@ export const Marketing = () => {
       <WebinarsStrip />
       <TestimonialsCarousel />
       <Footer />
-      
+
       {showCookieBanner && (
         <CookieBanner
           onAccept={() => handleCookieConsent(true)}
           onDecline={() => handleCookieConsent(false)}
         />
       )}
-      
+
       {showVideoModal && (
         <VideoModal
           videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ"

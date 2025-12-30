@@ -1,7 +1,11 @@
 import { Palette, Globe, Server, Image } from 'lucide-react';
 import { LanguageSelector } from '../components/LanguageSelector';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { DraggablePanel, DraggablePanelContainer, HiddenPanelsBar } from '../components/DraggablePanel';
+import {
+  DraggablePanel,
+  DraggablePanelContainer,
+  HiddenPanelsBar,
+} from '../components/DraggablePanel';
 import { PanelCustomizer } from '../components/PanelCustomizer';
 import { usePanelLayout } from '../hooks/usePanelLayout';
 import { BackgroundSelector } from '../components/BackgroundSelector';
@@ -33,7 +37,9 @@ export const Settings = () => {
         >
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <span className="text-sm text-text-secondary">Wählen Sie das Erscheinungsbild der Anwendung</span>
+            <span className="text-sm text-text-secondary">
+              Wählen Sie das Erscheinungsbild der Anwendung
+            </span>
           </div>
         </DraggablePanel>
 

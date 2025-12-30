@@ -1,12 +1,20 @@
 import { useState, useRef, useCallback } from 'react';
-import { 
-  X, FileText, Printer, Download, Save, ChevronLeft, ChevronRight,
-  Check, AlertCircle, Building2, Car, User
+import {
+  X,
+  FileText,
+  Printer,
+  Download,
+  Save,
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  AlertCircle,
+  Building2,
+  Car,
+  User,
 } from 'lucide-react';
 import { Vehicle } from '../../../../types/domain';
-import { 
-  DocumentTemplate, DocumentField, dealerInfo, getTemplateById 
-} from './DocumentTemplates';
+import { DocumentTemplate, DocumentField, dealerInfo, getTemplateById } from './DocumentTemplates';
 
 interface Props {
   vehicle: Vehicle;
@@ -20,25 +28,47 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [formData, setFormData] = useState<Record<string, unknown>>(() => {
     const initial: Record<string, unknown> = {};
-    template?.fields.forEach(field => {
+    template?.fields.forEach((field) => {
       if (field.autoFill === 'vehicle') {
         // Auto-fill vehicle data
         switch (field.id) {
-          case 'vehicle_brand': initial[field.id] = vehicle.brand; break;
-          case 'vehicle_model': initial[field.id] = vehicle.model; break;
-          case 'vehicle_vin': initial[field.id] = vehicle.vin || ''; break;
-          case 'vehicle_plate': initial[field.id] = vehicle.plate || ''; break;
-          case 'vehicle_mileage': initial[field.id] = vehicle.mileageKm; break;
-          case 'vehicle_color': initial[field.id] = vehicle.color || ''; break;
-          case 'vehicle_fuel': initial[field.id] = vehicle.fuelType || ''; break;
-          case 'vehicle_power': initial[field.id] = vehicle.power ? `${vehicle.power.kw} kW / ${vehicle.power.ps} PS` : ''; break;
-          case 'vehicle_first_registration': 
-            initial[field.id] = vehicle.firstRegistration 
-              ? new Date(vehicle.firstRegistration).toISOString().split('T')[0] 
-              : ''; 
+          case 'vehicle_brand':
+            initial[field.id] = vehicle.brand;
             break;
-          case 'new_vehicle_brand': initial[field.id] = vehicle.brand; break;
-          case 'new_vehicle_model': initial[field.id] = vehicle.model; break;
+          case 'vehicle_model':
+            initial[field.id] = vehicle.model;
+            break;
+          case 'vehicle_vin':
+            initial[field.id] = vehicle.vin || '';
+            break;
+          case 'vehicle_plate':
+            initial[field.id] = vehicle.plate || '';
+            break;
+          case 'vehicle_mileage':
+            initial[field.id] = vehicle.mileageKm;
+            break;
+          case 'vehicle_color':
+            initial[field.id] = vehicle.color || '';
+            break;
+          case 'vehicle_fuel':
+            initial[field.id] = vehicle.fuelType || '';
+            break;
+          case 'vehicle_power':
+            initial[field.id] = vehicle.power
+              ? `${vehicle.power.kw} kW / ${vehicle.power.ps} PS`
+              : '';
+            break;
+          case 'vehicle_first_registration':
+            initial[field.id] = vehicle.firstRegistration
+              ? new Date(vehicle.firstRegistration).toISOString().split('T')[0]
+              : '';
+            break;
+          case 'new_vehicle_brand':
+            initial[field.id] = vehicle.brand;
+            break;
+          case 'new_vehicle_model':
+            initial[field.id] = vehicle.model;
+            break;
         }
       } else if (field.autoFill === 'date') {
         initial[field.id] = new Date().toISOString().split('T')[0];
@@ -63,7 +93,10 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div className="bg-surface p-6 rounded-xl">
           <p>Template nicht gefunden</p>
-          <button onClick={onClose} className="mt-4 px-4 py-2 bg-primary text-primary-text rounded-lg">
+          <button
+            onClick={onClose}
+            className="mt-4 px-4 py-2 bg-primary text-primary-text rounded-lg"
+          >
             Schließen
           </button>
         </div>
@@ -72,13 +105,13 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
   }
 
   const currentSection = template.sections[currentSectionIndex];
-  const currentFields = template.fields.filter(f => f.section === currentSection.id);
+  const currentFields = template.fields.filter((f) => f.section === currentSection.id);
   const isFirstSection = currentSectionIndex === 0;
   const isLastSection = currentSectionIndex === template.sections.length - 1;
 
   const validateCurrentSection = () => {
     const newErrors: Record<string, string> = {};
-    currentFields.forEach(field => {
+    currentFields.forEach((field) => {
       if (field.required) {
         const value = formData[field.id];
         if (field.type === 'checkbox') {
@@ -97,7 +130,7 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
       if (isLastSection) {
         setShowPreview(true);
       } else {
-        setCurrentSectionIndex(prev => prev + 1);
+        setCurrentSectionIndex((prev) => prev + 1);
       }
     }
   };
@@ -106,14 +139,14 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
     if (showPreview) {
       setShowPreview(false);
     } else if (!isFirstSection) {
-      setCurrentSectionIndex(prev => prev - 1);
+      setCurrentSectionIndex((prev) => prev - 1);
     }
   };
 
   const handleChange = (fieldId: string, value: unknown) => {
-    setFormData(prev => ({ ...prev, [fieldId]: value }));
+    setFormData((prev) => ({ ...prev, [fieldId]: value }));
     if (errors[fieldId]) {
-      setErrors(prev => {
+      setErrors((prev) => {
         const next = { ...prev };
         delete next[fieldId];
         return next;
@@ -135,11 +168,12 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
   const renderField = (field: DocumentField) => {
     const value = formData[field.id];
     const error = errors[field.id];
-    const widthClass = field.width === 'full' ? 'col-span-2' : field.width === 'third' ? 'col-span-1' : 'col-span-1';
+    const widthClass =
+      field.width === 'full' ? 'col-span-2' : field.width === 'third' ? 'col-span-1' : 'col-span-1';
 
     const baseInputClass = `w-full rounded-lg border px-3 py-2.5 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 ${
-      error 
-        ? 'border-red-500 bg-red-500/5' 
+      error
+        ? 'border-red-500 bg-red-500/5'
         : 'border-border bg-bg-secondary hover:border-primary/50 focus:border-primary'
     }`;
 
@@ -210,8 +244,10 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
             className={baseInputClass}
           >
             <option value="">Bitte wählen...</option>
-            {field.options?.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            {field.options?.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
             ))}
           </select>
         )}
@@ -225,9 +261,11 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
                 onChange={(e) => handleChange(field.id, e.target.checked)}
                 className="sr-only"
               />
-              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                value ? 'bg-primary border-primary' : error ? 'border-red-500' : 'border-border'
-              }`}>
+              <div
+                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                  value ? 'bg-primary border-primary' : error ? 'border-red-500' : 'border-border'
+                }`}
+              >
                 {value && <Check className="h-3 w-3 text-primary-text" />}
               </div>
             </div>
@@ -247,7 +285,7 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
 
   const renderPreview = () => {
     const Icon = template.icon;
-    
+
     return (
       <div ref={printRef} className="bg-white text-black p-8 print:p-4">
         {/* Header */}
@@ -265,9 +303,9 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
         </div>
 
         {/* Content by sections */}
-        {template.sections.map(section => {
-          const sectionFields = template.fields.filter(f => f.section === section.id);
-          const filledFields = sectionFields.filter(f => {
+        {template.sections.map((section) => {
+          const sectionFields = template.fields.filter((f) => f.section === section.id);
+          const filledFields = sectionFields.filter((f) => {
             const val = formData[f.id];
             if (f.type === 'checkbox') return val === true;
             return val && String(val).trim() !== '';
@@ -281,14 +319,14 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
                 {section.title}
               </h2>
               <div className="grid grid-cols-2 gap-x-8 gap-y-2">
-                {filledFields.map(field => {
+                {filledFields.map((field) => {
                   const val = formData[field.id];
                   let displayValue = String(val);
 
                   if (field.type === 'checkbox') {
                     displayValue = val ? '✓ Ja' : '✗ Nein';
                   } else if (field.type === 'select' && field.options) {
-                    const opt = field.options.find(o => o.value === val);
+                    const opt = field.options.find((o) => o.value === val);
                     displayValue = opt?.label || String(val);
                   } else if (field.type === 'currency') {
                     displayValue = `${Number(val).toLocaleString('de-DE', { minimumFractionDigits: 2 })} €`;
@@ -326,8 +364,12 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
 
         {/* Footer */}
         <div className="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500 text-center">
-          <p>{dealerInfo.name} • {dealerInfo.street} • {dealerInfo.city}</p>
-          <p>Tel: {dealerInfo.phone} • E-Mail: {dealerInfo.email} • USt-IdNr.: {dealerInfo.taxId}</p>
+          <p>
+            {dealerInfo.name} • {dealerInfo.street} • {dealerInfo.city}
+          </p>
+          <p>
+            Tel: {dealerInfo.phone} • E-Mail: {dealerInfo.email} • USt-IdNr.: {dealerInfo.taxId}
+          </p>
         </div>
       </div>
     );
@@ -369,8 +411,8 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
                       idx === currentSectionIndex
                         ? 'bg-primary text-primary-text'
                         : idx < currentSectionIndex
-                        ? 'bg-green-500/10 text-green-500 cursor-pointer hover:bg-green-500/20'
-                        : 'bg-bg-tertiary text-text-secondary'
+                          ? 'bg-green-500/10 text-green-500 cursor-pointer hover:bg-green-500/20'
+                          : 'bg-bg-tertiary text-text-secondary'
                     }`}
                   >
                     {idx < currentSectionIndex ? (
@@ -394,20 +436,19 @@ export const DocumentCreationModal = ({ vehicle, templateId, onClose, onSave }: 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {showPreview ? (
-            <div className="rounded-xl border border-border overflow-hidden">
-              {renderPreview()}
-            </div>
+            <div className="rounded-xl border border-border overflow-hidden">{renderPreview()}</div>
           ) : (
             <div>
               <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 {currentSection.id === 'vehicle' && <Car className="h-5 w-5 text-primary" />}
-                {(currentSection.id === 'seller' || currentSection.id === 'buyer' || currentSection.id === 'customer' || currentSection.id === 'driver') && <User className="h-5 w-5 text-primary" />}
+                {(currentSection.id === 'seller' ||
+                  currentSection.id === 'buyer' ||
+                  currentSection.id === 'customer' ||
+                  currentSection.id === 'driver') && <User className="h-5 w-5 text-primary" />}
                 {currentSection.id === 'dealer' && <Building2 className="h-5 w-5 text-primary" />}
                 {currentSection.title}
               </h3>
-              <div className="grid grid-cols-2 gap-4">
-                {currentFields.map(renderField)}
-              </div>
+              <div className="grid grid-cols-2 gap-4">{currentFields.map(renderField)}</div>
             </div>
           )}
         </div>

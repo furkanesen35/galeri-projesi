@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { 
-  Settings2, 
-  Eye, 
-  EyeOff, 
-  GripVertical, 
-  RotateCcw, 
+import {
+  Settings2,
+  Eye,
+  EyeOff,
+  GripVertical,
   X,
   ChevronUp,
   ChevronDown,
   Layout,
   Palette,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
-import { usePanelLayoutStore, ViewId, PanelConfig, PanelStyle } from '../store/usePanelLayoutStore';
+import { usePanelLayoutStore, ViewId, PanelConfig } from '../store/usePanelLayoutStore';
 import { PanelStyleEditor, stylePresets } from './PanelStyleEditor';
 
 interface PanelCustomizerProps {
@@ -20,21 +19,18 @@ interface PanelCustomizerProps {
   className?: string;
 }
 
-export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
-  viewId,
-  className = '',
-}) => {
+export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({ viewId, className = '' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'layout' | 'style'>('layout');
   const [selectedPanelForStyle, setSelectedPanelForStyle] = useState<string | null>(null);
-  const { 
-    getPanels, 
-    togglePanelVisibility, 
-    reorderPanels, 
+  const {
+    getPanels,
+    togglePanelVisibility,
+    reorderPanels,
     resetLayout,
     updatePanelStyle,
     resetPanelStyle,
-    applyStyleToAllPanels
+    applyStyleToAllPanels,
   } = usePanelLayoutStore();
 
   const panels = getPanels(viewId);
@@ -51,11 +47,7 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
     }
   };
 
-  const handleReset = () => {
-    resetLayout(viewId);
-  };
-
-  const visibleCount = panels.filter(p => p.visible).length;
+  const visibleCount = panels.filter((p) => p.visible).length;
   const hiddenCount = panels.length - visibleCount;
 
   return (
@@ -65,9 +57,10 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className={`
           flex items-center gap-2 px-3 py-2 rounded-lg border transition-all
-          ${isOpen 
-            ? 'bg-primary text-primary-text border-primary' 
-            : 'bg-surface text-foreground border-border hover:border-primary hover:bg-bg-secondary'
+          ${
+            isOpen
+              ? 'bg-primary text-primary-text border-primary'
+              : 'bg-surface text-foreground border-border hover:border-primary hover:bg-bg-secondary'
           }
         `}
         title="Panels anpassen"
@@ -85,14 +78,14 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div 
+          <div
             className="fixed inset-0 z-40"
             onClick={() => {
               setIsOpen(false);
               setSelectedPanelForStyle(null);
             }}
           />
-          
+
           {/* Panel */}
           <div className="absolute right-0 top-full mt-2 w-[420px] bg-surface border border-border rounded-xl shadow-xl z-50 overflow-hidden max-h-[80vh] flex flex-col">
             {/* Header */}
@@ -121,9 +114,10 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
                 }}
                 className={`
                   flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors
-                  ${activeTab === 'layout' 
-                    ? 'text-primary border-b-2 border-primary bg-primary/5' 
-                    : 'text-text-secondary hover:text-foreground hover:bg-bg-secondary'
+                  ${
+                    activeTab === 'layout'
+                      ? 'text-primary border-b-2 border-primary bg-primary/5'
+                      : 'text-text-secondary hover:text-foreground hover:bg-bg-secondary'
                   }
                 `}
               >
@@ -134,9 +128,10 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
                 onClick={() => setActiveTab('style')}
                 className={`
                   flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors
-                  ${activeTab === 'style' 
-                    ? 'text-primary border-b-2 border-primary bg-primary/5' 
-                    : 'text-text-secondary hover:text-foreground hover:bg-bg-secondary'
+                  ${
+                    activeTab === 'style'
+                      ? 'text-primary border-b-2 border-primary bg-primary/5'
+                      : 'text-text-secondary hover:text-foreground hover:bg-bg-secondary'
                   }
                 `}
               >
@@ -152,8 +147,8 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
                   {/* Info */}
                   <div className="px-4 py-3 bg-blue-500/10 border-b border-blue-500/20">
                     <p className="text-xs text-blue-400">
-                      Ziehen Sie Panels um sie neu anzuordnen, oder blenden Sie sie ein/aus. 
-                      Ihre Einstellungen werden automatisch gespeichert.
+                      Ziehen Sie Panels um sie neu anzuordnen, oder blenden Sie sie ein/aus. Ihre
+                      Einstellungen werden automatisch gespeichert.
                     </p>
                   </div>
 
@@ -212,13 +207,16 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
                             onClick={() => setSelectedPanelForStyle(panel.id)}
                             className={`
                               w-full flex items-center justify-between px-3 py-2 rounded-lg border transition-colors
-                              ${panel.style && Object.keys(panel.style).length > 0
-                                ? 'border-primary/50 bg-primary/5 hover:bg-primary/10'
-                                : 'border-border hover:border-primary hover:bg-bg-secondary'
+                              ${
+                                panel.style && Object.keys(panel.style).length > 0
+                                  ? 'border-primary/50 bg-primary/5 hover:bg-primary/10'
+                                  : 'border-border hover:border-primary hover:bg-bg-secondary'
                               }
                             `}
                           >
-                            <span className="text-sm font-medium text-foreground">{panel.title}</span>
+                            <span className="text-sm font-medium text-foreground">
+                              {panel.title}
+                            </span>
                             {panel.style && Object.keys(panel.style).length > 0 && (
                               <span className="px-1.5 py-0.5 text-xs bg-primary/20 text-primary rounded">
                                 Angepasst
@@ -238,13 +236,15 @@ export const PanelCustomizer: React.FC<PanelCustomizerProps> = ({
                         <ChevronUp className="h-4 w-4 rotate-[-90deg]" />
                         Zurück zur Übersicht
                       </button>
-                      
+
                       {/* Style Editor */}
-                      {panels.find(p => p.id === selectedPanelForStyle) && (
+                      {panels.find((p) => p.id === selectedPanelForStyle) && (
                         <PanelStyleEditor
-                          panelTitle={panels.find(p => p.id === selectedPanelForStyle)!.title}
-                          style={panels.find(p => p.id === selectedPanelForStyle)!.style}
-                          onChange={(style) => updatePanelStyle(viewId, selectedPanelForStyle, style)}
+                          panelTitle={panels.find((p) => p.id === selectedPanelForStyle)!.title}
+                          style={panels.find((p) => p.id === selectedPanelForStyle)!.style}
+                          onChange={(style) =>
+                            updatePanelStyle(viewId, selectedPanelForStyle, style)
+                          }
                           onReset={() => resetPanelStyle(viewId, selectedPanelForStyle)}
                         />
                       )}
@@ -285,7 +285,7 @@ const PanelCustomizerItem: React.FC<PanelCustomizerItemProps> = ({
   hasCustomStyle,
 }) => {
   return (
-    <div 
+    <div
       className={`
         flex items-center gap-3 px-4 py-3 border-b border-border last:border-0
         ${panel.visible ? 'bg-surface' : 'bg-bg-secondary/50'}
@@ -298,24 +298,28 @@ const PanelCustomizerItem: React.FC<PanelCustomizerItemProps> = ({
       </div>
 
       {/* Order Number */}
-      <div className={`
+      <div
+        className={`
         w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium
-        ${panel.visible 
-          ? 'bg-primary/20 text-primary' 
-          : 'bg-text-secondary/20 text-text-secondary'
-        }
-      `}>
+        ${panel.visible ? 'bg-primary/20 text-primary' : 'bg-text-secondary/20 text-text-secondary'}
+      `}
+      >
         {index + 1}
       </div>
 
       {/* Panel Title */}
-      <span className={`
+      <span
+        className={`
         flex-1 text-sm font-medium truncate
         ${panel.visible ? 'text-foreground' : 'text-text-secondary line-through'}
-      `}>
+      `}
+      >
         {panel.title}
         {hasCustomStyle && (
-          <span className="ml-1.5 inline-block w-2 h-2 rounded-full bg-primary" title="Angepasster Stil" />
+          <span
+            className="ml-1.5 inline-block w-2 h-2 rounded-full bg-primary"
+            title="Angepasster Stil"
+          />
         )}
       </span>
 
@@ -325,9 +329,10 @@ const PanelCustomizerItem: React.FC<PanelCustomizerItemProps> = ({
           onClick={onEditStyle}
           className={`
             p-1.5 rounded-lg transition-colors
-            ${hasCustomStyle 
-              ? 'text-primary hover:bg-primary/10' 
-              : 'text-text-secondary hover:bg-surface hover:text-foreground'
+            ${
+              hasCustomStyle
+                ? 'text-primary hover:bg-primary/10'
+                : 'text-text-secondary hover:bg-surface hover:text-foreground'
             }
           `}
           title="Stil anpassen"
@@ -361,18 +366,15 @@ const PanelCustomizerItem: React.FC<PanelCustomizerItemProps> = ({
         onClick={onToggleVisibility}
         className={`
           p-1.5 rounded-lg transition-colors
-          ${panel.visible 
-            ? 'text-primary hover:bg-primary/10' 
-            : 'text-text-secondary hover:bg-surface'
+          ${
+            panel.visible
+              ? 'text-primary hover:bg-primary/10'
+              : 'text-text-secondary hover:bg-surface'
           }
         `}
         title={panel.visible ? 'Ausblenden' : 'Einblenden'}
       >
-        {panel.visible ? (
-          <Eye className="h-4 w-4" />
-        ) : (
-          <EyeOff className="h-4 w-4" />
-        )}
+        {panel.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
       </button>
     </div>
   );
@@ -399,17 +401,14 @@ export const PanelCustomizerInline: React.FC<PanelCustomizerInlineProps> = ({
           onClick={() => togglePanelVisibility(viewId, panel.id)}
           className={`
             flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-all
-            ${panel.visible 
-              ? 'bg-primary/10 text-primary border-primary/30 hover:bg-primary/20' 
-              : 'bg-bg-secondary text-text-secondary border-border hover:border-primary/30 hover:text-foreground'
+            ${
+              panel.visible
+                ? 'bg-primary/10 text-primary border-primary/30 hover:bg-primary/20'
+                : 'bg-bg-secondary text-text-secondary border-border hover:border-primary/30 hover:text-foreground'
             }
           `}
         >
-          {panel.visible ? (
-            <Eye className="h-3 w-3" />
-          ) : (
-            <EyeOff className="h-3 w-3" />
-          )}
+          {panel.visible ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
           {panel.title}
         </button>
       ))}

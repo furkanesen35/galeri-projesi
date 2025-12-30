@@ -30,7 +30,7 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
     claimNumber: '',
     // Assignment
     assignedTo: '',
-    priority: 'medium'
+    priority: 'medium',
   });
 
   const updateField = (field: string, value: string) => {
@@ -58,19 +58,13 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
               s === step
                 ? 'bg-primary text-primary-text'
                 : s < step
-                ? 'bg-success text-white'
-                : 'bg-border text-text-muted'
+                  ? 'bg-success text-white'
+                  : 'bg-border text-text-muted'
             }`}
           >
             {s < step ? '✓' : s}
           </div>
-          {s < 4 && (
-            <div
-              className={`w-12 h-1 ${
-                s < step ? 'bg-success' : 'bg-border'
-              }`}
-            ></div>
-          )}
+          {s < 4 && <div className={`w-12 h-1 ${s < step ? 'bg-success' : 'bg-border'}`}></div>}
         </div>
       ))}
     </div>
@@ -79,15 +73,23 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
-      
+
       <div className="relative w-full max-w-2xl bg-surface rounded-xl shadow-2xl overflow-hidden animate-slide-up max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="px-6 py-4 border-b border-border bg-bg-secondary">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-foreground">New Damage Case</h2>
-            <button onClick={onClose} className="text-text-muted hover:text-foreground transition-colors">
+            <button
+              onClick={onClose}
+              className="text-text-muted hover:text-foreground transition-colors"
+            >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -190,7 +192,9 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Description</label>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Description
+                </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => updateField('description', e.target.value)}
@@ -201,7 +205,9 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Accident Date</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Accident Date
+                  </label>
                   <input
                     type="date"
                     value={formData.accidentDate}
@@ -228,7 +234,9 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
               <h3 className="text-lg font-semibold text-foreground mb-4">Claimant & Insurer</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Claimant Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Claimant Name
+                  </label>
                   <input
                     type="text"
                     value={formData.claimantName}
@@ -261,7 +269,9 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
                 </div>
                 <div className="pt-4 border-t border-border">
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Insurance Company</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Insurance Company
+                    </label>
                     <input
                       type="text"
                       value={formData.insurerName}
@@ -272,7 +282,9 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
                   </div>
                   <div className="grid grid-cols-2 gap-4 mt-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Policy Number</label>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Policy Number
+                      </label>
                       <input
                         type="text"
                         value={formData.policyNumber}
@@ -282,7 +294,9 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Claim Number</label>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Claim Number
+                      </label>
                       <input
                         type="text"
                         value={formData.claimNumber}
@@ -331,7 +345,7 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
                   ))}
                 </div>
               </div>
-              
+
               {/* Summary */}
               <div className="mt-6 p-4 bg-bg-secondary rounded-lg border border-border">
                 <h4 className="font-semibold text-foreground mb-3">Case Summary</h4>
@@ -344,11 +358,15 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-text-secondary">License Plate:</span>
-                    <span className="text-foreground font-medium">{formData.licensePlate || 'N/A'}</span>
+                    <span className="text-foreground font-medium">
+                      {formData.licensePlate || 'N/A'}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-text-secondary">Case Type:</span>
-                    <span className="text-foreground font-medium capitalize">{formData.caseType}</span>
+                    <span className="text-foreground font-medium capitalize">
+                      {formData.caseType}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-text-secondary">Title:</span>
@@ -366,16 +384,12 @@ export const CaseWizard = ({ onClose, onSubmit }: CaseWizardProps) => {
             onClick={handleBack}
             disabled={step === 1}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              step === 1
-                ? 'text-text-muted cursor-not-allowed'
-                : 'text-foreground hover:bg-surface'
+              step === 1 ? 'text-text-muted cursor-not-allowed' : 'text-foreground hover:bg-surface'
             }`}
           >
             ← Back
           </button>
-          <div className="text-sm text-text-muted">
-            Step {step} of 4
-          </div>
+          <div className="text-sm text-text-muted">Step {step} of 4</div>
           {step < 4 ? (
             <button
               onClick={handleNext}

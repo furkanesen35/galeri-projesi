@@ -5,11 +5,11 @@ import { usePanelLayoutStore, ViewId, PanelConfig } from '../store/usePanelLayou
  * Custom hook to use panel layout with drag-and-drop functionality
  */
 export const usePanelLayout = (viewId: ViewId) => {
-  const { 
-    getPanels, 
-    togglePanelVisibility, 
+  const {
+    getPanels,
+    togglePanelVisibility,
     togglePanelCollapsed,
-    reorderPanels, 
+    reorderPanels,
     resetLayout,
     isPanelVisible,
     getPanelOrder,
@@ -21,16 +21,10 @@ export const usePanelLayout = (viewId: ViewId) => {
   const panels = useMemo(() => getPanels(viewId), [getPanels, viewId]);
 
   // Get only visible panels
-  const visiblePanels = useMemo(
-    () => panels.filter((p) => p.visible),
-    [panels]
-  );
+  const visiblePanels = useMemo(() => panels.filter((p) => p.visible), [panels]);
 
   // Get hidden panels
-  const hiddenPanels = useMemo(
-    () => panels.filter((p) => !p.visible),
-    [panels]
-  );
+  const hiddenPanels = useMemo(() => panels.filter((p) => !p.visible), [panels]);
 
   // Handle drag start
   const handleDragStart = useCallback((panelId: string) => {
@@ -122,28 +116,28 @@ export const usePanelLayout = (viewId: ViewId) => {
     panels,
     visiblePanels,
     hiddenPanels,
-    
+
     // Drag state
     draggedPanelId,
     isDragging: draggedPanelId !== null,
-    
+
     // Drag handlers
     handleDragStart,
     handleDragEnd,
     handleDrop,
-    
+
     // Visibility
     toggleVisibility,
     checkVisibility,
-    
+
     // Collapse
     toggleCollapsed,
-    
+
     // Order
     getOrder,
     moveUp,
     moveDown,
-    
+
     // Reset
     reset,
   };

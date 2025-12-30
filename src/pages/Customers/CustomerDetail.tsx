@@ -13,34 +13,36 @@ import {
   FileText,
   History,
   Edit,
-  Trash2,
   MoreHorizontal,
   Tag,
   Globe,
   CreditCard,
   Shield,
   MessageSquare,
-  Clock,
-  ChevronRight,
   Plus,
-  Download,
   Send,
   ShoppingCart,
   Wrench,
-  Eye,
-  FileCheck,
   PhoneCall,
   Mail as MailIcon,
   Users as UsersIcon,
   Notebook,
 } from 'lucide-react';
-import { customerFixtures, getCustomerById } from '../../services/customerFixtures';
+import { getCustomerById } from '../../services/customerFixtures';
 import { vehicleFixtures } from '../../services/vehicleFixtures';
-import { Customer, CustomerType, CustomerStatus, CustomerActivity } from '../../types/domain';
+import { CustomerType, CustomerStatus, CustomerActivity } from '../../types/domain';
 
-const typeConfig: Record<CustomerType, { label: string; icon: React.ElementType; color: string; bgColor: string }> = {
+const typeConfig: Record<
+  CustomerType,
+  { label: string; icon: React.ElementType; color: string; bgColor: string }
+> = {
   private: { label: 'Privatkunde', icon: User, color: 'text-blue-500', bgColor: 'bg-blue-500/10' },
-  business: { label: 'Geschäftskunde', icon: Building2, color: 'text-purple-500', bgColor: 'bg-purple-500/10' },
+  business: {
+    label: 'Geschäftskunde',
+    icon: Building2,
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-500/10',
+  },
   dealer: { label: 'Händler', icon: Store, color: 'text-amber-500', bgColor: 'bg-amber-500/10' },
 };
 
@@ -51,7 +53,10 @@ const statusConfig: Record<CustomerStatus, { label: string; color: string; bgCol
   blocked: { label: 'Gesperrt', color: 'text-red-500', bgColor: 'bg-red-500/10' },
 };
 
-const activityTypeConfig: Record<CustomerActivity['type'], { icon: React.ElementType; color: string; bgColor: string }> = {
+const activityTypeConfig: Record<
+  CustomerActivity['type'],
+  { icon: React.ElementType; color: string; bgColor: string }
+> = {
   vehicle_purchase: { icon: ShoppingCart, color: 'text-green-500', bgColor: 'bg-green-500/10' },
   vehicle_sale: { icon: Tag, color: 'text-blue-500', bgColor: 'bg-blue-500/10' },
   inquiry: { icon: MessageSquare, color: 'text-amber-500', bgColor: 'bg-amber-500/10' },
@@ -93,7 +98,7 @@ export const CustomerDetail = () => {
   const TypeIcon = type.icon;
 
   // Get linked vehicles
-  const linkedVehicles = vehicleFixtures.filter(v => customer.vehicleIds.includes(v.id));
+  const linkedVehicles = vehicleFixtures.filter((v) => customer.vehicleIds.includes(v.id));
 
   const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
     { id: 'overview', label: 'Übersicht', icon: User },
@@ -117,15 +122,20 @@ export const CustomerDetail = () => {
       <div className="bg-surface border border-border rounded-xl p-6">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className={`w-16 h-16 rounded-full ${type.bgColor} flex items-center justify-center`}>
+            <div
+              className={`w-16 h-16 rounded-full ${type.bgColor} flex items-center justify-center`}
+            >
               <TypeIcon className={`h-8 w-8 ${type.color}`} />
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
                 <h1 className="text-2xl font-bold text-foreground">
-                  {customer.companyName || `${customer.salutation} ${customer.firstName} ${customer.lastName}`}
+                  {customer.companyName ||
+                    `${customer.salutation} ${customer.firstName} ${customer.lastName}`}
                 </h1>
-                <span className={`text-xs px-2 py-1 rounded-full ${status.bgColor} ${status.color}`}>
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${status.bgColor} ${status.color}`}
+                >
                   {status.label}
                 </span>
                 <span className={`text-xs px-2 py-1 rounded-full ${type.bgColor} ${type.color}`}>
@@ -138,8 +148,12 @@ export const CustomerDetail = () => {
                 </p>
               )}
               <p className="text-sm text-text-secondary mt-1">
-                Kunde seit {new Date(customer.createdAt).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })}
-                {' '} • Kunden-Nr: {customer.customerId}
+                Kunde seit{' '}
+                {new Date(customer.createdAt).toLocaleDateString('de-DE', {
+                  month: 'long',
+                  year: 'numeric',
+                })}{' '}
+                • Kunden-Nr: {customer.customerId}
               </p>
             </div>
           </div>
@@ -168,28 +182,40 @@ export const CustomerDetail = () => {
         <div className="flex flex-wrap gap-6 mt-6 pt-4 border-t border-border">
           <div className="flex items-center gap-2 text-sm">
             <Mail className="h-4 w-4 text-text-secondary" />
-            <a href={`mailto:${customer.email}`} className="text-primary hover:underline">{customer.email}</a>
+            <a href={`mailto:${customer.email}`} className="text-primary hover:underline">
+              {customer.email}
+            </a>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Phone className="h-4 w-4 text-text-secondary" />
-            <a href={`tel:${customer.phone}`} className="text-foreground hover:text-primary">{customer.phone}</a>
+            <a href={`tel:${customer.phone}`} className="text-foreground hover:text-primary">
+              {customer.phone}
+            </a>
           </div>
           {customer.mobile && (
             <div className="flex items-center gap-2 text-sm">
               <Phone className="h-4 w-4 text-text-secondary" />
-              <a href={`tel:${customer.mobile}`} className="text-foreground hover:text-primary">{customer.mobile}</a>
+              <a href={`tel:${customer.mobile}`} className="text-foreground hover:text-primary">
+                {customer.mobile}
+              </a>
             </div>
           )}
           <div className="flex items-center gap-2 text-sm">
             <MapPin className="h-4 w-4 text-text-secondary" />
             <span className="text-foreground">
-              {customer.address.street} {customer.address.houseNumber}, {customer.address.postalCode} {customer.address.city}
+              {customer.address.street} {customer.address.houseNumber},{' '}
+              {customer.address.postalCode} {customer.address.city}
             </span>
           </div>
           {customer.website && (
             <div className="flex items-center gap-2 text-sm">
               <Globe className="h-4 w-4 text-text-secondary" />
-              <a href={`https://${customer.website}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+              <a
+                href={`https://${customer.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
                 {customer.website}
               </a>
             </div>
@@ -199,7 +225,7 @@ export const CustomerDetail = () => {
         {/* Tags */}
         {customer.tags && customer.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
-            {customer.tags.map(tag => (
+            {customer.tags.map((tag) => (
               <span key={tag} className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary">
                 {tag}
               </span>
@@ -210,7 +236,7 @@ export const CustomerDetail = () => {
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-border">
-        {tabs.map(tab => {
+        {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return (
@@ -251,7 +277,10 @@ export const CustomerDetail = () => {
                 {customer.mobile && <InfoRow label="Mobil" value={customer.mobile} />}
                 {customer.fax && <InfoRow label="Fax" value={customer.fax} />}
                 {customer.dateOfBirth && (
-                  <InfoRow label="Geburtsdatum" value={new Date(customer.dateOfBirth).toLocaleDateString('de-DE')} />
+                  <InfoRow
+                    label="Geburtsdatum"
+                    value={new Date(customer.dateOfBirth).toLocaleDateString('de-DE')}
+                  />
                 )}
               </div>
             </div>
@@ -263,7 +292,10 @@ export const CustomerDetail = () => {
                 Adresse
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <InfoRow label="Straße" value={`${customer.address.street} ${customer.address.houseNumber}`} />
+                <InfoRow
+                  label="Straße"
+                  value={`${customer.address.street} ${customer.address.houseNumber}`}
+                />
                 <InfoRow label="PLZ" value={customer.address.postalCode} />
                 <InfoRow label="Stadt" value={customer.address.city} />
                 <InfoRow label="Land" value={customer.address.country} />
@@ -279,9 +311,18 @@ export const CustomerDetail = () => {
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {customer.taxId && <InfoRow label="USt-IdNr" value={customer.taxId} />}
-                  {customer.commercialRegister && <InfoRow label="Handelsregister" value={customer.commercialRegister} />}
-                  {customer.creditLimit && <InfoRow label="Kreditlimit" value={`€${customer.creditLimit.toLocaleString()}`} />}
-                  {customer.paymentTermDays && <InfoRow label="Zahlungsziel" value={`${customer.paymentTermDays} Tage`} />}
+                  {customer.commercialRegister && (
+                    <InfoRow label="Handelsregister" value={customer.commercialRegister} />
+                  )}
+                  {customer.creditLimit && (
+                    <InfoRow
+                      label="Kreditlimit"
+                      value={`€${customer.creditLimit.toLocaleString()}`}
+                    />
+                  )}
+                  {customer.paymentTermDays && (
+                    <InfoRow label="Zahlungsziel" value={`${customer.paymentTermDays} Tage`} />
+                  )}
                 </div>
               </div>
             )}
@@ -342,21 +383,28 @@ export const CustomerDetail = () => {
             <div className="bg-surface border border-border rounded-xl p-6">
               <h3 className="text-lg font-semibold text-foreground mb-4">Letzte Aktivitäten</h3>
               <div className="space-y-4">
-                {customer.activities.slice(-5).reverse().map(activity => {
-                  const config = activityTypeConfig[activity.type];
-                  const Icon = config.icon;
-                  return (
-                    <div key={activity.id} className="flex items-start gap-3">
-                      <div className={`w-8 h-8 rounded-full ${config.bgColor} flex items-center justify-center flex-shrink-0`}>
-                        <Icon className={`h-4 w-4 ${config.color}`} />
+                {customer.activities
+                  .slice(-5)
+                  .reverse()
+                  .map((activity) => {
+                    const config = activityTypeConfig[activity.type];
+                    const Icon = config.icon;
+                    return (
+                      <div key={activity.id} className="flex items-start gap-3">
+                        <div
+                          className={`w-8 h-8 rounded-full ${config.bgColor} flex items-center justify-center flex-shrink-0`}
+                        >
+                          <Icon className={`h-4 w-4 ${config.color}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-foreground">{activity.title}</p>
+                          <p className="text-xs text-text-secondary">
+                            {new Date(activity.date).toLocaleDateString('de-DE')}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">{activity.title}</p>
-                        <p className="text-xs text-text-secondary">{new Date(activity.date).toLocaleDateString('de-DE')}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
               <button
                 onClick={() => setActiveTab('history')}
@@ -376,19 +424,26 @@ export const CustomerDetail = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-text-secondary">Bevorzugter Kontakt</span>
                   <span className="text-sm text-foreground capitalize">
-                    {customer.preferredContactMethod === 'email' ? 'E-Mail' : 
-                     customer.preferredContactMethod === 'phone' ? 'Telefon' : 'Post'}
+                    {customer.preferredContactMethod === 'email'
+                      ? 'E-Mail'
+                      : customer.preferredContactMethod === 'phone'
+                        ? 'Telefon'
+                        : 'Post'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-text-secondary">Newsletter</span>
-                  <span className={`text-sm ${customer.newsletter ? 'text-green-500' : 'text-text-secondary'}`}>
+                  <span
+                    className={`text-sm ${customer.newsletter ? 'text-green-500' : 'text-text-secondary'}`}
+                  >
                     {customer.newsletter ? 'Ja' : 'Nein'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-text-secondary">Marketing</span>
-                  <span className={`text-sm ${customer.marketingConsent ? 'text-green-500' : 'text-text-secondary'}`}>
+                  <span
+                    className={`text-sm ${customer.marketingConsent ? 'text-green-500' : 'text-text-secondary'}`}
+                  >
                     {customer.marketingConsent ? 'Erlaubt' : 'Nicht erlaubt'}
                   </span>
                 </div>
@@ -417,7 +472,9 @@ export const CustomerDetail = () => {
           {linkedVehicles.length === 0 ? (
             <div className="bg-surface border border-border rounded-xl p-12 text-center">
               <Car className="h-12 w-12 text-text-secondary mx-auto mb-3" />
-              <h3 className="text-lg font-medium text-foreground mb-1">Keine Fahrzeuge zugeordnet</h3>
+              <h3 className="text-lg font-medium text-foreground mb-1">
+                Keine Fahrzeuge zugeordnet
+              </h3>
               <p className="text-text-secondary text-sm mb-4">
                 Diesem Kunden sind noch keine Fahrzeuge zugeordnet.
               </p>
@@ -428,7 +485,7 @@ export const CustomerDetail = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {linkedVehicles.map(vehicle => (
+              {linkedVehicles.map((vehicle) => (
                 <div
                   key={vehicle.id}
                   onClick={() => navigate(`/vehicles/${vehicle.id}`)}
@@ -448,11 +505,15 @@ export const CustomerDetail = () => {
                     )}
                   </div>
                   <div className="p-4">
-                    <h4 className="font-semibold text-foreground">{vehicle.brand} {vehicle.model}</h4>
+                    <h4 className="font-semibold text-foreground">
+                      {vehicle.brand} {vehicle.model}
+                    </h4>
                     <p className="text-sm text-text-secondary">{vehicle.variant}</p>
                     <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
                       <span className="text-sm text-text-secondary">{vehicle.plate}</span>
-                      <span className="text-sm font-medium text-primary">€{vehicle.price.toLocaleString()}</span>
+                      <span className="text-sm font-medium text-primary">
+                        €{vehicle.price.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -487,14 +548,16 @@ export const CustomerDetail = () => {
                 <div key={activity.id} className="flex gap-4">
                   {/* Timeline */}
                   <div className="flex flex-col items-center">
-                    <div className={`w-10 h-10 rounded-full ${config.bgColor} flex items-center justify-center`}>
+                    <div
+                      className={`w-10 h-10 rounded-full ${config.bgColor} flex items-center justify-center`}
+                    >
                       <Icon className={`h-5 w-5 ${config.color}`} />
                     </div>
                     {index < customer.activities.length - 1 && (
                       <div className="w-0.5 flex-1 bg-border mt-2" />
                     )}
                   </div>
-                  
+
                   {/* Content */}
                   <div className="flex-1 pb-6">
                     <div className="flex items-start justify-between">
@@ -506,7 +569,7 @@ export const CustomerDetail = () => {
                         {new Date(activity.date).toLocaleDateString('de-DE', {
                           day: '2-digit',
                           month: '2-digit',
-                          year: 'numeric'
+                          year: 'numeric',
                         })}
                       </span>
                     </div>
@@ -534,7 +597,9 @@ const InfoRow = ({ label, value, isLink }: { label: string; value: string; isLin
   <div>
     <p className="text-xs text-text-secondary">{label}</p>
     {isLink ? (
-      <a href={`mailto:${value}`} className="text-sm text-primary hover:underline">{value}</a>
+      <a href={`mailto:${value}`} className="text-sm text-primary hover:underline">
+        {value}
+      </a>
     ) : (
       <p className="text-sm text-foreground">{value}</p>
     )}

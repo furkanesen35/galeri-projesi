@@ -21,8 +21,6 @@ export const NavLinkItem = ({ to, icon: Icon, children }: NavLinkItemProps) => (
     }
     title={typeof children === 'string' ? children : undefined}
   >
-    {Icon && (
-      <Icon className="h-5 w-5 shrink-0" strokeWidth={2} />
-    )}
+    {Icon && <Icon className="h-5 w-5 shrink-0" strokeWidth={2} />}
   </NavLink>
 );

@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   Users,
   Search,
-  Filter,
-  Plus,
   Building2,
   User,
   Store,
@@ -12,8 +10,6 @@ import {
   Mail,
   MapPin,
   Car,
-  Calendar,
-  Tag,
   ChevronRight,
   LayoutGrid,
   List,
@@ -21,16 +17,22 @@ import {
   UserPlus,
   TrendingUp,
   UserCheck,
-  UserX,
   Clock,
 } from 'lucide-react';
 import { customerFixtures, getCustomerStats } from '../../services/customerFixtures';
 import { Customer, CustomerType, CustomerStatus } from '../../types/domain';
-import { vehicleFixtures } from '../../services/vehicleFixtures';
 
-const typeConfig: Record<CustomerType, { label: string; icon: React.ElementType; color: string; bgColor: string }> = {
+const typeConfig: Record<
+  CustomerType,
+  { label: string; icon: React.ElementType; color: string; bgColor: string }
+> = {
   private: { label: 'Privat', icon: User, color: 'text-blue-500', bgColor: 'bg-blue-500/10' },
-  business: { label: 'Geschäft', icon: Building2, color: 'text-purple-500', bgColor: 'bg-purple-500/10' },
+  business: {
+    label: 'Geschäft',
+    icon: Building2,
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-500/10',
+  },
   dealer: { label: 'Händler', icon: Store, color: 'text-amber-500', bgColor: 'bg-amber-500/10' },
 };
 
@@ -56,7 +58,9 @@ const CustomerCard = ({ customer, onClick }: { customer: Customer; onClick: () =
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
-          <div className={`w-12 h-12 rounded-full ${type.bgColor} flex items-center justify-center`}>
+          <div
+            className={`w-12 h-12 rounded-full ${type.bgColor} flex items-center justify-center`}
+          >
             <TypeIcon className={`h-6 w-6 ${type.color}`} />
           </div>
           <div>
@@ -64,7 +68,9 @@ const CustomerCard = ({ customer, onClick }: { customer: Customer; onClick: () =
               {customer.companyName || `${customer.firstName} ${customer.lastName}`}
             </h3>
             {customer.companyName && (
-              <p className="text-sm text-text-secondary">{customer.firstName} {customer.lastName}</p>
+              <p className="text-sm text-text-secondary">
+                {customer.firstName} {customer.lastName}
+              </p>
             )}
           </div>
         </div>
@@ -111,8 +117,11 @@ const CustomerCard = ({ customer, onClick }: { customer: Customer; onClick: () =
       {/* Tags */}
       {customer.tags && customer.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mt-3">
-          {customer.tags.slice(0, 3).map(tag => (
-            <span key={tag} className="text-xs px-2 py-0.5 rounded bg-bg-secondary text-text-secondary">
+          {customer.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="text-xs px-2 py-0.5 rounded bg-bg-secondary text-text-secondary"
+            >
               {tag}
             </span>
           ))}
@@ -132,10 +141,7 @@ const CustomerRow = ({ customer, onClick }: { customer: Customer; onClick: () =>
   const vehicleCount = customer.vehicleIds.length;
 
   return (
-    <tr
-      onClick={onClick}
-      className="hover:bg-bg-secondary/50 cursor-pointer transition-colors"
-    >
+    <tr onClick={onClick} className="hover:bg-bg-secondary/50 cursor-pointer transition-colors">
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
           <div className={`w-8 h-8 rounded-full ${type.bgColor} flex items-center justify-center`}>
@@ -146,7 +152,9 @@ const CustomerRow = ({ customer, onClick }: { customer: Customer; onClick: () =>
               {customer.companyName || `${customer.firstName} ${customer.lastName}`}
             </p>
             {customer.companyName && (
-              <p className="text-xs text-text-secondary">{customer.firstName} {customer.lastName}</p>
+              <p className="text-xs text-text-secondary">
+                {customer.firstName} {customer.lastName}
+              </p>
             )}
           </div>
         </div>
@@ -184,17 +192,18 @@ export const Customers = () => {
 
   const filteredCustomers = useMemo(() => {
     return customerFixtures
-      .filter(customer => {
+      .filter((customer) => {
         // Search
         const searchLower = searchQuery.toLowerCase();
-        const matchesSearch = searchQuery === '' ||
+        const matchesSearch =
+          searchQuery === '' ||
           customer.firstName.toLowerCase().includes(searchLower) ||
           customer.lastName.toLowerCase().includes(searchLower) ||
           customer.email.toLowerCase().includes(searchLower) ||
           customer.companyName?.toLowerCase().includes(searchLower) ||
           customer.customerId.toLowerCase().includes(searchLower) ||
           customer.address.city.toLowerCase().includes(searchLower) ||
-          customer.tags?.some(t => t.toLowerCase().includes(searchLower));
+          customer.tags?.some((t) => t.toLowerCase().includes(searchLower));
 
         // Type filter
         const matchesType = filterType === 'all' || customer.type === filterType;
@@ -224,7 +233,7 @@ export const Customers = () => {
 
   const handleExportCSV = () => {
     const headers = ['ID', 'Name', 'Firma', 'Typ', 'Status', 'E-Mail', 'Telefon', 'Stadt'];
-    const rows = filteredCustomers.map(c => [
+    const rows = filteredCustomers.map((c) => [
       c.customerId,
       `${c.firstName} ${c.lastName}`,
       c.companyName || '',
@@ -232,10 +241,13 @@ export const Customers = () => {
       statusConfig[c.status].label,
       c.email,
       c.phone,
-      c.address.city
+      c.address.city,
     ]);
-    
-    const csvContent = [headers.join(','), ...rows.map(r => r.map(cell => `"${cell}"`).join(','))].join('\n');
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((r) => r.map((cell) => `"${cell}"`).join(',')),
+    ].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -395,7 +407,7 @@ export const Customers = () => {
       {/* Customer List */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredCustomers.map(customer => (
+          {filteredCustomers.map((customer) => (
             <CustomerCard
               key={customer.id}
               customer={customer}
@@ -408,18 +420,32 @@ export const Customers = () => {
           <table className="w-full">
             <thead className="bg-bg-secondary border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">Kunde</th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
+                  Kunde
+                </th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">Typ</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">Status</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">E-Mail</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">Telefon</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">Stadt</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">Fzg.</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">Aktualisiert</th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
+                  Status
+                </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
+                  E-Mail
+                </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
+                  Telefon
+                </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
+                  Stadt
+                </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
+                  Fzg.
+                </th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
+                  Aktualisiert
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {filteredCustomers.map(customer => (
+              {filteredCustomers.map((customer) => (
                 <CustomerRow
                   key={customer.id}
                   customer={customer}

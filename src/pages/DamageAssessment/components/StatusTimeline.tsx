@@ -18,13 +18,13 @@ const statusFlow = [
   { key: 'in-progress', label: 'In Progress', icon: '🔄' },
   { key: 'pending-approval', label: 'Pending Approval', icon: '⏳' },
   { key: 'approved', label: 'Approved', icon: '✅' },
-  { key: 'completed', label: 'Completed', icon: '🎉' }
+  { key: 'completed', label: 'Completed', icon: '🎉' },
 ];
 
 export const StatusTimeline = ({ caseItem, onStatusChange }: StatusTimelineProps) => {
   const [isChangingStatus, setIsChangingStatus] = useState(false);
 
-  const currentStatusIndex = statusFlow.findIndex(s => s.key === caseItem.status);
+  const currentStatusIndex = statusFlow.findIndex((s) => s.key === caseItem.status);
 
   const handleStatusClick = async (newStatus: string) => {
     setIsChangingStatus(true);
@@ -51,7 +51,11 @@ export const StatusTimeline = ({ caseItem, onStatusChange }: StatusTimelineProps
           <p className="text-sm text-text-secondary">Case ID: {caseItem.id}</p>
         </div>
         <button
-          onClick={() => handleStatusClick(statusFlow[Math.min(currentStatusIndex + 1, statusFlow.length - 1)].key)}
+          onClick={() =>
+            handleStatusClick(
+              statusFlow[Math.min(currentStatusIndex + 1, statusFlow.length - 1)].key
+            )
+          }
           disabled={isChangingStatus || currentStatusIndex === statusFlow.length - 1}
           className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
             currentStatusIndex === statusFlow.length - 1
@@ -59,7 +63,11 @@ export const StatusTimeline = ({ caseItem, onStatusChange }: StatusTimelineProps
               : 'bg-primary text-primary-text hover:bg-primary-hover'
           }`}
         >
-          {isChangingStatus ? 'Updating...' : currentStatusIndex === statusFlow.length - 1 ? 'Case Completed' : 'Advance Status →'}
+          {isChangingStatus
+            ? 'Updating...'
+            : currentStatusIndex === statusFlow.length - 1
+              ? 'Case Completed'
+              : 'Advance Status →'}
         </button>
       </div>
 
@@ -70,24 +78,35 @@ export const StatusTimeline = ({ caseItem, onStatusChange }: StatusTimelineProps
             <div key={status.key} className="flex flex-col items-center flex-1 relative">
               {/* Line connector */}
               {index < statusFlow.length - 1 && (
-                <div className={`absolute left-1/2 top-6 w-full h-1 ${getLineColor(index)}`} style={{ zIndex: 0 }}></div>
+                <div
+                  className={`absolute left-1/2 top-6 w-full h-1 ${getLineColor(index)}`}
+                  style={{ zIndex: 0 }}
+                ></div>
               )}
-              
+
               {/* Status node */}
               <button
                 onClick={() => index <= currentStatusIndex + 1 && handleStatusClick(status.key)}
                 disabled={index > currentStatusIndex + 1 || isChangingStatus}
                 className={`relative w-12 h-12 rounded-full border-2 flex items-center justify-center text-xl font-bold transition-all z-10 ${getStatusColor(index)} ${
-                  index <= currentStatusIndex + 1 && index !== currentStatusIndex ? 'hover:scale-110 cursor-pointer' : ''
+                  index <= currentStatusIndex + 1 && index !== currentStatusIndex
+                    ? 'hover:scale-110 cursor-pointer'
+                    : ''
                 } ${index > currentStatusIndex + 1 ? 'cursor-not-allowed' : ''}`}
               >
                 {index < currentStatusIndex ? '✓' : status.icon}
               </button>
-              
+
               {/* Label */}
-              <span className={`mt-2 text-xs font-medium text-center ${
-                index === currentStatusIndex ? 'text-primary' : index < currentStatusIndex ? 'text-success' : 'text-text-muted'
-              }`}>
+              <span
+                className={`mt-2 text-xs font-medium text-center ${
+                  index === currentStatusIndex
+                    ? 'text-primary'
+                    : index < currentStatusIndex
+                      ? 'text-success'
+                      : 'text-text-muted'
+                }`}
+              >
                 {status.label}
               </span>
             </div>
@@ -105,7 +124,7 @@ export const StatusTimeline = ({ caseItem, onStatusChange }: StatusTimelineProps
               month: 'short',
               day: 'numeric',
               hour: '2-digit',
-              minute: '2-digit'
+              minute: '2-digit',
             })}
           </span>
         </div>
@@ -117,7 +136,7 @@ export const StatusTimeline = ({ caseItem, onStatusChange }: StatusTimelineProps
               month: 'short',
               day: 'numeric',
               hour: '2-digit',
-              minute: '2-digit'
+              minute: '2-digit',
             })}
           </span>
         </div>

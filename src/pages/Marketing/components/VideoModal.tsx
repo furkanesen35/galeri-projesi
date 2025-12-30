@@ -9,14 +9,14 @@ export const VideoModal = ({ videoUrl, onClose }: VideoModalProps) => {
   useEffect(() => {
     // Prevent body scroll when modal is open
     document.body.style.overflow = 'hidden';
-    
+
     // Close on Escape key
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    
+
     window.addEventListener('keydown', handleEscape);
-    
+
     return () => {
       document.body.style.overflow = 'unset';
       window.removeEventListener('keydown', handleEscape);
@@ -26,11 +26,8 @@ export const VideoModal = ({ videoUrl, onClose }: VideoModalProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-        onClick={onClose}
-      ></div>
-      
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose}></div>
+
       {/* Modal content */}
       <div className="relative w-full max-w-4xl bg-surface rounded-xl shadow-2xl overflow-hidden animate-slide-up">
         {/* Close button */}
@@ -40,10 +37,15 @@ export const VideoModal = ({ videoUrl, onClose }: VideoModalProps) => {
           aria-label="Close video"
         >
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
-        
+
         {/* Video embed */}
         <div className="aspect-video">
           <iframe
@@ -54,7 +56,7 @@ export const VideoModal = ({ videoUrl, onClose }: VideoModalProps) => {
             allowFullScreen
           ></iframe>
         </div>
-        
+
         {/* Video info */}
         <div className="p-4 bg-bg-secondary border-t border-border">
           <h3 className="font-semibold text-foreground">Product Demo</h3>

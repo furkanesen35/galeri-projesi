@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  AlertTriangle,
-  AlertCircle,
-  Clock,
-} from 'lucide-react';
+import { AlertTriangle, AlertCircle, Clock } from 'lucide-react';
 import { TaskType, TaskPriority, TaskStatus } from '../types/domain';
 import {
   EngineIcon,
@@ -25,16 +21,18 @@ import {
   HeadlightIcon,
   InteriorIcon,
   GeneralRepairIcon,
-  DiagnosticIcon,
 } from '../components/icons/TaskIcons';
 
 // Task type icons with colors - using custom recognizable icons
-export const taskTypeConfig: Record<TaskType, { 
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  color: string;
-  bgColor: string;
-}> = {
+export const taskTypeConfig: Record<
+  TaskType,
+  {
+    icon: React.ComponentType<{ className?: string }>;
+    label: string;
+    color: string;
+    bgColor: string;
+  }
+> = {
   oil_change: {
     icon: OilDropIcon,
     label: 'Ölwechsel',
@@ -158,12 +156,15 @@ export const taskTypeConfig: Record<TaskType, {
 };
 
 // Priority configuration
-export const priorityConfig: Record<TaskPriority, {
-  label: string;
-  color: string;
-  bgColor: string;
-  icon: React.ComponentType<{ className?: string }>;
-}> = {
+export const priorityConfig: Record<
+  TaskPriority,
+  {
+    label: string;
+    color: string;
+    bgColor: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }
+> = {
   low: {
     label: 'Niedrig',
     color: 'text-gray-400',
@@ -191,11 +192,14 @@ export const priorityConfig: Record<TaskPriority, {
 };
 
 // Status configuration
-export const statusConfig: Record<TaskStatus, {
-  label: string;
-  color: string;
-  bgColor: string;
-}> = {
+export const statusConfig: Record<
+  TaskStatus,
+  {
+    label: string;
+    color: string;
+    bgColor: string;
+  }
+> = {
   pending: {
     label: 'Ausstehend',
     color: 'text-gray-500',
@@ -227,29 +231,25 @@ export const TaskTypeIcon: React.FC<{
 }> = ({ type, size = 'md', showLabel = false, className = '' }) => {
   const config = taskTypeConfig[type];
   const Icon = config.icon;
-  
+
   const sizeClasses = {
     sm: 'h-5 w-5',
     md: 'h-6 w-6',
     lg: 'h-8 w-8',
   };
-  
+
   const containerSizeClasses = {
     sm: 'p-1.5',
     md: 'p-2.5',
     lg: 'p-3',
   };
-  
+
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <div className={`rounded-lg ${config.bgColor} ${containerSizeClasses[size]}`}>
         <Icon className={`${sizeClasses[size]} ${config.color}`} />
       </div>
-      {showLabel && (
-        <span className={`text-sm font-medium ${config.color}`}>
-          {config.label}
-        </span>
-      )}
+      {showLabel && <span className={`text-sm font-medium ${config.color}`}>{config.label}</span>}
     </div>
   );
 };
@@ -262,15 +262,13 @@ export const PriorityBadge: React.FC<{
 }> = ({ priority, showLabel = true, className = '' }) => {
   const config = priorityConfig[priority];
   const Icon = config.icon;
-  
+
   return (
-    <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${config.bgColor} ${className}`}>
+    <div
+      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${config.bgColor} ${className}`}
+    >
       <Icon className={`h-3 w-3 ${config.color}`} />
-      {showLabel && (
-        <span className={`text-xs font-medium ${config.color}`}>
-          {config.label}
-        </span>
-      )}
+      {showLabel && <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>}
     </div>
   );
 };

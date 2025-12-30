@@ -1,9 +1,19 @@
 import { useState } from 'react';
 import { Vehicle } from '../../../../types/domain';
-import { 
-  Upload, Trash2, Download, Move, Star, 
-  ZoomIn, Grid, Rows, CheckCircle, MoreVertical,
-  Camera, Sparkles, ArrowRight
+import {
+  Upload,
+  Trash2,
+  Download,
+  Move,
+  Star,
+  ZoomIn,
+  Grid,
+  Rows,
+  CheckCircle,
+  MoreVertical,
+  Camera,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 
 interface Props {
@@ -30,34 +40,38 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
     url,
     category: index < Math.ceil(vehicle.images.length / 2) ? 'before' : 'after',
     uploadedAt: new Date(Date.now() - index * 86400000).toISOString(),
-    description: index === 0 ? 'Hauptbild' : undefined
+    description: index === 0 ? 'Hauptbild' : undefined,
   }));
 
-  const beforePhotos = allPhotos.filter(p => p.category === 'before');
-  const afterPhotos = allPhotos.filter(p => p.category === 'after');
+  const beforePhotos = allPhotos.filter((p) => p.category === 'before');
+  const afterPhotos = allPhotos.filter((p) => p.category === 'after');
 
   const toggleImageSelection = (id: string) => {
-    setSelectedImages(prev => 
-      prev.includes(id) 
-        ? prev.filter(i => i !== id)
-        : [...prev, id]
-    );
+    setSelectedImages((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
   };
 
   const currentSelectedCount = selectedImages.length;
 
-  const PhotoCard = ({ photo, index, category }: { photo: PhotoData; index: number; category: PhotoCategory }) => (
-    <div 
+  const PhotoCard = ({
+    photo,
+    index,
+    category,
+  }: {
+    photo: PhotoData;
+    index: number;
+    category: PhotoCategory;
+  }) => (
+    <div
       className={`group relative rounded-xl border overflow-hidden transition-all cursor-pointer ${
-        selectedImages.includes(photo.id) 
-          ? 'border-primary ring-2 ring-primary/30' 
+        selectedImages.includes(photo.id)
+          ? 'border-primary ring-2 ring-primary/30'
           : 'border-border hover:border-primary/50'
       }`}
       onClick={() => toggleImageSelection(photo.id)}
     >
       <div className="aspect-video">
-        <img 
-          src={photo.url} 
+        <img
+          src={photo.url}
           alt={`${vehicle.brand} ${vehicle.model} - ${category === 'before' ? 'Vorher' : 'Nachher'} ${index + 1}`}
           className="h-full w-full object-cover"
         />
@@ -65,16 +79,16 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors">
         {/* Selection Checkbox */}
-        <div className={`absolute top-2 left-2 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-all ${
-          selectedImages.includes(photo.id)
-            ? 'bg-primary border-primary'
-            : 'border-white bg-black/30 opacity-0 group-hover:opacity-100'
-        }`}>
-          {selectedImages.includes(photo.id) && (
-            <CheckCircle className="h-4 w-4 text-white" />
-          )}
+        <div
+          className={`absolute top-2 left-2 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-all ${
+            selectedImages.includes(photo.id)
+              ? 'bg-primary border-primary'
+              : 'border-white bg-black/30 opacity-0 group-hover:opacity-100'
+          }`}
+        >
+          {selectedImages.includes(photo.id) && <CheckCircle className="h-4 w-4 text-white" />}
         </div>
-        
+
         {/* Main Photo Badge */}
         {index === 0 && category === 'before' && (
           <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-medium text-white">
@@ -85,14 +99,18 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
 
         {/* Actions */}
         <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button 
-            onClick={(e) => { e.stopPropagation(); }}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             className="rounded-lg bg-white/90 p-2 text-gray-700 hover:bg-white transition-colors"
           >
             <ZoomIn className="h-4 w-4" />
           </button>
-          <button 
-            onClick={(e) => { e.stopPropagation(); }}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             className="rounded-lg bg-white/90 p-2 text-gray-700 hover:bg-white transition-colors"
           >
             <MoreVertical className="h-4 w-4" />
@@ -102,19 +120,19 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
     </div>
   );
 
-  const PhotoColumn = ({ 
-    photos, 
-    category, 
-    title, 
-    icon: Icon, 
-    color, 
-    bgColor 
-  }: { 
-    photos: PhotoData[]; 
+  const PhotoColumn = ({
+    photos,
+    category,
+    title,
+    icon: Icon,
+    color,
+    bgColor,
+  }: {
+    photos: PhotoData[];
     category: PhotoCategory;
-    title: string; 
-    icon: React.ElementType; 
-    color: string; 
+    title: string;
+    icon: React.ElementType;
+    color: string;
     bgColor: string;
   }) => (
     <div className="flex-1 min-w-0">
@@ -130,11 +148,13 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
               <p className="text-sm text-text-secondary">{photos.length} Fotos</p>
             </div>
           </div>
-          <button className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${
-            category === 'before' 
-              ? 'bg-amber-500 text-white hover:bg-amber-600' 
-              : 'bg-green-500 text-white hover:bg-green-600'
-          }`}>
+          <button
+            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${
+              category === 'before'
+                ? 'bg-amber-500 text-white hover:bg-amber-600'
+                : 'bg-green-500 text-white hover:bg-green-600'
+            }`}
+          >
             <Upload className="h-4 w-4" />
             Hochladen
           </button>
@@ -150,15 +170,17 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
             </div>
             <h5 className="font-medium text-foreground">Keine {title}-Fotos</h5>
             <p className="text-sm text-text-secondary mt-1 text-center max-w-[200px]">
-              {category === 'before' 
+              {category === 'before'
                 ? 'Dokumentieren Sie den Ankaufszustand'
                 : 'Zeigen Sie das aufbereitete Fahrzeug'}
             </p>
-            <button className={`mt-4 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
-              category === 'before' 
-                ? 'bg-amber-500 text-white hover:bg-amber-600' 
-                : 'bg-green-500 text-white hover:bg-green-600'
-            }`}>
+            <button
+              className={`mt-4 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
+                category === 'before'
+                  ? 'bg-amber-500 text-white hover:bg-amber-600'
+                  : 'bg-green-500 text-white hover:bg-green-600'
+              }`}
+            >
               <Upload className="h-4 w-4" />
               Fotos hochladen
             </button>
@@ -187,9 +209,7 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h3 className="text-lg font-semibold text-foreground">Fahrzeugfotos</h3>
-          <span className="text-sm text-text-secondary">
-            {allPhotos.length} Fotos insgesamt
-          </span>
+          <span className="text-sm text-text-secondary">{allPhotos.length} Fotos insgesamt</span>
         </div>
         <div className="flex items-center gap-2">
           {/* View Toggle */}
@@ -197,7 +217,9 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
             <button
               onClick={() => setViewMode('grid')}
               className={`rounded p-1.5 transition-colors ${
-                viewMode === 'grid' ? 'bg-primary text-primary-text' : 'text-text-secondary hover:bg-bg-secondary'
+                viewMode === 'grid'
+                  ? 'bg-primary text-primary-text'
+                  : 'text-text-secondary hover:bg-bg-secondary'
               }`}
             >
               <Grid className="h-4 w-4" />
@@ -205,7 +227,9 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
             <button
               onClick={() => setViewMode('list')}
               className={`rounded p-1.5 transition-colors ${
-                viewMode === 'list' ? 'bg-primary text-primary-text' : 'text-text-secondary hover:bg-bg-secondary'
+                viewMode === 'list'
+                  ? 'bg-primary text-primary-text'
+                  : 'text-text-secondary hover:bg-bg-secondary'
               }`}
             >
               <Rows className="h-4 w-4" />
@@ -232,7 +256,7 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
             <Trash2 className="h-4 w-4" />
             Löschen
           </button>
-          <button 
+          <button
             onClick={() => setSelectedImages([])}
             className="ml-auto text-sm text-text-secondary hover:text-foreground"
           >
@@ -244,7 +268,7 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
       {/* Side by Side Layout: Vorher (Left) | Nachher (Right) */}
       <div className="flex gap-6">
         {/* VORHER - Left Column */}
-        <PhotoColumn 
+        <PhotoColumn
           photos={beforePhotos}
           category="before"
           title="Vorher (Ankauf)"
@@ -261,7 +285,7 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
         </div>
 
         {/* NACHHER - Right Column */}
-        <PhotoColumn 
+        <PhotoColumn
           photos={afterPhotos}
           category="after"
           title="Nachher (Verkauf)"
@@ -276,11 +300,15 @@ export const VehiclePhotosTab = ({ vehicle }: Props) => {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-amber-500" />
-            <span className="text-sm text-text-secondary">Vorher: <strong className="text-foreground">{beforePhotos.length}</strong></span>
+            <span className="text-sm text-text-secondary">
+              Vorher: <strong className="text-foreground">{beforePhotos.length}</strong>
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-green-500" />
-            <span className="text-sm text-text-secondary">Nachher: <strong className="text-foreground">{afterPhotos.length}</strong></span>
+            <span className="text-sm text-text-secondary">
+              Nachher: <strong className="text-foreground">{afterPhotos.length}</strong>
+            </span>
           </div>
         </div>
         <div className="text-sm text-text-secondary">

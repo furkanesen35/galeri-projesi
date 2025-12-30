@@ -14,22 +14,22 @@ const hotspots: Hotspot[] = [
     x: 25,
     y: 30,
     title: 'AI Photo Analysis',
-    description: 'Automatically detect and categorize damage from photos'
+    description: 'Automatically detect and categorize damage from photos',
   },
   {
     id: 'hs-2',
     x: 50,
     y: 45,
     title: 'Smart OCR',
-    description: 'Extract vehicle data from Fahrzeugschein instantly'
+    description: 'Extract vehicle data from Fahrzeugschein instantly',
   },
   {
     id: 'hs-3',
     x: 75,
     y: 35,
     title: 'One-Click Export',
-    description: 'Send estimates to Audatex, DAT, and more'
-  }
+    description: 'Send estimates to Audatex, DAT, and more',
+  },
 ];
 
 export const HotspotExplainer = () => {
@@ -46,7 +46,7 @@ export const HotspotExplainer = () => {
             See how autoiXpert transforms your damage assessment process
           </p>
         </div>
-        
+
         {/* Interactive demo area */}
         <div className="relative w-full max-w-4xl mx-auto">
           {/* Placeholder for feature screenshot/mockup */}
@@ -59,19 +59,29 @@ export const HotspotExplainer = () => {
                 ))}
               </div>
             </div>
-            
+
             {/* Feature mockup placeholder */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center space-y-4 p-8">
                 <div className="w-20 h-20 mx-auto bg-primary/20 rounded-full flex items-center justify-center">
-                  <svg className="w-10 h-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-10 h-10 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 </div>
                 <p className="text-text-muted">Interactive Feature Demo</p>
               </div>
             </div>
-            
+
             {/* Hotspot markers */}
             {hotspots.map((hotspot) => (
               <div
@@ -90,9 +100,11 @@ export const HotspotExplainer = () => {
                   onMouseLeave={() => setActiveHotspot(null)}
                 >
                   <span className="absolute inset-0 rounded-full bg-primary animate-ping opacity-75"></span>
-                  <span className="relative flex items-center justify-center text-white text-xs font-bold">+</span>
+                  <span className="relative flex items-center justify-center text-white text-xs font-bold">
+                    +
+                  </span>
                 </button>
-                
+
                 {/* Tooltip */}
                 {activeHotspot === hotspot.id && (
                   <div className="absolute left-10 top-0 w-64 bg-surface border border-border rounded-lg shadow-xl p-4 z-10 animate-fade-in">
@@ -104,7 +116,7 @@ export const HotspotExplainer = () => {
             ))}
           </div>
         </div>
-        
+
         {/* Feature cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
           {hotspots.map((hotspot) => (

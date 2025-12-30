@@ -26,7 +26,7 @@ export const personnelFixtures: Personnel[] = [
         wednesday: { start: '08:00', end: '17:00' },
         thursday: { start: '08:00', end: '17:00' },
         friday: { start: '08:00', end: '16:00' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=1',
     hireDate: '2018-03-15',
@@ -53,7 +53,7 @@ export const personnelFixtures: Personnel[] = [
         wednesday: { start: '07:00', end: '16:00' },
         thursday: { start: '07:00', end: '16:00' },
         friday: { start: '07:00', end: '15:00' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=12',
     hireDate: '2019-06-01',
@@ -80,7 +80,7 @@ export const personnelFixtures: Personnel[] = [
         wednesday: { start: '08:00', end: '17:00' },
         thursday: { start: '08:00', end: '17:00' },
         friday: { start: '08:00', end: '17:00' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=5',
     hireDate: '2020-09-10',
@@ -107,7 +107,7 @@ export const personnelFixtures: Personnel[] = [
         wednesday: { start: '07:30', end: '16:30' },
         thursday: { start: '07:30', end: '16:30' },
         friday: { start: '07:30', end: '14:30' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=8',
     hireDate: '2017-02-20',
@@ -134,7 +134,7 @@ export const personnelFixtures: Personnel[] = [
         wednesday: { start: '08:00', end: '17:00' },
         thursday: { start: '08:00', end: '17:00' },
         friday: { start: '08:00', end: '16:00' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=9',
     hireDate: '2019-11-05',
@@ -161,7 +161,7 @@ export const personnelFixtures: Personnel[] = [
         thursday: { start: '07:00', end: '16:00' },
         friday: { start: '07:00', end: '16:00' },
         saturday: { start: '08:00', end: '12:00' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=15',
     hireDate: '2021-01-15',
@@ -188,7 +188,7 @@ export const personnelFixtures: Personnel[] = [
         wednesday: { start: '09:00', end: '18:00' },
         thursday: { start: '09:00', end: '18:00' },
         friday: { start: '09:00', end: '17:00' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=10',
     hireDate: '2022-04-01',
@@ -215,7 +215,7 @@ export const personnelFixtures: Personnel[] = [
         wednesday: { start: '07:00', end: '17:00' },
         thursday: { start: '07:00', end: '17:00' },
         friday: { start: '07:00', end: '16:00' },
-      }
+      },
     },
     image: 'https://i.pravatar.cc/150?img=13',
     hireDate: '2015-08-01',
@@ -227,9 +227,8 @@ export const personnelFixtures: Personnel[] = [
  * Helper function to get available personnel for a specific task type
  */
 export const getAvailablePersonnelForTask = (taskType: string): Personnel[] => {
-  return personnelFixtures.filter(person => 
-    person.status === 'available' && 
-    person.specializations.includes(taskType as any)
+  return personnelFixtures.filter(
+    (person) => person.status === 'available' && person.specializations.includes(taskType as any)
   );
 };
 
@@ -237,12 +236,12 @@ export const getAvailablePersonnelForTask = (taskType: string): Personnel[] => {
  * Helper function to get all available personnel regardless of specialization
  */
 export const getAvailablePersonnel = (): Personnel[] => {
-  return personnelFixtures.filter(person => person.status === 'available');
+  return personnelFixtures.filter((person) => person.status === 'available');
 };
 
 /**
  * Helper function to get personnel by ID
  */
 export const getPersonnelById = (id: string): Personnel | undefined => {
-  return personnelFixtures.find(person => person.id === id);
+  return personnelFixtures.find((person) => person.id === id);
 };
